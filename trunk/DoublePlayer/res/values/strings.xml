@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">DoublePlayer</string>
+    <string name="action_settings">Настройки</string>
+    <string name="select_video">Выберите видео</string>
+    <string name="left_panel">Левая панель</string>
+    <string name="right_panel">Правая панель</string>
+    <string name="default_path">Путь по умолчанию</string>
+    <string name="video">Видео</string>
+    <string name="camera">Камера</string>
+    <string name="path_not_setted">Путь не задан</string>
+
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:title="@string/left_panel" >
+        <Preference
+            android:key="@string/left_path"
+            android:defaultValue="@string/path_not_setted"
+            android:title="@string/default_path" />
+        <Preference
+            android:key="@string/left_camera_path"
+            android:defaultValue="@string/path_not_setted"
+            android:title="@string/camera" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/right_panel" >
+        <Preference
+            android:key="@string/right_path"
+            android:defaultValue="@string/path_not_setted"
+            android:title="@string/default_path" />
+        <Preference
+            android:key="@string/right_camera_path"
+            android:defaultValue="@string/path_not_setted"
+            android:title="@string/camera" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
