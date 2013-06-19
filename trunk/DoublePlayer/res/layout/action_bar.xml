@@ -11,7 +11,7 @@
         layout="@layout/action_bar_item" />
 
     <include
-        android:id="@+id/actio_bar_right"
+        android:id="@+id/action_bar_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/settings"

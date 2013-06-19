@@ -7,8 +7,7 @@
     <string name="left_panel">Левая панель</string>
     <string name="right_panel">Правая панель</string>
     <string name="default_path">Путь по умолчанию</string>
-    <string name="video">Видео</string>
-    <string name="camera">Камера</string>
+    <string name="path">Путь</string>
     <string name="path_not_setted">Путь не задан</string>
 
 </resources>
