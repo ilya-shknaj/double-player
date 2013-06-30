@@ -25,7 +25,7 @@ public class SettingsActivity extends PreferenceActivity {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preference);
 		leftPath = findPreference(getString(R.string.left_path));
-		leftPath.setSummary(SettingsManager.getLeftPath());
+		leftPath.setSummary(SettingsManager.getLeftPathWithDefault());
 		leftPath.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			@Override
@@ -36,7 +36,7 @@ public class SettingsActivity extends PreferenceActivity {
 		});
 
 		rightPath = findPreference(getString(R.string.right_path));
-		rightPath.setSummary(SettingsManager.getRightPath());
+		rightPath.setSummary(SettingsManager.getLeftPathWithDefault());
 		rightPath.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			@Override

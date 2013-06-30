@@ -1,7 +1,6 @@
 package by.gravity.doubleplayer;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -101,6 +100,9 @@ public class MainActivity extends Activity {
 				startActivity(intent);
 			}
 		});
+		
+		
+		
 	}
 
 	@Override
