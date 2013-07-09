@@ -10,23 +10,24 @@
         layout="@layout/action_bar" />
 
     <LinearLayout
-        android:baselineAligned="false"
+        android:id="@+id/mainLayout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:baselineAligned="false"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
-        <fragment
+        <RelativeLayout
+            android:id="@+id/leftVideoLayout"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"
-            class="by.gravity.doublexplayer.fragment.VideoFragment" />
+            android:layout_weight="0.5" />
 
-        <fragment
+        <RelativeLayout
+            android:id="@+id/rightVideoLayout"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5"
-            class="by.gravity.doublexplayer.fragment.VideoFragment" />
+            android:layout_weight="0.5" />
     </LinearLayout>
 
 </LinearLayout>

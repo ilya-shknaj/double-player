@@ -3,16 +3,23 @@ package by.gravity.doublexplayer.activity;
 import java.text.SimpleDateFormat;
 
 import android.content.Intent;
+import android.media.MediaPlayer.TrackInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import by.gravity.common.utils.StringUtil;
 import by.gravity.doublexplayer.R;
+import by.gravity.doublexplayer.fragment.VideoFragment;
 import by.gravity.doublexplayer.manager.SettingsManager;
+import by.gravity.doublexplayer.model.VideoState;
 
 public class MainActivity extends FragmentActivity {
 
@@ -92,6 +99,28 @@ public class MainActivity extends FragmentActivity {
 			}
 		});
 
+		initFragment();
+
+	}
+
+	public void showFullScreen(VideoState videoState) {
+		LinearLayout mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
+		mainLayout.removeAllViews();
+		Fragment full = VideoFragment.newInstance(videoState);
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		transaction.add(R.id.mainLayout, full);
+		transaction.commit();
+	}
+
+	private void initFragment() {
+
+		Fragment leftVideo = VideoFragment.newInstance(null);
+		Fragment rightVideo = VideoFragment.newInstance(null);
+
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		transaction.add(R.id.leftVideoLayout, leftVideo);
+		transaction.add(R.id.rightVideoLayout, rightVideo);
+		transaction.commit();
 	}
 
 	private void openFileAction(int requestCode, String defaultPath) {

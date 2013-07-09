@@ -4,49 +4,49 @@
     android:layout_height="match_parent" >
 
     <Button
-        android:id="@+id/leftPosition"
+        android:id="@+id/leftPositionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:text="l" />
 
     <Button
-        android:id="@+id/rightPosition"
+        android:id="@+id/rightPositionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/leftPosition"
+        android:layout_toRightOf="@id/leftPositionButton"
         android:text="r" />
 
     <Button
-        android:id="@+id/prevFrame"
+        android:id="@+id/prevFrameButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/play"
+        android:layout_toLeftOf="@+id/playButton"
         android:text="pr" />
 
     <Button
-        android:id="@+id/play"
+        android:id="@+id/playButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="pl" />
 
     <Button
-        android:id="@+id/nextFrame"
+        android:id="@+id/nextFrameButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/play"
+        android:layout_toRightOf="@id/playButton"
         android:text="nx" />
 
     <Button
-        android:id="@+id/rate"
+        android:id="@+id/rateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/fullScreen"
+        android:layout_toLeftOf="@+id/fullScreenButton"
         android:text="rt" />
 
     <Button
-        android:id="@+id/fullScreen"
+        android:id="@+id/fullScreenButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
