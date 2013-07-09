@@ -10,20 +10,21 @@
         layout="@layout/action_bar" />
 
     <LinearLayout
-        android:id="@+id/mainLayout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:baselineAligned="false"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
-        <RelativeLayout
+        <LinearLayout
+            android:orientation="horizontal"
             android:id="@+id/leftVideoLayout"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="0.5" />
 
-        <RelativeLayout
+        <LinearLayout
+            android:orientation="horizontal"
             android:id="@+id/rightVideoLayout"
             android:layout_width="0dp"
             android:layout_height="fill_parent"

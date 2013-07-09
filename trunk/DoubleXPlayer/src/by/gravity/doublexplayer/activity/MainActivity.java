@@ -12,9 +12,11 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import by.gravity.common.utils.StringUtil;
 import by.gravity.doublexplayer.R;
 import by.gravity.doublexplayer.fragment.VideoFragment;
@@ -103,13 +105,29 @@ public class MainActivity extends FragmentActivity {
 
 	}
 
-	public void showFullScreen(VideoState videoState) {
-		LinearLayout mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
-		mainLayout.removeAllViews();
-		Fragment full = VideoFragment.newInstance(videoState);
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		transaction.add(R.id.mainLayout, full);
-		transaction.commit();
+	private enum Video {
+		LEFT, RIGHT;
+	}
+
+	public void showFullScreen(String tag) {
+		showFullScreen(Video.valueOf(tag));
+	}
+
+	private void showFullScreen(Video video) {
+		LinearLayout layout = null;
+		if (video == Video.LEFT) {
+			layout = (LinearLayout) findViewById(R.id.leftVideoLayout);
+
+		} else {
+			layout = (LinearLayout) findViewById(R.id.rightVideoLayout);
+
+		}
+		layout.setLayoutParams(new LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.FILL_PARENT,
+				android.widget.LinearLayout.LayoutParams.FILL_PARENT));
+	}
+
+	private void hideFullScreen() {
+
 	}
 
 	private void initFragment() {
@@ -118,8 +136,8 @@ public class MainActivity extends FragmentActivity {
 		Fragment rightVideo = VideoFragment.newInstance(null);
 
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		transaction.add(R.id.leftVideoLayout, leftVideo);
-		transaction.add(R.id.rightVideoLayout, rightVideo);
+		transaction.add(R.id.leftVideoLayout, leftVideo, Video.LEFT.toString());
+		transaction.add(R.id.rightVideoLayout, rightVideo, Video.RIGHT.toString());
 		transaction.commit();
 	}
 

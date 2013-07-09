@@ -21,6 +21,8 @@ public class VideoFragment extends BaseVideoFragment {
 	private static final String DEFAULT_MEDIA_URI = "file://" + Environment.getExternalStorageDirectory().getAbsolutePath()
 			+ "/DoublePlayer/Video/1.mp4";
 
+	private Button mPlayButton;
+
 	public static VideoFragment newInstance(VideoState videoState) {
 
 		VideoFragment fragment = new VideoFragment();
@@ -35,8 +37,8 @@ public class VideoFragment extends BaseVideoFragment {
 
 		super.onActivityCreated(savedInstanceState);
 
-		Button playButton = (Button) getView().findViewById(R.id.playButton);
-		playButton.setOnClickListener(new OnClickListener() {
+		mPlayButton = (Button) getView().findViewById(R.id.playButton);
+		mPlayButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -49,7 +51,7 @@ public class VideoFragment extends BaseVideoFragment {
 			}
 		});
 
-		Button rateButton = (Button) getView().findViewById(R.id.rateButton);
+		TextView rateButton = (TextView) getView().findViewById(R.id.rateButton);
 		rateButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -92,8 +94,8 @@ public class VideoFragment extends BaseVideoFragment {
 	}
 
 	private void onFullScreenClick() {
-
-		((MainActivity) getActivity()).showFullScreen(createVideoState());
+//		getView().setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+		 ((MainActivity) getActivity()).showFullScreen(getTag());
 	}
 
 	private VideoState createVideoState() {
@@ -108,7 +110,7 @@ public class VideoFragment extends BaseVideoFragment {
 
 	private static VideoState getDefaultVideoState() {
 
-		return new VideoState(DEFAULT_MEDIA_URI, 0, Rate.X4, false);
+		return new VideoState(DEFAULT_MEDIA_URI, 0, Rate.X1, false);
 	}
 
 	private Rate getRate() {
@@ -125,8 +127,28 @@ public class VideoFragment extends BaseVideoFragment {
 
 	private void setRateUI(Rate rate) {
 
-		Button rateButton = (Button) getView().findViewById(R.id.rateButton);
+		TextView rateButton = (TextView) getView().findViewById(R.id.rateButton);
 		rateButton.setText(rate.getName());
+	}
+
+	@Override
+	public void play() {
+		super.play();
+		setPlayPauseUI();
+	}
+
+	@Override
+	public void pause() {
+		super.pause();
+		setPlayPauseUI();
+	}
+
+	private void setPlayPauseUI() {
+		if (isPlayed()) {
+			mPlayButton.setBackgroundResource(R.drawable.btn_pause);
+		} else {
+			mPlayButton.setBackgroundResource(R.drawable.btn_play);
+		}
 	}
 
 	@Override
