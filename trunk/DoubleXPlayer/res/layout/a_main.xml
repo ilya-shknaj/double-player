@@ -16,19 +16,19 @@
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
-        <LinearLayout
-            android:orientation="horizontal"
+        <RelativeLayout
             android:id="@+id/leftVideoLayout"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.5"
+            android:orientation="horizontal" />
 
-        <LinearLayout
-            android:orientation="horizontal"
+        <RelativeLayout
             android:id="@+id/rightVideoLayout"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.5"
+            android:orientation="horizontal" />
     </LinearLayout>
 
 </LinearLayout>

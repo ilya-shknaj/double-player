@@ -36,6 +36,12 @@ public class VideoFragment extends BaseVideoFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 
 		super.onActivityCreated(savedInstanceState);
+		initUI();
+		init();
+
+	}
+
+	private void initUI() {
 
 		mPlayButton = (Button) getView().findViewById(R.id.playButton);
 		mPlayButton.setOnClickListener(new OnClickListener() {
@@ -71,9 +77,6 @@ public class VideoFragment extends BaseVideoFragment {
 				onFullScreenClick();
 			}
 		});
-
-		init();
-
 	}
 
 	private void init() {
@@ -94,11 +97,12 @@ public class VideoFragment extends BaseVideoFragment {
 	}
 
 	private void onFullScreenClick() {
-//		getView().setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-		 ((MainActivity) getActivity()).showFullScreen(getTag());
+
+		((MainActivity) getActivity()).onFullScreenClick(getTag());
+
 	}
 
-	private VideoState createVideoState() {
+	public VideoState createVideoState() {
 
 		return new VideoState(getMediaUri(), getPosition(), getRate(), isPlayed());
 	}
@@ -133,17 +137,20 @@ public class VideoFragment extends BaseVideoFragment {
 
 	@Override
 	public void play() {
+
 		super.play();
 		setPlayPauseUI();
 	}
 
 	@Override
 	public void pause() {
+
 		super.pause();
 		setPlayPauseUI();
 	}
 
 	private void setPlayPauseUI() {
+
 		if (isPlayed()) {
 			mPlayButton.setBackgroundResource(R.drawable.btn_pause);
 		} else {

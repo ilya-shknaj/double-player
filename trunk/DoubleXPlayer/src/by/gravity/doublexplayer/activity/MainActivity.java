@@ -3,7 +3,6 @@ package by.gravity.doublexplayer.activity;
 import java.text.SimpleDateFormat;
 
 import android.content.Intent;
-import android.media.MediaPlayer.TrackInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -12,8 +11,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -21,7 +18,6 @@ import by.gravity.common.utils.StringUtil;
 import by.gravity.doublexplayer.R;
 import by.gravity.doublexplayer.fragment.VideoFragment;
 import by.gravity.doublexplayer.manager.SettingsManager;
-import by.gravity.doublexplayer.model.VideoState;
 
 public class MainActivity extends FragmentActivity {
 
@@ -106,28 +102,39 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	private enum Video {
-		LEFT, RIGHT;
+		LEFT,
+		RIGHT;
+
 	}
 
-	public void showFullScreen(String tag) {
+	public void onFullScreenClick(String tag) {
+
 		showFullScreen(Video.valueOf(tag));
+
 	}
 
 	private void showFullScreen(Video video) {
-		LinearLayout layout = null;
+
+		RelativeLayout activeLayout = null;
+		RelativeLayout unActiveLayout = null;
 		if (video == Video.LEFT) {
-			layout = (LinearLayout) findViewById(R.id.leftVideoLayout);
+			activeLayout = (RelativeLayout) findViewById(R.id.leftVideoLayout);
+			unActiveLayout = (RelativeLayout) findViewById(R.id.rightVideoLayout);
 
 		} else {
-			layout = (LinearLayout) findViewById(R.id.rightVideoLayout);
+			activeLayout = (RelativeLayout) findViewById(R.id.rightVideoLayout);
+			unActiveLayout = (RelativeLayout) findViewById(R.id.leftVideoLayout);
 
 		}
-		layout.setLayoutParams(new LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.FILL_PARENT,
-				android.widget.LinearLayout.LayoutParams.FILL_PARENT));
-	}
+		if (activeLayout.getLayoutParams().width == android.widget.RelativeLayout.LayoutParams.MATCH_PARENT) {
+			activeLayout.setLayoutParams(new LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
+			unActiveLayout.setLayoutParams(new LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
+		} else {
+			unActiveLayout.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+			activeLayout.setLayoutParams(new LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+					android.widget.LinearLayout.LayoutParams.MATCH_PARENT));
 
-	private void hideFullScreen() {
-
+		}
 	}
 
 	private void initFragment() {
