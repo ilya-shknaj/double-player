@@ -2,6 +2,7 @@ package by.gravity.doublexplayer.fragment;
 
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -18,7 +19,8 @@ public class VideoFragment extends BaseVideoFragment {
 
 	private static final String ARG_VIDEO_STATE = "ARG_VIDEO_STATE";
 
-	private static final String DEFAULT_MEDIA_URI = "file://" + Environment.getExternalStorageDirectory().getAbsolutePath()
+	private static final String DEFAULT_MEDIA_URI = "file://"
+			+ Environment.getExternalStorageDirectory().getAbsolutePath()
 			+ "/DoublePlayer/Video/1.mp4";
 
 	private Button mPlayButton;
@@ -27,7 +29,8 @@ public class VideoFragment extends BaseVideoFragment {
 
 		VideoFragment fragment = new VideoFragment();
 		Bundle bundle = new Bundle();
-		bundle.putSerializable(ARG_VIDEO_STATE, videoState != null ? videoState : getDefaultVideoState());
+		bundle.putSerializable(ARG_VIDEO_STATE, videoState != null ? videoState
+				: getDefaultVideoState());
 		fragment.setArguments(bundle);
 		return fragment;
 	}
@@ -57,7 +60,8 @@ public class VideoFragment extends BaseVideoFragment {
 			}
 		});
 
-		TextView rateButton = (TextView) getView().findViewById(R.id.rateButton);
+		TextView rateButton = (TextView) getView()
+				.findViewById(R.id.rateButton);
 		rateButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -68,13 +72,35 @@ public class VideoFragment extends BaseVideoFragment {
 			}
 		});
 
-		Button fullScreenButton = (Button) getView().findViewById(R.id.fullScreenButton);
+		Button fullScreenButton = (Button) getView().findViewById(
+				R.id.fullScreenButton);
 		fullScreenButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View paramView) {
 
 				onFullScreenClick();
+			}
+		});
+
+		Button nextFrameButton = (Button) getView().findViewById(
+				R.id.nextFrameButton);
+		nextFrameButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				onNextFrameClick();
+			}
+		});
+
+		Button prevFrameButton = (Button) getView().findViewById(
+				R.id.prevFrameButton);
+		prevFrameButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				onPrevFrameClick();
+
 			}
 		});
 	}
@@ -96,6 +122,16 @@ public class VideoFragment extends BaseVideoFragment {
 		}
 	}
 
+	private void onNextFrameClick() {
+		Log.e("test", "next Frame");
+		nativeNextFrame();
+	}
+
+	private void onPrevFrameClick() {
+		Log.e("test", "prev Frame");
+		nativePrevFrame();
+	}
+
 	private void onFullScreenClick() {
 
 		((MainActivity) getActivity()).onFullScreenClick(getTag());
@@ -104,7 +140,8 @@ public class VideoFragment extends BaseVideoFragment {
 
 	public VideoState createVideoState() {
 
-		return new VideoState(getMediaUri(), getPosition(), getRate(), isPlayed());
+		return new VideoState(getMediaUri(), getPosition(), getRate(),
+				isPlayed());
 	}
 
 	private VideoState getVideoState() {
@@ -131,7 +168,8 @@ public class VideoFragment extends BaseVideoFragment {
 
 	private void setRateUI(Rate rate) {
 
-		TextView rateButton = (TextView) getView().findViewById(R.id.rateButton);
+		TextView rateButton = (TextView) getView()
+				.findViewById(R.id.rateButton);
 		rateButton.setText(rate.getName());
 	}
 
