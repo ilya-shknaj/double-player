@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import by.gravity.common.utils.FileUtil;
 import by.gravity.common.utils.StringUtil;
 import by.gravity.doublexplayer.R;
+import by.gravity.doublexplayer.fragment.SwfFragment;
 import by.gravity.doublexplayer.fragment.VideoFragment;
 import by.gravity.doublexplayer.manager.SettingsManager;
 
@@ -157,13 +158,15 @@ public class MainActivity extends FragmentActivity {
 
 	private void initFragment() {
 
-		Fragment leftVideo = VideoFragment.newInstance();
-		Fragment rightVideo = VideoFragment.newInstance();
+		Fragment leftVideo = VideoFragment.newInstance(null);
+		Fragment rightVideo = VideoFragment.newInstance(null);
+		Fragment swfFragment = SwfFragment.newInstance(null);
 
 		FragmentTransaction transaction = getSupportFragmentManager()
 				.beginTransaction();
-		transaction.add(R.id.leftVideoLayout, leftVideo, Video.LEFT.name());
-		transaction.add(R.id.rightVideoLayout, rightVideo, Video.RIGHT.name());
+		transaction.replace(R.id.leftVideoLayout, leftVideo, Video.LEFT.name());
+		transaction.replace(R.id.rightVideoLayout, rightVideo,
+				Video.RIGHT.name());
 		transaction.commit();
 	}
 
@@ -214,11 +217,23 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	private void setVideoFragmentUri(String tag, String mediaUri) {
-		VideoFragment videoFragment = (VideoFragment) getSupportFragmentManager()
-				.findFragmentByTag(tag);
-		if (videoFragment != null) {
-			videoFragment.init(mediaUri);
+		Fragment fragment;
+		if (mediaUri.length() > 4
+				&& mediaUri.substring(mediaUri.length() - 3).equals("swf")) {
+			fragment = SwfFragment.newInstance(mediaUri);
+		} else {
+			fragment = VideoFragment.newInstance(mediaUri);
+
 		}
+
+		FragmentTransaction transaction = getSupportFragmentManager()
+				.beginTransaction();
+		if (tag.intern() == Video.LEFT.name().intern()) {
+			transaction.replace(R.id.leftVideoLayout, fragment, tag);
+		} else {
+			transaction.replace(R.id.rightVideoLayout, fragment, tag);
+		}
+		transaction.commit();
 
 	}
 

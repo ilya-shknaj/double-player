@@ -20,16 +20,19 @@ public class VideoFragment extends BaseVideoFragment {
 
 	private static final String ARG_VIDEO_STATE = "ARG_VIDEO_STATE";
 
+	private static final String ARG_MEDIA_URI = "ARG_MEDIA_URI";
+
 	private static final String DEFAULT_MEDIA_URI = "file://"
 			+ Environment.getExternalStorageDirectory().getAbsolutePath()
 			+ "/DoublePlayer/Video/1.mp4";
 
 	private Button mPlayButton;
 
-	public static VideoFragment newInstance() {
+	public static VideoFragment newInstance(String mediaUri) {
 
 		VideoFragment fragment = new VideoFragment();
 		Bundle bundle = new Bundle();
+		bundle.putString(ARG_MEDIA_URI, mediaUri);
 		fragment.setArguments(bundle);
 		return fragment;
 	}
@@ -38,11 +41,14 @@ public class VideoFragment extends BaseVideoFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 
 		super.onActivityCreated(savedInstanceState);
-		init(DEFAULT_MEDIA_URI);
+		init(getArguments().getString(ARG_MEDIA_URI));
 
 	}
 
 	public void init(String uri) {
+		if (uri == null) {
+			uri = DEFAULT_MEDIA_URI;
+		}
 		setMediaUri(uri);
 		setRate(Rate.X1);
 		initUI();
