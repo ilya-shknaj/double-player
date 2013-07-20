@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import by.gravity.doubleplayer.core.fragment.BaseVideoFragment;
 import by.gravity.doublexplayer.R;
@@ -25,12 +26,10 @@ public class VideoFragment extends BaseVideoFragment {
 
 	private Button mPlayButton;
 
-	public static VideoFragment newInstance(VideoState videoState) {
+	public static VideoFragment newInstance() {
 
 		VideoFragment fragment = new VideoFragment();
 		Bundle bundle = new Bundle();
-		bundle.putSerializable(ARG_VIDEO_STATE, videoState != null ? videoState
-				: getDefaultVideoState());
 		fragment.setArguments(bundle);
 		return fragment;
 	}
@@ -39,9 +38,27 @@ public class VideoFragment extends BaseVideoFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 
 		super.onActivityCreated(savedInstanceState);
-		initUI();
-		init();
+		init(DEFAULT_MEDIA_URI);
 
+	}
+
+	public void init(String uri) {
+		setMediaUri(uri);
+		setRate(Rate.X1);
+		initUI();
+
+	}
+
+	private void init() {
+
+		final VideoState videoState = getDefaultVideoState();
+		if (videoState != null) {
+			setMediaUri(videoState.getMediaUri());
+			setRate(videoState.getRate());
+			setCurrentPosition(videoState.getPosition());
+			initUI();
+
+		}
 	}
 
 	private void initUI() {
@@ -78,8 +95,12 @@ public class VideoFragment extends BaseVideoFragment {
 
 			@Override
 			public void onClick(View paramView) {
-
+				boolean isPlayed = isPlayed();
+				pause();
 				onFullScreenClick();
+				if (isPlayed) {
+					play();
+				}
 			}
 		});
 
@@ -89,7 +110,9 @@ public class VideoFragment extends BaseVideoFragment {
 
 			@Override
 			public void onClick(View v) {
-				onNextFrameClick();
+				if (!isPlayed()) {
+					onNextFrameClick();
+				}
 			}
 		});
 
@@ -103,22 +126,16 @@ public class VideoFragment extends BaseVideoFragment {
 
 			}
 		});
+
+		showProgressBar();
+
 	}
 
-	private void init() {
-
-		final VideoState videoState = getVideoState();
-		if (videoState != null) {
-			setMediaUri(videoState.getMediaUri());
-			setPosition(videoState.getPosition());
-
-			if (videoState.isPlayed()) {
-				play();
-			} else {
-				pause();
-			}
-			setRate(videoState.getRate());
-
+	private void showProgressBar() {
+		LinearLayout progressBar = (LinearLayout) getView().findViewById(
+				R.id.progressBar);
+		if (progressBar != null) {
+			progressBar.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -151,7 +168,7 @@ public class VideoFragment extends BaseVideoFragment {
 
 	private static VideoState getDefaultVideoState() {
 
-		return new VideoState(DEFAULT_MEDIA_URI, 0, Rate.X1, false);
+		return new VideoState(DEFAULT_MEDIA_URI, 5000, Rate.X1, false);
 	}
 
 	private Rate getRate() {

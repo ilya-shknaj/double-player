@@ -5,6 +5,7 @@
     android:layout_gravity="center_vertical" >
 
     <Button
+        android:layout_marginTop="5dp"
         android:id="@+id/leftPositionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -13,6 +14,7 @@
         android:background="@drawable/btn_add_left_position" />
 
     <Button
+        android:layout_marginTop="5dp"
         android:id="@+id/rightPositionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -53,6 +55,7 @@
         android:background="@drawable/btn_next_frame" />
 
     <TextView
+        android:layout_marginTop="2dp"
         android:id="@+id/rateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,7 +63,7 @@
         android:layout_toLeftOf="@+id/fullScreenButton"
         android:text="1X"
         android:textColor="@android:color/white"
-        android:textSize="20sp" />
+        android:textSize="22sp" />
 
     <Button
         android:id="@+id/fullScreenButton"

@@ -14,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import by.gravity.common.utils.FileUtil;
 import by.gravity.common.utils.StringUtil;
 import by.gravity.doublexplayer.R;
 import by.gravity.doublexplayer.fragment.VideoFragment;
@@ -45,44 +46,52 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.a_main);
 
-		leftOpenButton = (ImageView) findViewById(R.id.action_bar_left).findViewById(R.id.open);
+		leftOpenButton = (ImageView) findViewById(R.id.action_bar_left)
+				.findViewById(R.id.open);
 
 		leftOpenButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				openFileAction(LEFT_OPEN_REQUEST_CODE, SettingsManager.getLeftPath());
+				openFileAction(LEFT_OPEN_REQUEST_CODE,
+						SettingsManager.getLeftPath());
 			}
 		});
 
-		leftCameraButton = (ImageView) findViewById(R.id.action_bar_left).findViewById(R.id.camera);
+		leftCameraButton = (ImageView) findViewById(R.id.action_bar_left)
+				.findViewById(R.id.camera);
 		leftCameraButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				openCameraAction(LEFT_CAMERA_REQUEST_CODE, SettingsManager.getLeftPath());
+				openCameraAction(LEFT_CAMERA_REQUEST_CODE,
+						SettingsManager.getLeftPath());
 			}
 		});
 
-		rightOpenButton = (ImageView) findViewById(R.id.action_bar_right).findViewById(R.id.open);
+		rightOpenButton = (ImageView) findViewById(R.id.action_bar_right)
+				.findViewById(R.id.open);
 		rightOpenButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				openFileAction(RIGHT_OPEN_REQUEST_CODE, SettingsManager.getRightPath());
+				openFileAction(RIGHT_OPEN_REQUEST_CODE,
+						SettingsManager.getRightPath());
 			}
 		});
 
-		rightCameraButton = (ImageView) findViewById(R.id.action_bar_right).findViewById(R.id.camera);
+		rightCameraButton = (ImageView) findViewById(R.id.action_bar_right)
+				.findViewById(R.id.camera);
 		rightCameraButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				openCameraAction(RIGHT_CAMERA_REQUEST_CODE, SettingsManager.getRightPath());
+				openCameraAction(RIGHT_CAMERA_REQUEST_CODE,
+						SettingsManager.getRightPath());
 			}
 		});
 
@@ -92,7 +101,8 @@ public class MainActivity extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 
-				Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+				Intent intent = new Intent(MainActivity.this,
+						SettingsActivity.class);
 				startActivity(intent);
 			}
 		});
@@ -101,9 +111,8 @@ public class MainActivity extends FragmentActivity {
 
 	}
 
-	private enum Video {
-		LEFT,
-		RIGHT;
+	public enum Video {
+		LEFT, RIGHT;
 
 	}
 
@@ -127,11 +136,20 @@ public class MainActivity extends FragmentActivity {
 
 		}
 		if (activeLayout.getLayoutParams().width == android.widget.RelativeLayout.LayoutParams.MATCH_PARENT) {
-			activeLayout.setLayoutParams(new LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
-			unActiveLayout.setLayoutParams(new LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
+			activeLayout
+					.setLayoutParams(new LinearLayout.LayoutParams(
+							0,
+							android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+							0.5f));
+			unActiveLayout
+					.setLayoutParams(new LinearLayout.LayoutParams(
+							0,
+							android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+							0.5f));
 		} else {
 			unActiveLayout.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
-			activeLayout.setLayoutParams(new LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+			activeLayout.setLayoutParams(new LinearLayout.LayoutParams(
+					android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
 					android.widget.LinearLayout.LayoutParams.MATCH_PARENT));
 
 		}
@@ -139,12 +157,13 @@ public class MainActivity extends FragmentActivity {
 
 	private void initFragment() {
 
-		Fragment leftVideo = VideoFragment.newInstance(null);
-		Fragment rightVideo = VideoFragment.newInstance(null);
+		Fragment leftVideo = VideoFragment.newInstance();
+		Fragment rightVideo = VideoFragment.newInstance();
 
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		transaction.add(R.id.leftVideoLayout, leftVideo, Video.LEFT.toString());
-		transaction.add(R.id.rightVideoLayout, rightVideo, Video.RIGHT.toString());
+		FragmentTransaction transaction = getSupportFragmentManager()
+				.beginTransaction();
+		transaction.add(R.id.leftVideoLayout, leftVideo, Video.LEFT.name());
+		transaction.add(R.id.rightVideoLayout, rightVideo, Video.RIGHT.name());
 		transaction.commit();
 	}
 
@@ -157,17 +176,18 @@ public class MainActivity extends FragmentActivity {
 		startActivityForResult(intent, requestCode);
 	}
 
-	private void openCameraAction(int requestCode, String defaultPath) {
+	private void openCameraAction(int requestCode, String videoPath) {
 
 		Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-		Uri uri = Uri.parse(defaultPath + "/" + generateVideoName());
+		Uri uri = Uri.parse(videoPath + "/" + generateVideoName());
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 		startActivityForResult(intent, requestCode);
 	}
 
 	private String generateVideoName() {
 
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+		SimpleDateFormat dateFormat = new SimpleDateFormat(
+				"yyyy_MM_dd_HH_mm_ss");
 		return dateFormat.format(System.currentTimeMillis()) + ".mp4";
 
 	}
@@ -178,6 +198,26 @@ public class MainActivity extends FragmentActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode != RESULT_OK) {
 			return;
+		}
+		if (requestCode == LEFT_OPEN_REQUEST_CODE) {
+			setVideoFragmentUri(Video.LEFT.name(), data.getDataString());
+		} else if (requestCode == RIGHT_OPEN_REQUEST_CODE) {
+			setVideoFragmentUri(Video.RIGHT.name(), data.getDataString());
+		} else if (requestCode == LEFT_CAMERA_REQUEST_CODE) {
+			setVideoFragmentUri(Video.LEFT.name(),
+					FileUtil.getFilePathFromContentUri(data.getData()));
+		} else if (requestCode == RIGHT_CAMERA_REQUEST_CODE) {
+			setVideoFragmentUri(Video.RIGHT.name(),
+					FileUtil.getFilePathFromContentUri(data.getData()));
+		}
+
+	}
+
+	private void setVideoFragmentUri(String tag, String mediaUri) {
+		VideoFragment videoFragment = (VideoFragment) getSupportFragmentManager()
+				.findFragmentByTag(tag);
+		if (videoFragment != null) {
+			videoFragment.init(mediaUri);
 		}
 
 	}
