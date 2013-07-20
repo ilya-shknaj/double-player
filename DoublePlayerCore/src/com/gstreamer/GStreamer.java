@@ -14,7 +14,7 @@ public class GStreamer {
 
     public static void init(Context context) throws Exception {
         nativeInit(context);
-        copyFonts(context);
+//        copyFonts(context);
     }
 
     private static void copyFonts(Context context) {
