@@ -44,6 +44,7 @@ typedef struct _CustomData {
 	GstClockTime last_seek_time; /* For seeking overflow prevention (throttling) */
 	gboolean is_live; /* Live streams do not use buffering */
 	gdouble rate; /* Current playback rate (can be negative) */
+	gboolean is_repeat; /*Repeat mode*/
 } CustomData;
 
 /* playbin2 flags */
@@ -144,6 +145,7 @@ static gboolean refresh_ui(CustomData *data) {
 			GST_WARNING(
 					"Could not query current duration (normal for still pictures)");
 			data->duration = 0;
+			
 		}
 	}
 
@@ -151,7 +153,9 @@ static gboolean refresh_ui(CustomData *data) {
 		GST_WARNING(
 				"Could not query current position (normal for still pictures)");
 		position = 0;
+		
 	}
+
 
 	/* Java expects these values in milliseconds, and GStreamer provides nanoseconds */
 	set_current_ui_position(position / GST_MSECOND,
@@ -189,13 +193,11 @@ static void execute_seek(gint64 desired_position, CustomData *data) {
 		 * to perform a seek, only the last one is remembered. */
 		data->desired_position = desired_position;
 		GST_DEBUG(
-				"Throttling seek to %" GST_TIME_FORMAT ", will be in %" GST_TIME_FORMAT,
-				GST_TIME_ARGS (desired_position),
-				GST_TIME_ARGS (SEEK_MIN_DELAY - diff));
+				"Throttling seek to %" GST_TIME_FORMAT ", will be in %" GST_TIME_FORMAT, GST_TIME_ARGS (desired_position), GST_TIME_ARGS (SEEK_MIN_DELAY - diff));
 	} else {
 		/* Perform the seek now */
-		GST_DEBUG("Seeking to %" GST_TIME_FORMAT,
-				GST_TIME_ARGS (desired_position));
+		GST_DEBUG(
+				"Seeking to %" GST_TIME_FORMAT, GST_TIME_ARGS (desired_position));
 		data->last_seek_time = gst_util_get_timestamp();
 		gst_element_seek_simple(data->pipeline, GST_FORMAT_TIME,
 				GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT, desired_position);
@@ -205,8 +207,8 @@ static void execute_seek(gint64 desired_position, CustomData *data) {
 
 /* Delayed seek callback. This gets called by the timer setup in the above function. */
 static gboolean delayed_seek_cb(CustomData *data) {
-	GST_DEBUG("Doing delayed seek to %" GST_TIME_FORMAT,
-			GST_TIME_ARGS (data->desired_position));
+	GST_DEBUG(
+			"Doing delayed seek to %" GST_TIME_FORMAT, GST_TIME_ARGS (data->desired_position));
 	execute_seek(data->desired_position, data);
 	return FALSE;
 }
@@ -230,10 +232,20 @@ static void error_cb(GstBus *bus, GstMessage *msg, CustomData *data) {
 
 /* Called when the End Of the Stream is reached. Just move to the beginning of the media and pause. */
 static void eos_cb(GstBus *bus, GstMessage *msg, CustomData *data) {
+	jdouble rate = data->rate;
 	data->target_state = GST_STATE_PAUSED;
 	data->is_live = (gst_element_set_state(data->pipeline, GST_STATE_PAUSED)
 			== GST_STATE_CHANGE_NO_PREROLL);
 	execute_seek(0, data);
+	if(data->is_repeat){
+		data->target_state = GST_STATE_PLAYING;
+		data->is_live = (gst_element_set_state(data->pipeline, GST_STATE_PLAYING)
+			== GST_STATE_CHANGE_NO_PREROLL);
+		data->rate = rate;
+		send_seek_event(data);
+		g_print("start from start");
+	}
+	g_print("end of video");
 }
 
 /* Called when the duration of the media changes. Just mark it as unknown, so we re-query it in the next UI refresh. */
@@ -336,8 +348,7 @@ static void check_initialization_complete(CustomData *data) {
 	JNIEnv *env = get_jni_env();
 	if (!data->initialized && data->native_window && data->main_loop) {
 		GST_DEBUG(
-				"Initialization complete, notifying application. native_window:%p main_loop:%p",
-				data->native_window, data->main_loop);
+				"Initialization complete, notifying application. native_window:%p main_loop:%p", data->native_window, data->main_loop);
 
 		/* The main loop is running and we received a native window, inform the sink about it */
 		gst_x_overlay_set_window_handle(GST_X_OVERLAY(data->pipeline),
@@ -513,12 +524,12 @@ void gst_native_set_position(JNIEnv* env, jobject thiz, int milliseconds) {
 	CustomData *data = GET_CUSTOM_DATA (env, thiz, custom_data_field_id);
 	if (!data)
 		return;
-	gint64 desired_position = (gint64)(milliseconds * GST_MSECOND);
+	gint64 desired_position = (gint64) (milliseconds * GST_MSECOND);
 	if (data->state >= GST_STATE_PAUSED) {
 		execute_seek(desired_position, data);
 	} else {
-		GST_DEBUG("Scheduling seek to %" GST_TIME_FORMAT " for later",
-				GST_TIME_ARGS (desired_position));
+		GST_DEBUG(
+				"Scheduling seek to %" GST_TIME_FORMAT " for later", GST_TIME_ARGS (desired_position));
 		data->desired_position = desired_position;
 	}
 }
@@ -555,22 +566,22 @@ static void gst_native_surface_init(JNIEnv *env, jobject thiz, jobject surface) 
 	if (!data)
 		return;
 	ANativeWindow *new_native_window = ANativeWindow_fromSurface(env, surface);
-	GST_DEBUG("Received surface %p (native window %p)", surface,
-			new_native_window);
+	GST_DEBUG(
+			"Received surface %p (native window %p)", surface, new_native_window);
 
 	if (data->native_window) {
 		ANativeWindow_release(data->native_window);
 		if (data->native_window == new_native_window) {
-			GST_DEBUG("New native window is the same as the previous one",
-					data->native_window);
+			GST_DEBUG(
+					"New native window is the same as the previous one", data->native_window);
 			if (data->pipeline) {
 				gst_x_overlay_expose(GST_X_OVERLAY(data->pipeline));
 				gst_x_overlay_expose(GST_X_OVERLAY(data->pipeline));
 			}
 			return;
 		} else {
-			GST_DEBUG("Released previous native window %p",
-					data->native_window);
+			GST_DEBUG(
+					"Released previous native window %p", data->native_window);
 			data->initialized = FALSE;
 		}
 	}
@@ -596,43 +607,88 @@ static void gst_native_surface_finalize(JNIEnv *env, jobject thiz) {
 	data->initialized = FALSE;
 }
 
-void gst_native_set_rate(JNIEnv *env, jobject thiz,jdouble rate) {
+void gst_native_set_rate(JNIEnv *env, jobject thiz, jdouble rate) {
 	CustomData *data = GET_CUSTOM_DATA (env, thiz, custom_data_field_id);
-	if(!data){
+	if (!data) {
 		return;
 	}
 	data->rate = rate;
-	gint64 position;
-	GstFormat format = GST_FORMAT_TIME;
-	GstEvent *seek_event;
+	send_seek_event(data);
+	g_print("Current rate: %g\n", data->rate);
+}
 
-	/* Obtain the current position, needed for the seek event */
-	if (!gst_element_query_position(data->pipeline, &format, &position)) {
-		g_printerr("Unable to retrieve current position.\n");
+/* Send seek event to change rate */
+void send_seek_event (CustomData *data) {
+  gint64 position;
+  GstFormat format = GST_FORMAT_TIME;
+  GstEvent *seek_event;
+
+  /* Obtain the current position, needed for the seek event */
+  /*if (!gst_element_query_position (data->pipeline, &format, &position)) {
+    g_printerr ("Unable to retrieve current position.\n");
+    return;
+  }*/
+
+  /* Create the seek event */
+  if (data->rate > 0) {
+    seek_event = gst_event_new_seek (data->rate, GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_ACCURATE,
+        GST_SEEK_TYPE_SET, position, GST_SEEK_TYPE_NONE, 0);
+  } else {
+    seek_event = gst_event_new_seek (data->rate, GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_ACCURATE,
+        GST_SEEK_TYPE_SET, 0, GST_SEEK_TYPE_SET, position);
+  }
+
+  if (data->video_sink == NULL) {
+    /* If we have not done so, obtain the sink through which we will send the seek events */
+    g_object_get (data->pipeline, "video-sink", &data->video_sink, NULL);
+  }
+
+  /* Send the event */
+  gst_element_send_event (data->video_sink, seek_event);
+
+  g_print ("Current rate: %g\n", data->rate);
+}
+
+void gst_native_next_frame(JNIEnv *env, jobject thiz) {
+	CustomData *data = GET_CUSTOM_DATA (env, thiz, custom_data_field_id);
+	if (!data) {
 		return;
 	}
-
-	/* Create the seek event */
-	if (data->rate > 0) {
-		seek_event = gst_event_new_seek(data->rate, GST_FORMAT_TIME,
-				GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_ACCURATE, GST_SEEK_TYPE_SET,
-				position, GST_SEEK_TYPE_NONE, 0);
-	} else {
-		seek_event = gst_event_new_seek(data->rate, GST_FORMAT_TIME,
-				GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_ACCURATE, GST_SEEK_TYPE_SET,
-				0, GST_SEEK_TYPE_SET, position);
-	}
-
 	if (data->video_sink == NULL) {
-		/* If we have not done so, obtain the sink through which we will send the seek events */
+		/* If we have not done so, obtain the sink through which we will send the step events */
 		g_object_get(data->pipeline, "video-sink", &data->video_sink, NULL);
 	}
 
-	/* Send the event */
-	gst_element_send_event(data->video_sink, seek_event);
-
-	g_print("Current rate: %g\n", data->rate);
+	gst_element_send_event(data->video_sink,
+			gst_event_new_step(GST_FORMAT_BUFFERS, 1, data->rate, TRUE, FALSE));
+	g_print("Stepping one frame\n");
 }
+
+void gst_native_prev_frame(JNIEnv *env, jobject thiz) {
+	CustomData *data = GET_CUSTOM_DATA (env, thiz, custom_data_field_id);
+	if (!data) {
+		return;
+	}
+	if (data->video_sink == NULL) {
+		/* If we have not done so, obtain the sink through which we will send the step events */
+		g_object_get(data->pipeline, "video-sink", &data->video_sink, NULL);
+	}
+
+	gst_element_send_event(data->video_sink,
+			gst_event_new_step(GST_FORMAT_BUFFERS, 1, -1.0, TRUE, FALSE));
+	g_print("Stepping one frame\n");
+}
+
+void gst_native_set_repeat_mode(JNIEnv *env, jobject thiz,jboolean is_repeat){
+	CustomData *data = GET_CUSTOM_DATA (env, thiz, custom_data_field_id);
+	if (!data) {
+		return;
+	}
+	data->is_repeat = is_repeat;
+	g_print("set repeat mode");
+}
+
+
 
 /* List of implemented native methods */
 static JNINativeMethod native_methods[] = { { "nativeInit", "()V",
@@ -645,7 +701,10 @@ static JNINativeMethod native_methods[] = { { "nativeInit", "()V",
 		"(Ljava/lang/Object;)V", (void *) gst_native_surface_init }, {
 		"nativeSurfaceFinalize", "()V", (void *) gst_native_surface_finalize },
 		{ "nativeClassInit", "()Z", (void *) gst_native_class_init }, {
-				"nativeSetRate", "(D)V", gst_native_set_rate } };
+				"nativeSetRate", "(D)V", gst_native_set_rate }, {
+				"nativeNextFrame", "()V", (void *) gst_native_next_frame }, {
+				"nativePrevFrame", "()V", (void *) gst_native_prev_frame },{
+				"nativeSetRepeatMode", "(Z)V", (void *) gst_native_set_repeat_mode }};
 
 /* Library initializer */
 jint JNI_OnLoad(JavaVM *vm, void *reserved) {
