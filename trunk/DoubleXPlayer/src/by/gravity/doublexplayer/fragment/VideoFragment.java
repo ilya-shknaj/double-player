@@ -8,6 +8,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import by.gravity.doubleplayer.core.fragment.BaseVideoFragment;
 import by.gravity.doublexplayer.R;
 import by.gravity.doublexplayer.activity.MainActivity;
@@ -22,7 +23,7 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 
 	private static final String DEFAULT_MEDIA_URI = "file://"
 			+ Environment.getExternalStorageDirectory().getAbsolutePath()
-			+ "/DoublePlayer/Video/1.mp4";
+			+ "/DoublePlayer/Video/verh_pered_3.mp4";
 
 	private Button mPlayButton;
 
@@ -44,9 +45,9 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 	}
 
 	public void init(String uri) {
-		// if (uri == null) {
-		// uri = DEFAULT_MEDIA_URI;
-		// }
+		if (uri == null) {
+			uri = DEFAULT_MEDIA_URI;
+		}
 		setMediaUri(uri);
 		setRate(Rate.X1);
 		if (uri != null) {
@@ -130,6 +131,19 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 			public void onClick(View arg0) {
 				onPrevFrameClick();
 
+			}
+		});
+
+		Button repeatMode = (Button) getView().findViewById(R.id.repeatButton);
+		repeatMode.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String message = !getRepeatMode() ? "Repeat mode enable"
+						: "Repeat mode disable";
+				setRepeatMode(!getRepeatMode());
+				Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT)
+						.show();
 			}
 		});
 
