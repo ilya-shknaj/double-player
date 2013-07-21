@@ -14,11 +14,9 @@ import by.gravity.doublexplayer.activity.MainActivity;
 import by.gravity.doublexplayer.model.Rate;
 import by.gravity.doublexplayer.model.VideoState;
 
-public class VideoFragment extends BaseVideoFragment implements IVideo{
+public class VideoFragment extends BaseVideoFragment implements IVideo {
 
 	private Rate mRate = Rate.X1;
-
-	private static final String ARG_VIDEO_STATE = "ARG_VIDEO_STATE";
 
 	private static final String ARG_MEDIA_URI = "ARG_MEDIA_URI";
 
@@ -46,12 +44,14 @@ public class VideoFragment extends BaseVideoFragment implements IVideo{
 	}
 
 	public void init(String uri) {
-		if (uri == null) {
-			uri = DEFAULT_MEDIA_URI;
-		}
+		// if (uri == null) {
+		// uri = DEFAULT_MEDIA_URI;
+		// }
 		setMediaUri(uri);
 		setRate(Rate.X1);
-		initUI();
+		if (uri != null) {
+			initUI();
+		}
 
 	}
 
@@ -165,11 +165,6 @@ public class VideoFragment extends BaseVideoFragment implements IVideo{
 
 		return new VideoState(getMediaUri(), getPosition(), getRate(),
 				isPlayed());
-	}
-
-	private VideoState getVideoState() {
-
-		return (VideoState) getArguments().getSerializable(ARG_VIDEO_STATE);
 	}
 
 	private static VideoState getDefaultVideoState() {

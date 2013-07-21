@@ -41,7 +41,7 @@ public class SettingsActivity extends PreferenceActivity {
 		});
 
 		rightPath = findPreference(getString(R.string.right_path));
-		rightPath.setSummary(SettingsManager.getLeftPathWithDefault());
+		rightPath.setSummary(SettingsManager.getRightPathWithDefault());
 		rightPath.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			@Override
