@@ -5,51 +5,51 @@
     android:layout_gravity="center_vertical" >
 
     <Button
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="2dp"
         android:id="@+id/leftPositionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="12dp"
+        android:layout_height="24dp"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="10dp"
         android:background="@drawable/btn_add_left_position" />
 
     <Button
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="2dp"
         android:id="@+id/rightPositionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="12dp"
+        android:layout_height="24dp"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/leftPositionButton"
         android:background="@drawable/btn_add_right_position" />
 
     <Button
         android:id="@+id/repeatButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/rightPositionButton"
         android:background="@drawable/btn_repeat" />
 
     <Button
         android:id="@+id/prevFrameButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginLeft="10dp"
         android:layout_toLeftOf="@+id/playButton"
         android:background="@drawable/btn_prev_frame" />
 
     <Button
         android:id="@+id/playButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="10dp"
         android:background="@drawable/btn_play" />
 
     <Button
         android:id="@+id/nextFrameButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/playButton"
         android:background="@drawable/btn_next_frame" />
@@ -67,8 +67,8 @@
 
     <Button
         android:id="@+id/fullScreenButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"

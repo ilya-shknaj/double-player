@@ -11,5 +11,10 @@
             android:key="@string/right_path"
             android:title="@string/path" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/info_path" >
+        <Preference
+            android:key="@string/info_path"
+            android:title="@string/path" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

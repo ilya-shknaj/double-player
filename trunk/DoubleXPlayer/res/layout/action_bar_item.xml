@@ -4,18 +4,25 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal" >
 
-    <ImageView
-        android:id="@+id/open"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/btn_open"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginLeft="10dp"
         android:background="@drawable/btn_gallery" />
 
-    <ImageView
-        android:id="@+id/camera"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/btn_camera"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginLeft="10dp"
         android:background="@drawable/btn_camera" />
+
+    <Button
+        android:id="@+id/btn_info"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/btn_info" />
 
 </LinearLayout>

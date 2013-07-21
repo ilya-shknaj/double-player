@@ -16,9 +16,13 @@ public class SettingsActivity extends PreferenceActivity {
 
 	private static final int RIGHT_PATH = 2;
 
+	private static final int INFO_PATH = 3;
+
 	private Preference leftPath;
 
 	private Preference rightPath;
+
+	private Preference infoPath;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -47,6 +51,17 @@ public class SettingsActivity extends PreferenceActivity {
 			}
 		});
 
+		infoPath = findPreference(getString(R.string.info_path));
+		infoPath.setSummary(SettingsManager.getInfoPath());
+		infoPath.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+			@Override
+			public boolean onPreferenceClick(Preference paramPreference) {
+				startSelectFolder(INFO_PATH);
+				return false;
+			}
+		});
+
 	}
 
 	private void startSelectFolder(int requestCode) {
@@ -54,7 +69,8 @@ public class SettingsActivity extends PreferenceActivity {
 		try {
 			startActivityForResult(intent, requestCode);
 		} catch (ActivityNotFoundException e) {
-			Toast.makeText(this, "File manager not found", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "File manager not found", Toast.LENGTH_SHORT)
+					.show();
 		}
 	}
 
@@ -71,6 +87,9 @@ public class SettingsActivity extends PreferenceActivity {
 		} else if (requestCode == RIGHT_PATH) {
 			SettingsManager.setRightPath(uriString);
 			updateSummary(rightPath, uriString);
+		} else if (requestCode == INFO_PATH) {
+			SettingsManager.setInfoPath(uriString);
+			updateSummary(infoPath, uriString);
 		}
 	}
 

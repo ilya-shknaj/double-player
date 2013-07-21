@@ -14,7 +14,7 @@ import by.gravity.doublexplayer.activity.MainActivity;
 import by.gravity.doublexplayer.model.Rate;
 import by.gravity.doublexplayer.model.VideoState;
 
-public class VideoFragment extends BaseVideoFragment {
+public class VideoFragment extends BaseVideoFragment implements IVideo{
 
 	private Rate mRate = Rate.X1;
 

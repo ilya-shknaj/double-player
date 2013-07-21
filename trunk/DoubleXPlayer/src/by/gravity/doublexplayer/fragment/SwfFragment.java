@@ -16,7 +16,7 @@ import android.widget.Button;
 import by.gravity.doublexplayer.R;
 import by.gravity.doublexplayer.activity.MainActivity;
 
-public class SwfFragment extends Fragment {
+public class SwfFragment extends Fragment implements IVideo {
 
 	private WebView mWebView;
 
@@ -91,7 +91,7 @@ public class SwfFragment extends Fragment {
 		mWebView.getSettings().setCacheMode(
 				mWebView.getSettings().LOAD_NO_CACHE);
 		mWebView.setBackgroundColor(Color.BLACK);
-		mWebView.loadUrl(getArguments().getString(ARG_MEDIA_URI));
+		mWebView.loadUrl(getMediaUri());
 	}
 
 	@Override
@@ -147,6 +147,11 @@ public class SwfFragment extends Fragment {
 			}
 
 		}
+	}
+
+	@Override
+	public String getMediaUri() {
+		return getArguments().getString(ARG_MEDIA_URI);
 	}
 
 }
