@@ -50,6 +50,7 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 		}
 		setMediaUri(uri);
 		setRate(Rate.X1);
+		setRepeatMode(true);
 		if (uri != null) {
 			initUI();
 		}
