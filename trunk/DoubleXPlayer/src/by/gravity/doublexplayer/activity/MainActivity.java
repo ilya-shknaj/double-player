@@ -4,6 +4,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,8 +19,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import by.gravity.common.utils.FileUtil;
-import by.gravity.common.utils.StringUtil;
+import by.gravity.doubleplayer.core.utils.StringUtil;
 import by.gravity.doublexplayer.R;
 import by.gravity.doublexplayer.fragment.IVideo;
 import by.gravity.doublexplayer.fragment.SwfFragment;
@@ -138,7 +140,7 @@ public class MainActivity extends FragmentActivity {
 			}
 		});
 
-//		initFragment();
+		// initFragment();
 
 	}
 
@@ -207,7 +209,12 @@ public class MainActivity extends FragmentActivity {
 		if (!StringUtil.isEmpty(defaultPath)) {
 			intent.setData(Uri.parse(defaultPath));
 		}
-		startActivityForResult(intent, requestCode);
+		try {
+			startActivityForResult(intent, requestCode);
+		} catch (ActivityNotFoundException e) {
+			Toast.makeText(this, "IO File Manager not installed", Toast.LENGTH_LONG)
+					.show();
+		}
 	}
 
 	private void openCameraAction(int requestCode, String videoPath) {
