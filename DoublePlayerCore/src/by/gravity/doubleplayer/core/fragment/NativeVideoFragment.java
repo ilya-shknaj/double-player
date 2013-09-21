@@ -39,6 +39,12 @@ public class NativeVideoFragment extends Fragment {
 
 	protected native void nativeSurfaceFinalize(); // Surface about to be
 	// destroyed
+	
+	protected native void nativeNextFrame();
+	
+	protected native void nativePrevFrame();
+	
+	protected native void nativeSetRepeatMode(boolean isRepeat);
 
 	private long native_custom_data; // Native code will use this to keep
 	// private data
@@ -70,6 +76,7 @@ public class NativeVideoFragment extends Fragment {
 	protected void onMediaSizeChanged(int width, int height) {
 
 	}
+	
 
 	public int getPosition() {
 		return position;
@@ -79,8 +86,12 @@ public class NativeVideoFragment extends Fragment {
 		return duration;
 	}
 
-	public void setPosition(int position) {
+	public void setCurrentPosition(int position){
 		this.position = position;
+	}
+	
+	public void setPosition(int position) {
+		nativeSetPosition(position);
 	}
 
 	public void setDuration(int duration) {

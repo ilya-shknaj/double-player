@@ -1,5 +1,9 @@
 package by.gravity.doubleplayer.core.fragment;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -11,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 import android.widget.Toast;
 import by.gravity.doubleplayer.core.IPlayer;
 import by.gravity.doubleplayer.core.utils.StringUtil;
@@ -36,14 +41,22 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 
 	abstract public int getViewID();
 
+	abstract public int getSeekBarID();
+
+	abstract public int getCurrentPositionTextViewID();
+
+	abstract public int getTotaTextViewID();
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+
 		super.onCreate(savedInstanceState);
 		gstreamerInit();
 
 	}
 
 	private void gstreamerInit() {
+
 		try {
 			GStreamer.init(getActivity());
 		} catch (Exception e) {
@@ -55,6 +68,7 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
+
 		super.onActivityCreated(savedInstanceState);
 		PowerManager pm = (PowerManager) getActivity().getSystemService(Context.POWER_SERVICE);
 		wake_lock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, TAG);
@@ -64,8 +78,8 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 		SurfaceHolder sh = sv.getHolder();
 		sh.addCallback(this);
 
-//		SeekBar sb = (SeekBar) getView().findViewById(R.id.seek_bar);
-//		sb.setOnSeekBarChangeListener(this);
+		SeekBar sb = (SeekBar) getView().findViewById(getSeekBarID());
+		sb.setOnSeekBarChangeListener(this);
 
 		// Retrieve our previous state, or initialize it to default values
 		if (savedInstanceState != null) {
@@ -86,11 +100,19 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(getViewID(), container);
+
+		return inflater.inflate(getViewID(), null);
+	}
+
+	@Override
+	public void onDestroy() {
+
+		super.onDestroy();
 	}
 
 	@Override
 	public void onDestroyView() {
+
 		nativeFinalize();
 		if (wake_lock.isHeld()) {
 			wake_lock.release();
@@ -102,6 +124,7 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	// Called from native code
 	@Override
 	protected void onGStreamerInitialized() {
+
 		Log.i("GStreamer", "GStreamer initialized:");
 
 		// Restore previous playing state
@@ -115,41 +138,54 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 
 	}
 
+	public boolean isPlayed() {
+
+		return is_playing_desired;
+	}
+
 	// The text widget acts as an slave for the seek bar, so it reflects what
 	// the seek bar shows, whether
 	// it is an actual pipeline position or the position the user is currently
 	// dragging to.
 	private void updateTimeWidget() {
-		// TextView tv = (TextView) getView().findViewById(R.id.textview_time);
-		// SeekBar sb = (SeekBar) getView().findViewById(R.id.seek_bar);
-		// int pos = sb.getProgress();
-		//
-		// SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
-		// df.setTimeZone(TimeZone.getTimeZone("UTC"));
-		// String message = df.format(new Date(pos)) + " / " + df.format(new
-		// Date(getDuration()));
-		// tv.setText(message);
+
+		TextView tv = (TextView) getView().findViewById(getCurrentPositionTextViewID());
+		TextView duration = (TextView) getView().findViewById(getTotaTextViewID());
+		SeekBar sb = (SeekBar) getView().findViewById(getSeekBarID());
+		if (tv == null || duration == null || sb == null) {
+			return;
+		}
+		int pos = sb.getProgress();
+
+		SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+		df.setTimeZone(TimeZone.getTimeZone("UTC"));
+		tv.setText(df.format(new Date(pos)));
+		duration.setText(df.format(new Date(getDuration())));
 	}
 
 	// Called from native code
 	@Override
 	protected void setCurrentPosition(final int position, final int duration) {
-//		final SeekBar sb = (SeekBar) getView().findViewById(R.id.seek_bar);
+
+		final SeekBar sb = (SeekBar) getView().findViewById(getSeekBarID());
 
 		// Ignore position messages from the pipeline if the seek bar is being
 		// dragged
-		// if (sb.isPressed())
-		// return;
-		//
-		// getActivity().runOnUiThread(new Runnable() {
-		// public void run() {
-		// sb.setMax(duration);
-		// sb.setProgress(position);
-		// updateTimeWidget();
-		// sb.setEnabled(duration != 0);
-		// }
-		// });
-		setPosition(position);
+		if (sb.isPressed()) {
+			return;
+		}
+
+		getActivity().runOnUiThread(new Runnable() {
+
+			public void run() {
+
+				sb.setMax(duration);
+				sb.setProgress(position);
+				updateTimeWidget();
+				sb.setEnabled(duration != 0);
+			}
+		});
+		setCurrentPosition(position);
 		setDuration(duration);
 	}
 
@@ -160,15 +196,18 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	}
 
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
 		Log.d("GStreamer", "Surface changed to format " + format + " width " + width + " height " + height);
 		nativeSurfaceInit(holder.getSurface());
 	}
 
 	public void surfaceCreated(SurfaceHolder holder) {
+
 		Log.d("GStreamer", "Surface created: " + holder.getSurface());
 	}
 
 	public void surfaceDestroyed(SurfaceHolder holder) {
+
 		Log.d("GStreamer", "Surface destroyed");
 		nativeSurfaceFinalize();
 	}
@@ -176,12 +215,15 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	// Called from native code
 	@Override
 	protected void onMediaSizeChanged(int width, int height) {
+
 		Log.i("GStreamer", "Media size changed to " + width + "x" + height);
 		final GStreamerSurfaceView gsv = (GStreamerSurfaceView) getView().findViewById(getSurfaceID());
 		gsv.media_width = width;
 		gsv.media_height = height;
 		getActivity().runOnUiThread(new Runnable() {
+
 			public void run() {
+
 				gsv.requestLayout();
 			}
 		});
@@ -190,6 +232,7 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	// The Seek Bar thumb has moved, either because the user dragged it or we
 	// have called setProgress()
 	public void onProgressChanged(SeekBar sb, int progress, boolean fromUser) {
+
 		if (fromUser == false)
 			return;
 		desired_position = progress;
@@ -203,28 +246,34 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 
 	// The user started dragging the Seek Bar thumb
 	public void onStartTrackingTouch(SeekBar sb) {
+
 		nativePause();
 	}
 
 	// The user released the Seek Bar thumb
 	public void onStopTrackingTouch(SeekBar sb) {
+
 		// If this is a remote file, scrub seeking is probably not going to work
 		// smoothly enough.
 		// Therefore, perform only the seek when the slider is released.
-		if (!is_local_media)
+		if (!is_local_media) {
 			nativeSetPosition(desired_position);
-		if (is_playing_desired)
+		}
+		if (is_playing_desired) {
 			nativePlay();
+		}
 	}
 
 	@Override
 	public void setRate(double rate) {
+
 		nativeSetRate(rate);
 
 	}
 
 	@Override
 	public void play() {
+
 		is_playing_desired = true;
 		wake_lock.acquire();
 		nativePlay();
@@ -232,6 +281,7 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 
 	@Override
 	public void pause() {
+
 		is_playing_desired = false;
 		wake_lock.release();
 		nativePause();
@@ -240,12 +290,34 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 
 	@Override
 	public void setMediaUri(String uri) {
+
 		if (!StringUtil.isEmpty(uri)) {
 			mediaUri = uri;
 			nativeSetUri(mediaUri);
 			is_local_media = uri.startsWith("file://");
 		}
 
+	}
+
+	public int getDesired_position() {
+
+		return desired_position;
+	}
+
+	public String getMediaUri() {
+
+		return mediaUri;
+	}
+	
+	private boolean isRepeatMode = false;
+	
+	public void setRepeatMode(boolean isRepeat){
+		this.isRepeatMode = isRepeat;
+		nativeSetRepeatMode(isRepeat);
+	}
+	
+	public boolean getRepeatMode(){
+		return isRepeatMode;
 	}
 
 }
