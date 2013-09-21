@@ -140,7 +140,7 @@ public class MainActivity extends FragmentActivity {
 			}
 		});
 
-		// initFragment();
+		 initFragment();
 
 	}
 
