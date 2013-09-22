@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="35dp"
+        android:layout_height="@dimen/button_size"
         android:layout_marginLeft="3dp"
         android:layout_marginRight="3dp"
         android:orientation="horizontal" >
