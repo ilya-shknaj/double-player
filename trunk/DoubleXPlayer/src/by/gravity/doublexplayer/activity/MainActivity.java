@@ -140,7 +140,7 @@ public class MainActivity extends FragmentActivity {
 			}
 		});
 
-//		initFragment();
+		// initFragment();
 
 	}
 
@@ -240,10 +240,15 @@ public class MainActivity extends FragmentActivity {
 		if (resultCode != RESULT_OK) {
 			return;
 		}
-		if (requestCode == LEFT_OPEN_REQUEST_CODE) {
-			setVideoFragmentUri(Position.LEFT.name(), data.getDataString());
-		} else if (requestCode == RIGHT_OPEN_REQUEST_CODE) {
-			setVideoFragmentUri(Position.RIGHT.name(), data.getDataString());
+		if (requestCode == LEFT_OPEN_REQUEST_CODE
+				|| requestCode == RIGHT_OPEN_REQUEST_CODE) {
+			String filePath = decodeFilePath(data.getDataString());
+			filePath = StringUtil.decodeString(filePath);
+			if (requestCode == LEFT_OPEN_REQUEST_CODE) {
+				setVideoFragmentUri(Position.LEFT.name(), filePath);
+			} else if (requestCode == RIGHT_OPEN_REQUEST_CODE) {
+				setVideoFragmentUri(Position.RIGHT.name(), filePath);
+			}
 		} else if (requestCode == LEFT_CAMERA_REQUEST_CODE) {
 			setVideoFragmentUri(Position.LEFT.name(),
 					FileUtil.getFilePathFromContentUri(data.getData()));
@@ -252,6 +257,10 @@ public class MainActivity extends FragmentActivity {
 					FileUtil.getFilePathFromContentUri(data.getData()));
 		}
 
+	}
+
+	private String decodeFilePath(String path) {
+		return StringUtil.decodeString(path);
 	}
 
 	private void setVideoFragmentUri(String tag, String mediaUri) {
@@ -301,7 +310,6 @@ public class MainActivity extends FragmentActivity {
 
 				String txtPath = PlayerUtil.changeFileExtensionToTxt(FileUtil
 						.getFileNameFromPath(mediaUri));
-				txtPath = StringUtil.decodeString(txtPath);
 				return FileUtil.readFileAsString(SettingsManager.getInfoPath()
 						+ File.separator + txtPath);
 			}
