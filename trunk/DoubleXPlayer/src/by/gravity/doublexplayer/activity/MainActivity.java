@@ -21,7 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import by.gravity.common.utils.FileUtil;
-import by.gravity.doubleplayer.core.utils.StringUtil;
+import by.gravity.common.utils.StringUtil;
 import by.gravity.doublexplayer.R;
 import by.gravity.doublexplayer.fragment.IVideo;
 import by.gravity.doublexplayer.fragment.SwfFragment;
@@ -140,7 +140,7 @@ public class MainActivity extends FragmentActivity {
 			}
 		});
 
-		 initFragment();
+//		initFragment();
 
 	}
 
@@ -212,8 +212,8 @@ public class MainActivity extends FragmentActivity {
 		try {
 			startActivityForResult(intent, requestCode);
 		} catch (ActivityNotFoundException e) {
-			Toast.makeText(this, "IO File Manager not installed", Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(this, "IO File Manager not installed",
+					Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -301,6 +301,7 @@ public class MainActivity extends FragmentActivity {
 
 				String txtPath = PlayerUtil.changeFileExtensionToTxt(FileUtil
 						.getFileNameFromPath(mediaUri));
+				txtPath = StringUtil.decodeString(txtPath);
 				return FileUtil.readFileAsString(SettingsManager.getInfoPath()
 						+ File.separator + txtPath);
 			}
