@@ -61,7 +61,8 @@ static jmethodID set_message_method_id;
 static jmethodID set_current_position_method_id;
 static jmethodID on_gstreamer_initialized_method_id;
 static jmethodID on_media_size_changed_method_id;
-
+static jmethodID on_video_finished;
+static jmethodID on_set_rate_finished;
 /*
  * Private methods
  */
@@ -127,6 +128,16 @@ static void set_current_ui_position(gint position, gint duration,
 	}
 }
 
+static void video_finished(CustomData *data) {
+	JNIEnv *env = get_jni_env();
+	(*env)->CallVoidMethod(env, data->app, on_video_finished);
+}
+
+static void set_rate_finished(CustomData *data){
+	JNIEnv *env = get_jni_env();
+		(*env)->CallVoidMethod(env, data->app, on_set_rate_finished);
+}
+
 /* If we have pipeline and it is running, query the current position and clip duration and inform
  * the application */
 static gboolean refresh_ui(CustomData *data) {
@@ -145,7 +156,7 @@ static gboolean refresh_ui(CustomData *data) {
 			GST_WARNING(
 					"Could not query current duration (normal for still pictures)");
 			data->duration = 0;
-			
+
 		}
 	}
 
@@ -153,7 +164,7 @@ static gboolean refresh_ui(CustomData *data) {
 		GST_WARNING(
 				"Could not query current position (normal for still pictures)");
 		position = 0;
-		
+
 	}
 
 
@@ -237,6 +248,8 @@ static void eos_cb(GstBus *bus, GstMessage *msg, CustomData *data) {
 	data->target_state = GST_STATE_PAUSED;
 	data->is_live = (gst_element_set_state(data->pipeline, GST_STATE_PAUSED)
 			== GST_STATE_CHANGE_NO_PREROLL);
+	video_finished(data);
+	/*
 	if(data->is_repeat){
 		g_print("set state to ready");
 		data->target_state = GST_STATE_READY;
@@ -248,7 +261,7 @@ static void eos_cb(GstBus *bus, GstMessage *msg, CustomData *data) {
 		data->rate = rate;
 		send_seek_event(data);
 		g_print("start from start");
-	}
+	}*/
 	g_print("end of video");
 }
 
@@ -470,11 +483,11 @@ static void gst_native_init(JNIEnv* env, jobject thiz) {
 
 /* Quit the main loop, remove the native thread and free resources */
 static void gst_native_finalize(JNIEnv* env, jobject thiz) {
-	GST_ERROR("calling native finalize");
+	g_print("calling native finalize");
 	CustomData *data = GET_CUSTOM_DATA (env, thiz, custom_data_field_id);
 	if (!data)
 		return;
-	/*
+
 	GST_DEBUG("Quitting main loop...");
 	g_main_loop_quit(data->main_loop);
 	GST_DEBUG("Waiting for thread to finish...");
@@ -482,12 +495,10 @@ static void gst_native_finalize(JNIEnv* env, jobject thiz) {
 	GST_DEBUG("Deleting GlobalRef for app object at %p", data->app);
 	(*env)->DeleteGlobalRef(env, data->app);
 	GST_DEBUG("Freeing CustomData at %p", data);
-	*/
 	g_free(data);
-	/*
 	SET_CUSTOM_DATA(env, thiz, custom_data_field_id, NULL);
 	GST_DEBUG("Done finalizing");
-	*/
+
 }
 
 /* Set playbin2's URI */
@@ -555,6 +566,10 @@ static jboolean gst_native_class_init(JNIEnv* env, jclass klass) {
 			"onGStreamerInitialized", "()V");
 	on_media_size_changed_method_id = (*env)->GetMethodID(env, klass,
 			"onMediaSizeChanged", "(II)V");
+	on_video_finished = (*env)->GetMethodID(env, klass,
+				"onVideoFinished", "()V");
+	on_set_rate_finished = (*env)->GetMethodID(env, klass,
+			"onSetRateFinished", "()V");
 
 	if (!custom_data_field_id || !set_message_method_id
 			|| !on_gstreamer_initialized_method_id
@@ -621,17 +636,29 @@ void gst_native_set_rate(JNIEnv *env, jobject thiz, jdouble rate) {
 	if (!data) {
 		return;
 	}
-	jboolean isPlayed = data->target_state = GST_STATE_PLAYING;
-	if(isPlayed){
-		g_print("video plaued set pause before set rate");
-		gst_native_pause(env,thiz);
+
+	GstState currentState = data->target_state ;
+	if(currentState == GST_STATE_PLAYING){
+		g_print("video played set state pause");
+		data->target_state = GST_STATE_PAUSED;
+		data->is_live = (gst_element_set_state(data->pipeline, GST_STATE_PAUSED)
+					== GST_STATE_CHANGE_NO_PREROLL);
 	}
+
 	data->rate = rate;
 	send_seek_event(data);
-	if(isPlayed){
-		g_print("continue play");
-		gst_native_play(env,thiz);
+	/*
+	sleep(1);
+	if(currentState == GST_STATE_PLAYING){
+		g_print("continue playing");
+		data->target_state = GST_STATE_PLAYING;
+		data->is_live = (gst_element_set_state(data->pipeline, GST_STATE_PLAYING)
+							== GST_STATE_CHANGE_NO_PREROLL);
+
 	}
+	*/
+	set_rate_finished(data);
+
 }
 
 /* Send seek event to change rate */
@@ -639,13 +666,13 @@ void send_seek_event (CustomData *data) {
   gint64 position;
   GstFormat format = GST_FORMAT_TIME;
   GstEvent *seek_event;
-   
+
   /* Obtain the current position, needed for the seek event */
   if (!gst_element_query_position (data->pipeline, &format, &position)) {
     g_printerr ("Unable to retrieve current position.\n");
     return;
   }
-   
+
   /* Create the seek event */
   if (data->rate > 0) {
     seek_event = gst_event_new_seek (data->rate, GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_ACCURATE,
@@ -654,15 +681,15 @@ void send_seek_event (CustomData *data) {
     seek_event = gst_event_new_seek (data->rate, GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_ACCURATE,
         GST_SEEK_TYPE_SET, 0, GST_SEEK_TYPE_SET, position);
   }
-   
+
   if (data->video_sink == NULL) {
     /* If we have not done so, obtain the sink through which we will send the seek events */
     g_object_get (data->pipeline, "video-sink", &data->video_sink, NULL);
   }
-   
+
   /* Send the event */
   gst_element_send_event (data->video_sink, seek_event);
-   
+
   g_print ("Current rate: %g\n", data->rate);
 }
 

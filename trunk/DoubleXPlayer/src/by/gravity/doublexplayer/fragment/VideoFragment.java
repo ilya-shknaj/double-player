@@ -17,13 +17,15 @@ import by.gravity.doublexplayer.model.VideoState;
 
 public class VideoFragment extends BaseVideoFragment implements IVideo {
 
+	private static final String TAG = VideoFragment.class.getSimpleName();
+	
 	private Rate mRate = Rate.X1;
 
 	private static final String ARG_MEDIA_URI = "ARG_MEDIA_URI";
 
 	private static final String DEFAULT_MEDIA_URI = "file://"
 			+ Environment.getExternalStorageDirectory().getAbsolutePath()
-			+ "/DoublePlayer/2013_09_18_14_18_58.mp4";
+			+ "/DoublePlayer/Video/1.mp4";
 
 	private Button mPlayButton;
 
@@ -193,10 +195,11 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 	}
 
 	public void setRate(Rate rate) {
-
 		mRate = rate;
 		setRateUI(rate);
+		setPreRateStatePlaying(isPlayed());
 		setRate(rate.getValue());
+		
 	}
 
 	private void setRateUI(Rate rate) {
@@ -210,23 +213,30 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 	public void play() {
 
 		super.play();
-		setPlayPauseUI();
+		updatePlayPauseUI();
 	}
 
 	@Override
 	public void pause() {
 
 		super.pause();
-		setPlayPauseUI();
+		updatePlayPauseUI();
 	}
 
-	private void setPlayPauseUI() {
-
+	@Override
+	protected void updatePlayPauseUI() {
+		if(mPlayButton==null){
+			return;
+		}
+		
 		if (isPlayed()) {
+			Log.d(TAG, "set pause button image");
 			mPlayButton.setBackgroundResource(R.drawable.btn_pause);
 		} else {
+			Log.d(TAG, "set play button image");
 			mPlayButton.setBackgroundResource(R.drawable.btn_play);
 		}
+		
 	}
 
 	@Override

@@ -17,8 +17,8 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import by.gravity.common.utils.StringUtil;
 import by.gravity.doubleplayer.core.IPlayer;
-import by.gravity.doubleplayer.core.utils.StringUtil;
 import by.gravity.doubleplayer.core.view.GStreamerSurfaceView;
 
 import com.gstreamer.GStreamer;
@@ -46,6 +46,8 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	abstract public int getCurrentPositionTextViewID();
 
 	abstract public int getTotaTextViewID();
+
+	private boolean preRateStatePlaying = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -113,7 +115,7 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	@Override
 	public void onDestroyView() {
 
-		nativeFinalize();
+		// nativeFinalize();
 		if (wake_lock.isHeld()) {
 			wake_lock.release();
 		}
@@ -273,7 +275,7 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 
 	@Override
 	public void play() {
-
+		Log.i(TAG, "start play");
 		is_playing_desired = true;
 		wake_lock.acquire();
 		nativePlay();
@@ -299,6 +301,42 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 
 	}
 
+	@Override
+	protected void onVideoFinished() {
+		super.onVideoFinished();
+		if (is_playing_desired && isRepeatMode) {
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			play();
+		} else {
+			is_playing_desired = false;
+			updatePlayPauseUI();
+		}
+	}
+
+	@Override
+	protected void onSetRateFinished() {
+		super.onSetRateFinished();
+		if (isPreRateStatePlaying()) {
+			setPreRateStatePlaying(false);
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			play();
+		}
+	}
+
+	protected void updatePlayPauseUI() {
+
+	}
+
 	public int getDesired_position() {
 
 		return desired_position;
@@ -308,16 +346,24 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 
 		return mediaUri;
 	}
-	
+
 	private boolean isRepeatMode = false;
-	
-	public void setRepeatMode(boolean isRepeat){
+
+	public void setRepeatMode(boolean isRepeat) {
 		this.isRepeatMode = isRepeat;
 		nativeSetRepeatMode(isRepeat);
 	}
-	
-	public boolean getRepeatMode(){
+
+	public boolean getRepeatMode() {
 		return isRepeatMode;
+	}
+
+	public boolean isPreRateStatePlaying() {
+		return preRateStatePlaying;
+	}
+
+	public void setPreRateStatePlaying(boolean preRateStatePlaying) {
+		this.preRateStatePlaying = preRateStatePlaying;
 	}
 
 }

@@ -77,6 +77,16 @@ public class NativeVideoFragment extends Fragment {
 
 	}
 	
+	
+	//called when video end of stream
+	protected void onVideoFinished(){
+		Log.e(TAG, "video finishing calling");
+	}
+	
+	protected void onSetRateFinished(){
+		Log.e(TAG, "set rate finishing calling");
+	}
+	
 
 	public int getPosition() {
 		return position;

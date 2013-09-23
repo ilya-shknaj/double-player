@@ -59,33 +59,28 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.a_main);
 
-		leftOpenButton = (Button) findViewById(R.id.action_bar_left)
-				.findViewById(R.id.btn_open);
+		leftOpenButton = (Button) findViewById(R.id.action_bar_left).findViewById(R.id.btn_open);
 
 		leftOpenButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				openFileAction(LEFT_OPEN_REQUEST_CODE,
-						SettingsManager.getLeftPath());
+				openFileAction(LEFT_OPEN_REQUEST_CODE, SettingsManager.getLeftPath());
 			}
 		});
 
-		leftCameraButton = (Button) findViewById(R.id.action_bar_left)
-				.findViewById(R.id.btn_camera);
+		leftCameraButton = (Button) findViewById(R.id.action_bar_left).findViewById(R.id.btn_camera);
 		leftCameraButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				openCameraAction(LEFT_CAMERA_REQUEST_CODE,
-						SettingsManager.getLeftPath());
+				openCameraAction(LEFT_CAMERA_REQUEST_CODE, SettingsManager.getLeftPath());
 			}
 		});
 
-		leftInfoButton = (Button) findViewById(R.id.action_bar_left)
-				.findViewById(R.id.btn_info);
+		leftInfoButton = (Button) findViewById(R.id.action_bar_left).findViewById(R.id.btn_info);
 		leftInfoButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -94,32 +89,27 @@ public class MainActivity extends FragmentActivity {
 			}
 		});
 
-		rightOpenButton = (Button) findViewById(R.id.action_bar_right)
-				.findViewById(R.id.btn_open);
+		rightOpenButton = (Button) findViewById(R.id.action_bar_right).findViewById(R.id.btn_open);
 		rightOpenButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				openFileAction(RIGHT_OPEN_REQUEST_CODE,
-						SettingsManager.getRightPath());
+				openFileAction(RIGHT_OPEN_REQUEST_CODE, SettingsManager.getRightPath());
 			}
 		});
 
-		rightCameraButton = (Button) findViewById(R.id.action_bar_right)
-				.findViewById(R.id.btn_camera);
+		rightCameraButton = (Button) findViewById(R.id.action_bar_right).findViewById(R.id.btn_camera);
 		rightCameraButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				openCameraAction(RIGHT_CAMERA_REQUEST_CODE,
-						SettingsManager.getRightPath());
+				openCameraAction(RIGHT_CAMERA_REQUEST_CODE, SettingsManager.getRightPath());
 			}
 		});
 
-		rightInfoButton = (Button) findViewById(R.id.action_bar_right)
-				.findViewById(R.id.btn_info);
+		rightInfoButton = (Button) findViewById(R.id.action_bar_right).findViewById(R.id.btn_info);
 		rightInfoButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -134,13 +124,12 @@ public class MainActivity extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 
-				Intent intent = new Intent(MainActivity.this,
-						SettingsActivity.class);
+				Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
 				startActivity(intent);
 			}
 		});
 
-		// initFragment();
+		initFragment();
 
 	}
 
@@ -169,20 +158,11 @@ public class MainActivity extends FragmentActivity {
 
 		}
 		if (activeLayout.getLayoutParams().width == android.widget.RelativeLayout.LayoutParams.MATCH_PARENT) {
-			activeLayout
-					.setLayoutParams(new LinearLayout.LayoutParams(
-							0,
-							android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
-							0.5f));
-			unActiveLayout
-					.setLayoutParams(new LinearLayout.LayoutParams(
-							0,
-							android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
-							0.5f));
+			activeLayout.setLayoutParams(new LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
+			unActiveLayout.setLayoutParams(new LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
 		} else {
 			unActiveLayout.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
-			activeLayout.setLayoutParams(new LinearLayout.LayoutParams(
-					android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+			activeLayout.setLayoutParams(new LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
 					android.widget.LinearLayout.LayoutParams.MATCH_PARENT));
 
 		}
@@ -190,16 +170,14 @@ public class MainActivity extends FragmentActivity {
 
 	private void initFragment() {
 
-		Fragment leftVideo = VideoFragment.newInstance(null);
+		// Fragment leftVideo = VideoFragment.newInstance(null);
 		Fragment rightVideo = VideoFragment.newInstance(null);
 		Fragment swfFragment = SwfFragment.newInstance(null);
 
-		FragmentTransaction transaction = getSupportFragmentManager()
-				.beginTransaction();
-		transaction.replace(R.id.leftVideoLayout, leftVideo,
-				Position.LEFT.name());
-		transaction.replace(R.id.rightVideoLayout, rightVideo,
-				Position.RIGHT.name());
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		// transaction.replace(R.id.leftVideoLayout, leftVideo,
+		// Position.LEFT.name());
+		transaction.replace(R.id.rightVideoLayout, rightVideo, Position.RIGHT.name());
 		transaction.commit();
 	}
 
@@ -212,8 +190,7 @@ public class MainActivity extends FragmentActivity {
 		try {
 			startActivityForResult(intent, requestCode);
 		} catch (ActivityNotFoundException e) {
-			Toast.makeText(this, "IO File Manager not installed",
-					Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "IO File Manager not installed", Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -227,8 +204,7 @@ public class MainActivity extends FragmentActivity {
 
 	private String generateVideoName() {
 
-		SimpleDateFormat dateFormat = new SimpleDateFormat(
-				"yyyy_MM_dd_HH_mm_ss");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
 		return dateFormat.format(System.currentTimeMillis()) + ".mp4";
 
 	}
@@ -240,41 +216,28 @@ public class MainActivity extends FragmentActivity {
 		if (resultCode != RESULT_OK) {
 			return;
 		}
-		if (requestCode == LEFT_OPEN_REQUEST_CODE
-				|| requestCode == RIGHT_OPEN_REQUEST_CODE) {
-			String filePath = decodeFilePath(data.getDataString());
-			filePath = StringUtil.decodeString(filePath);
-			if (requestCode == LEFT_OPEN_REQUEST_CODE) {
-				setVideoFragmentUri(Position.LEFT.name(), filePath);
-			} else if (requestCode == RIGHT_OPEN_REQUEST_CODE) {
-				setVideoFragmentUri(Position.RIGHT.name(), filePath);
-			}
+		if (requestCode == LEFT_OPEN_REQUEST_CODE) {
+			setVideoFragmentUri(Position.LEFT.name(), data.getDataString());
+		} else if (requestCode == RIGHT_OPEN_REQUEST_CODE) {
+			setVideoFragmentUri(Position.RIGHT.name(), data.getDataString());
 		} else if (requestCode == LEFT_CAMERA_REQUEST_CODE) {
-			setVideoFragmentUri(Position.LEFT.name(),
-					FileUtil.getFilePathFromContentUri(data.getData()));
+			setVideoFragmentUri(Position.LEFT.name(), FileUtil.getFilePathFromContentUri(data.getData()));
 		} else if (requestCode == RIGHT_CAMERA_REQUEST_CODE) {
-			setVideoFragmentUri(Position.RIGHT.name(),
-					FileUtil.getFilePathFromContentUri(data.getData()));
+			setVideoFragmentUri(Position.RIGHT.name(), FileUtil.getFilePathFromContentUri(data.getData()));
 		}
 
 	}
 
-	private String decodeFilePath(String path) {
-		return StringUtil.decodeString(path);
-	}
-
 	private void setVideoFragmentUri(String tag, String mediaUri) {
 		Fragment fragment;
-		if (mediaUri.length() > 4
-				&& mediaUri.substring(mediaUri.length() - 3).equals("swf")) {
+		if (mediaUri.length() > 4 && mediaUri.substring(mediaUri.length() - 3).equals("swf")) {
 			fragment = SwfFragment.newInstance(mediaUri);
 		} else {
 			fragment = VideoFragment.newInstance(mediaUri);
 
 		}
 
-		FragmentTransaction transaction = getSupportFragmentManager()
-				.beginTransaction();
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		if (tag.intern() == Position.LEFT.name().intern()) {
 			transaction.replace(R.id.leftVideoLayout, fragment, tag);
 		} else {
@@ -301,17 +264,14 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	private String getMediaInfo(Position position) {
-		Fragment fragment = getSupportFragmentManager().findFragmentByTag(
-				position.name());
+		Fragment fragment = getSupportFragmentManager().findFragmentByTag(position.name());
 		if (fragment != null) {
 			IVideo video = (IVideo) fragment;
 			String mediaUri = video.getMediaUri();
 			if (mediaUri != null) {
-
-				String txtPath = PlayerUtil.changeFileExtensionToTxt(FileUtil
-						.getFileNameFromPath(mediaUri));
-				return FileUtil.readFileAsString(SettingsManager.getInfoPath()
-						+ File.separator + txtPath);
+				mediaUri = StringUtil.decodeString(mediaUri);
+				String txtPath = PlayerUtil.changeFileExtensionToTxt(FileUtil.getFileNameFromPath(mediaUri));
+				return FileUtil.readFileAsString(SettingsManager.getInfoPath() + File.separator + txtPath);
 			}
 		}
 
