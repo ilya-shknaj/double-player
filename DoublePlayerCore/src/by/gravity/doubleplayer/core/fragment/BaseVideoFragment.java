@@ -20,6 +20,8 @@ import android.widget.Toast;
 import by.gravity.common.utils.StringUtil;
 import by.gravity.doubleplayer.core.IPlayer;
 import by.gravity.doubleplayer.core.view.GStreamerSurfaceView;
+import by.gravity.doublexplayer.R;
+import by.gravity.doublexplayer.model.Rate;
 
 import com.gstreamer.GStreamer;
 
@@ -48,6 +50,8 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	abstract public int getTotaTextViewID();
 
 	private boolean preRateStatePlaying = false;
+
+	private Rate mRate = Rate.X1;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -304,6 +308,8 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	@Override
 	protected void onVideoFinished() {
 		super.onVideoFinished();
+		Log.e(TAG, "onVideoFinished");
+		Log.e(TAG, "is_playing_desired " + is_playing_desired + " isRepeatMode " + isRepeatMode);
 		if (is_playing_desired && isRepeatMode) {
 			try {
 				Thread.sleep(200);
@@ -311,7 +317,8 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			play();
+			// play();
+			setRate(getRate());
 		} else {
 			is_playing_desired = false;
 			updatePlayPauseUI();
@@ -345,6 +352,26 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	public String getMediaUri() {
 
 		return mediaUri;
+	}
+
+	protected Rate getRate() {
+
+		return mRate;
+	}
+
+	protected void setRate(Rate rate) {
+		mRate = rate;
+		Log.e(TAG, "setRate isPlayed()=" + isPlayed());
+		setPreRateStatePlaying(isPlayed());
+		setRate(rate.getValue());
+		setRateUI(rate);
+
+	}
+
+	protected void setRateUI(Rate rate) {
+
+		TextView rateButton = (TextView) getView().findViewById(R.id.rateButton);
+		rateButton.setText(rate.getName());
 	}
 
 	private boolean isRepeatMode = false;
