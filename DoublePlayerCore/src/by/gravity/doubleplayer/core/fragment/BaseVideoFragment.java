@@ -6,6 +6,7 @@ import java.util.TimeZone;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PowerManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,11 +54,20 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 
 	private Rate mRate = Rate.X1;
 
+	private Handler handler;
+
+	private Runnable mSetRateRunnable;
+
+	private Runnable mPlayRunnable;
+
+	private static final long RUNNABLE_DELAY = 200;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		gstreamerInit();
+		handler = new Handler();
 
 	}
 
@@ -311,17 +321,19 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 		Log.e(TAG, "onVideoFinished");
 		Log.e(TAG, "is_playing_desired " + is_playing_desired + " isRepeatMode " + isRepeatMode);
 		if (is_playing_desired && isRepeatMode) {
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			// play();
-			setRate(getRate());
+			postDelayedSetRate();
 		} else {
 			is_playing_desired = false;
-			updatePlayPauseUI();
+			Runnable runnable = new Runnable() {
+
+				@Override
+				public void run() {
+					updatePlayPauseUI();
+				}
+			};
+			
+			postDelayed(runnable, RUNNABLE_DELAY);
+
 		}
 	}
 
@@ -330,14 +342,42 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 		super.onSetRateFinished();
 		if (isPreRateStatePlaying()) {
 			setPreRateStatePlaying(false);
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			play();
+			postDelayedPlay();
 		}
+	}
+
+	private void postDelayedSetRate() {
+		if (mSetRateRunnable == null) {
+			mSetRateRunnable = new Runnable() {
+
+				@Override
+				public void run() {
+					setRate(getRate());
+				}
+			};
+		}
+
+		postDelayed(mSetRateRunnable, RUNNABLE_DELAY);
+
+	}
+
+	protected void postDelayedPlay() {
+		if (mPlayRunnable == null) {
+			mPlayRunnable = new Runnable() {
+
+				@Override
+				public void run() {
+					play();
+				}
+			};
+		}
+
+		postDelayed(mPlayRunnable, RUNNABLE_DELAY);
+
+	}
+
+	private void postDelayed(Runnable runnable, long time) {
+		handler.postDelayed(runnable, time);
 	}
 
 	protected void updatePlayPauseUI() {

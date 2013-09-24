@@ -104,7 +104,7 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 				pause();
 				onFullScreenClick();
 				if (isPlayed) {
-					play();
+					postDelayedPlay();
 				}
 			}
 		});
