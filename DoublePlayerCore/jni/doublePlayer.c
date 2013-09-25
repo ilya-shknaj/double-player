@@ -746,6 +746,28 @@ void gst_native_set_repeat_mode(JNIEnv *env, jobject thiz,jboolean is_repeat){
 	g_print("set repeat mode");
 }
 
+void gst_native_set_fragment(JNIEnv *env, jobject thiz,gint startPosition,gint finishPosition){
+
+	CustomData *data = GET_CUSTOM_DATA (env, thiz, custom_data_field_id);
+	if (!data) {
+			return;
+	}
+	g_print("set fragment start position %d finish position %d",startPosition,finishPosition);
+	gint64 start_position = (gint64) (startPosition * GST_MSECOND);
+	gint64 finish_position = (gint64) (finishPosition * GST_MSECOND);
+	GstEvent *seek_event = gst_event_new_seek (data->rate, GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_ACCURATE,
+			GST_SEEK_TYPE_SET , start_position, GST_SEEK_TYPE_SET, finish_position);
+
+	if (data->video_sink == NULL) {
+		/* If we have not done so, obtain the sink through which we will send the seek events */
+		g_object_get (data->pipeline, "video-sink", &data->video_sink, NULL);
+	}
+
+	/* Send the event */
+	gst_element_send_event (data->video_sink, seek_event);
+
+}
+
 
 
 /* List of implemented native methods */
@@ -762,7 +784,8 @@ static JNINativeMethod native_methods[] = { { "nativeInit", "()V",
 				"nativeSetRate", "(D)V", gst_native_set_rate }, {
 				"nativeNextFrame", "()V", (void *) gst_native_next_frame }, {
 				"nativeSetRepeatMode", "(Z)V", (void *) gst_native_set_repeat_mode },{
-						"nativeSeekToPosition", "(I)V", (void *) gst_seek_to_position }};
+						"nativeSeekToPosition", "(I)V", (void *) gst_seek_to_position },{
+								"nativeSetFragment", "(II)V", (void *) gst_native_set_fragment }};
 
 /* Library initializer */
 jint JNI_OnLoad(JavaVM *vm, void *reserved) {
