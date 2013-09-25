@@ -6,7 +6,7 @@
 
     <Button
         android:layout_marginTop="2dp"
-        android:id="@+id/leftPositionButton"
+        android:id="@+id/leftFragmentButton"
         android:layout_width="@dimen/button_loop_width"
         android:layout_height="@dimen/button_loop_height"
         android:layout_alignParentLeft="true"
@@ -15,11 +15,11 @@
 
     <Button
         android:layout_marginTop="2dp"
-        android:id="@+id/rightPositionButton"
+        android:id="@+id/rightFragmentButton"
         android:layout_width="@dimen/button_loop_width"
         android:layout_height="@dimen/button_loop_height"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/leftPositionButton"
+        android:layout_toRightOf="@id/leftFragmentButton"
         android:background="@drawable/btn_add_right_position" />
 
     <Button
@@ -27,7 +27,7 @@
         android:layout_width="@dimen/button_size"
         android:layout_height="@dimen/button_size"
         android:layout_marginLeft="@dimen/button_margin"
-        android:layout_toRightOf="@+id/rightPositionButton"
+        android:layout_toRightOf="@+id/rightFragmentButton"
         android:background="@drawable/btn_repeat" />
 
     <Button

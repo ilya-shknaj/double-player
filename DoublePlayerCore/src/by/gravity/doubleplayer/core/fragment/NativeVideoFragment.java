@@ -45,6 +45,8 @@ public class NativeVideoFragment extends Fragment {
 	protected native void nativeSetRepeatMode(boolean isRepeat);
 
 	protected native void nativeSeekToPosition(int position);
+	
+	protected native void nativeSetFragment(int startPosition,int finishPosition);
 
 	private long native_custom_data; // Native code will use this to keep
 	// private data

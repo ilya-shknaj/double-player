@@ -142,6 +142,15 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 				Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
 			}
 		});
+		
+		Button leftFragment = (Button) getView().findViewById(R.id.leftFragmentButton);
+		leftFragment.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View paramView) {
+				nativeSetFragment(1560, 4800);
+			}
+		});
 
 		showProgressBar();
 
