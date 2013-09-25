@@ -2,11 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="by.gravity.doublexplayer"
     android:versionCode="1"
-    android:versionName="1.0.2" >
+    android:versionName="1.0.4" >
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="18" />
 
     <uses-feature android:name="android.hardware.camera" />
 

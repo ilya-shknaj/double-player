@@ -22,7 +22,7 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 	private static final String ARG_MEDIA_URI = "ARG_MEDIA_URI";
 
 	private static final String DEFAULT_MEDIA_URI = "file://" + Environment.getExternalStorageDirectory().getAbsolutePath()
-			+ "/DoublePlayer/Video/1.mp4";
+			+ "/DoublePlayer/Video/11.mp4";
 
 	private Button mPlayButton;
 
@@ -125,7 +125,9 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 
 			@Override
 			public void onClick(View arg0) {
-				setPosition(1100);
+				if (!isPlayed()) {
+					onPrevFrameClick();
+				}
 
 			}
 		});
@@ -158,8 +160,8 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 	}
 
 	private void onPrevFrameClick() {
-		Log.e("test", "prev Frame");
-		nativePrevFrame();
+		int nextPosition = (getPosition() - 40);
+		nativeSeekToPosition(nextPosition);
 	}
 
 	private void onFullScreenClick() {

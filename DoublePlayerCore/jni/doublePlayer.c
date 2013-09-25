@@ -24,9 +24,15 @@ GST_DEBUG_CATEGORY_STATIC( debug_category);
 # define SET_CUSTOM_DATA(env, thiz, fieldID, data) (*env)->SetLongField (env, thiz, fieldID, (jlong)(jint)data)
 #endif
 
+
+#define APPNAME "by.gravity.doublexplayer"
+#define LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG, APPNAME, __VA_ARGS__)
+#define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR, APPNAME, __VA_ARGS__)
+#define LOGI(...)  __android_log_print(ANDROID_LOG_INFO, APPNAME, __VA_ARGS__)
+
 /* Do not allow seeks to be performed closer than this distance. It is visually useless, and will probably
  * confuse some demuxers. */
-#define SEEK_MIN_DELAY (500 * GST_MSECOND)
+#define SEEK_MIN_DELAY (1 * GST_MSECOND)
 
 /* Structure to contain all our information, so we can pass it to callbacks */
 typedef struct _CustomData {
@@ -574,7 +580,9 @@ static jboolean gst_native_class_init(JNIEnv* env, jclass klass) {
 	if (!custom_data_field_id || !set_message_method_id
 			|| !on_gstreamer_initialized_method_id
 			|| !on_media_size_changed_method_id
-			|| !set_current_position_method_id) {
+			|| !set_current_position_method_id
+			|| !on_video_finished
+			|| !on_set_rate_finished) {
 		/* We emit this message through the Android log instead of the GStreamer log because the later
 		 * has not been initialized yet.
 		 */
@@ -708,19 +716,25 @@ void gst_native_next_frame(JNIEnv *env, jobject thiz) {
 	g_print("Stepping one frame\n");
 }
 
-void gst_native_prev_frame(JNIEnv *env, jobject thiz) {
+void gst_seek_to_position(JNIEnv *env, jobject thiz,gint milliseconds) {
 	CustomData *data = GET_CUSTOM_DATA (env, thiz, custom_data_field_id);
 	if (!data) {
 		return;
 	}
-	if (data->video_sink == NULL) {
-		/* If we have not done so, obtain the sink through which we will send the step events */
-		g_object_get(data->pipeline, "video-sink", &data->video_sink, NULL);
-	}
 
-	gst_element_send_event(data->video_sink,
-			gst_event_new_step(GST_FORMAT_BUFFERS, 1, -1.0, TRUE, FALSE));
-	g_print("Stepping one frame\n");
+
+	gint64 desired_position = (gint64) (milliseconds * GST_MSECOND);
+
+	GstEvent *seek_event = gst_event_new_seek (data->rate, GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_ACCURATE,
+	        GST_SEEK_TYPE_SET, desired_position, GST_SEEK_TYPE_NONE, 0);
+
+	  if (data->video_sink == NULL) {
+	    /* If we have not done so, obtain the sink through which we will send the seek events */
+	    g_object_get (data->pipeline, "video-sink", &data->video_sink, NULL);
+	  }
+
+	  /* Send the event */
+	  gst_element_send_event (data->video_sink, seek_event);
 }
 
 void gst_native_set_repeat_mode(JNIEnv *env, jobject thiz,jboolean is_repeat){
@@ -747,8 +761,8 @@ static JNINativeMethod native_methods[] = { { "nativeInit", "()V",
 		{ "nativeClassInit", "()Z", (void *) gst_native_class_init }, {
 				"nativeSetRate", "(D)V", gst_native_set_rate }, {
 				"nativeNextFrame", "()V", (void *) gst_native_next_frame }, {
-				"nativePrevFrame", "()V", (void *) gst_native_prev_frame },{
-				"nativeSetRepeatMode", "(Z)V", (void *) gst_native_set_repeat_mode }};
+				"nativeSetRepeatMode", "(Z)V", (void *) gst_native_set_repeat_mode },{
+						"nativeSeekToPosition", "(I)V", (void *) gst_seek_to_position }};
 
 /* Library initializer */
 jint JNI_OnLoad(JavaVM *vm, void *reserved) {

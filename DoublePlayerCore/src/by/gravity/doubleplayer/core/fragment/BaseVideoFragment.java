@@ -172,7 +172,6 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 			return;
 		}
 		int pos = sb.getProgress();
-
 		SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
 		df.setTimeZone(TimeZone.getTimeZone("UTC"));
 		tv.setText(df.format(new Date(pos)));
@@ -182,9 +181,8 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	// Called from native code
 	@Override
 	protected void setCurrentPosition(final int position, final int duration) {
-
 		final SeekBar sb = (SeekBar) getView().findViewById(getSeekBarID());
-
+		Log.e(TAG, "position = " + position + " duration " + duration);
 		// Ignore position messages from the pipeline if the seek bar is being
 		// dragged
 		if (sb.isPressed()) {
@@ -248,7 +246,6 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	// The Seek Bar thumb has moved, either because the user dragged it or we
 	// have called setProgress()
 	public void onProgressChanged(SeekBar sb, int progress, boolean fromUser) {
-
 		if (fromUser == false)
 			return;
 		desired_position = progress;

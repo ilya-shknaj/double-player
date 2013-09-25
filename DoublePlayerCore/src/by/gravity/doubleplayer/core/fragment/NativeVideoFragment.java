@@ -26,7 +26,7 @@ public class NativeVideoFragment extends Fragment {
 																// milliseconds
 
 	protected native void nativePause(); // Set pipeline to PAUSED
-	
+
 	protected native void nativeSetRate(double rate); // set playback rate
 
 	protected static native boolean nativeClassInit(); // Initialize native
@@ -39,12 +39,12 @@ public class NativeVideoFragment extends Fragment {
 
 	protected native void nativeSurfaceFinalize(); // Surface about to be
 	// destroyed
-	
+
 	protected native void nativeNextFrame();
-	
-	protected native void nativePrevFrame();
-	
+
 	protected native void nativeSetRepeatMode(boolean isRepeat);
+
+	protected native void nativeSeekToPosition(int position);
 
 	private long native_custom_data; // Native code will use this to keep
 	// private data
@@ -76,17 +76,15 @@ public class NativeVideoFragment extends Fragment {
 	protected void onMediaSizeChanged(int width, int height) {
 
 	}
-	
-	
-	//called when video end of stream
-	protected void onVideoFinished(){
+
+	// called when video end of stream
+	protected void onVideoFinished() {
 		Log.e(TAG, "video finishing calling");
 	}
-	
-	protected void onSetRateFinished(){
+
+	protected void onSetRateFinished() {
 		Log.e(TAG, "set rate finishing calling");
 	}
-	
 
 	public int getPosition() {
 		return position;
@@ -96,10 +94,10 @@ public class NativeVideoFragment extends Fragment {
 		return duration;
 	}
 
-	public void setCurrentPosition(int position){
+	public void setCurrentPosition(int position) {
 		this.position = position;
 	}
-	
+
 	public void setPosition(int position) {
 		nativeSetPosition(position);
 	}
