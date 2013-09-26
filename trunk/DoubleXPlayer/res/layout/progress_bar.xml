@@ -19,7 +19,8 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true" />
 
-        <SeekBar
+        <LinearLayout
+            android:orientation="horizontal"
             android:id="@+id/seekBar"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

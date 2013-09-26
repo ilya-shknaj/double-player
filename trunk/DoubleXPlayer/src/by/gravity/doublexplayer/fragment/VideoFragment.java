@@ -14,6 +14,7 @@ import by.gravity.doublexplayer.R;
 import by.gravity.doublexplayer.activity.MainActivity;
 import by.gravity.doublexplayer.model.Rate;
 import by.gravity.doublexplayer.model.VideoState;
+import by.gravity.doublexplayer.widget.RangeSeekBar;
 
 public class VideoFragment extends BaseVideoFragment implements IVideo {
 
@@ -21,7 +22,8 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 
 	private static final String ARG_MEDIA_URI = "ARG_MEDIA_URI";
 
-	private static final String DEFAULT_MEDIA_URI = "file://" + Environment.getExternalStorageDirectory().getAbsolutePath()
+	private static final String DEFAULT_MEDIA_URI = "file://"
+			+ Environment.getExternalStorageDirectory().getAbsolutePath()
 			+ "/DoublePlayer/Video/11.mp4";
 
 	private Button mPlayButton;
@@ -84,7 +86,8 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 			}
 		});
 
-		TextView rateButton = (TextView) getView().findViewById(R.id.rateButton);
+		TextView rateButton = (TextView) getView()
+				.findViewById(R.id.rateButton);
 		rateButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -95,7 +98,8 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 			}
 		});
 
-		Button fullScreenButton = (Button) getView().findViewById(R.id.fullScreenButton);
+		Button fullScreenButton = (Button) getView().findViewById(
+				R.id.fullScreenButton);
 		fullScreenButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -109,7 +113,8 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 			}
 		});
 
-		Button nextFrameButton = (Button) getView().findViewById(R.id.nextFrameButton);
+		Button nextFrameButton = (Button) getView().findViewById(
+				R.id.nextFrameButton);
 		nextFrameButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -120,7 +125,8 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 			}
 		});
 
-		Button prevFrameButton = (Button) getView().findViewById(R.id.prevFrameButton);
+		Button prevFrameButton = (Button) getView().findViewById(
+				R.id.prevFrameButton);
 		prevFrameButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -137,18 +143,48 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 
 			@Override
 			public void onClick(View v) {
-				String message = !getRepeatMode() ? "Repeat mode enable" : "Repeat mode disable";
+				String message = !getRepeatMode() ? "Repeat mode enable"
+						: "Repeat mode disable";
 				setRepeatMode(!getRepeatMode());
-				Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT)
+						.show();
 			}
 		});
-		
-		Button leftFragment = (Button) getView().findViewById(R.id.leftFragmentButton);
+
+		View leftFragment = getView().findViewById(R.id.leftFragmentLayout);
 		leftFragment.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View paramView) {
-				nativeSetFragment(1560, 4800);
+				Log.d(TAG, "leftFragmentClick");
+				if (!getRangeSeekBar().hasMinValue()) {
+					getRangeSeekBar().setSelectedMinValue(getPosition());
+					getRangeSeekBar().setHasMinValue(true);
+				} else {
+					getRangeSeekBar().setHasMinValue(false);
+				}
+
+				setVideoFragment();
+				updateVideoFragmentUI(FragmentButton.START);
+
+			}
+		});
+
+		View rightFragment = getView().findViewById(R.id.rightFragmentLayout);
+		rightFragment.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View paramView) {
+				Log.d(TAG, "rightFragmentClick");
+				if (!getRangeSeekBar().hasMaxValue()) {
+					getRangeSeekBar().setSelectedMaxValue(getPosition());
+					getRangeSeekBar().setHasMaxValue(true);
+				} else {
+					getRangeSeekBar().setHasMaxValue(false);
+				}
+				setVideoFragment();
+				updateVideoFragmentUI(FragmentButton.FINISH);
+
 			}
 		});
 
@@ -156,8 +192,11 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 
 	}
 
+	
+	
 	private void showProgressBar() {
-		LinearLayout progressBar = (LinearLayout) getView().findViewById(R.id.progressBar);
+		LinearLayout progressBar = (LinearLayout) getView().findViewById(
+				R.id.progressBar);
 		if (progressBar != null) {
 			progressBar.setVisibility(View.VISIBLE);
 		}
@@ -181,7 +220,8 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 
 	public VideoState createVideoState() {
 
-		return new VideoState(getMediaUri(), getPosition(), getRate(), isPlayed());
+		return new VideoState(getMediaUri(), getPosition(), getRate(),
+				isPlayed());
 	}
 
 	private static VideoState getDefaultVideoState() {
@@ -219,6 +259,35 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 
 	}
 
+	private enum FragmentButton {
+		START, FINISH
+	}
+
+	@SuppressWarnings("deprecation")
+	protected void updateVideoFragmentUI(FragmentButton fragmentButton) {
+		View button;
+		if (fragmentButton == FragmentButton.START) {
+			button = getView().findViewById(R.id.leftFragmentButton);
+			if (getRangeSeekBar().hasMinValue()) {
+				button.setBackgroundDrawable(getResources().getDrawable(
+						R.drawable.btn_remove_left_position));
+			} else {
+				button.setBackgroundDrawable(getResources().getDrawable(
+						R.drawable.btn_add_left_position));
+			}
+		} else {
+			button = getView().findViewById(R.id.rightFragmentButton);
+			if (getRangeSeekBar().hasMaxValue()) {
+				button.setBackgroundDrawable(getResources().getDrawable(
+						R.drawable.btn_remove_right_position));
+			} else {
+				button.setBackgroundDrawable(getResources().getDrawable(
+						R.drawable.btn_add_right_position));
+			}
+		}
+
+	}
+
 	@Override
 	public int getSurfaceID() {
 
@@ -229,12 +298,6 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 	public int getViewID() {
 
 		return R.layout.f_video;
-	}
-
-	@Override
-	public int getSeekBarID() {
-
-		return R.id.seekBar;
 	}
 
 	@Override

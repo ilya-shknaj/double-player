@@ -4,30 +4,42 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical" >
 
-    <Button
-        android:layout_marginTop="2dp"
-        android:id="@+id/leftFragmentButton"
-        android:layout_width="@dimen/button_loop_width"
-        android:layout_height="@dimen/button_loop_height"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="10dp"
-        android:background="@drawable/btn_add_left_position" />
+    <RelativeLayout
+        android:id="@+id/leftFragmentLayout"
+        android:layout_width="@dimen/button_size"
+        android:layout_height="@dimen/button_size"
+        android:layout_alignParentLeft="true" >
+
+        <Button
+            android:id="@+id/leftFragmentButton"
+            android:layout_width="@dimen/button_loop_width"
+            android:layout_height="@dimen/button_loop_height"
+            android:layout_centerInParent="true"
+            android:background="@drawable/btn_add_left_position" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_marginLeft="@dimen/button_margin"
+        android:id="@+id/rightFragmentLayout"
+        android:layout_width="@dimen/button_size"
+        android:layout_height="@dimen/button_size"
+        android:layout_toRightOf="@id/leftFragmentLayout" >
+
+        <Button
+            android:id="@+id/rightFragmentButton"
+            android:layout_width="@dimen/button_loop_width"
+            android:layout_height="@dimen/button_loop_height"
+            android:layout_centerInParent="true"
+            android:background="@drawable/btn_add_right_position" />
+    </RelativeLayout>
 
     <Button
-        android:layout_marginTop="2dp"
-        android:id="@+id/rightFragmentButton"
-        android:layout_width="@dimen/button_loop_width"
-        android:layout_height="@dimen/button_loop_height"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/leftFragmentButton"
-        android:background="@drawable/btn_add_right_position" />
-
-    <Button
+        android:visibility="gone"
         android:id="@+id/repeatButton"
         android:layout_width="@dimen/button_size"
         android:layout_height="@dimen/button_size"
         android:layout_marginLeft="@dimen/button_margin"
-        android:layout_toRightOf="@+id/rightFragmentButton"
+        android:layout_toRightOf="@+id/rightFragmentLayout"
         android:background="@drawable/btn_repeat" />
 
     <Button
@@ -55,11 +67,11 @@
         android:background="@drawable/btn_next_frame" />
 
     <TextView
-        android:layout_marginTop="2dp"
         android:id="@+id/rateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/button_margin"
+        android:layout_marginTop="2dp"
         android:layout_toLeftOf="@+id/fullScreenButton"
         android:text="1X"
         android:textColor="@android:color/white"
@@ -71,7 +83,6 @@
         android:layout_height="@dimen/button_size"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="@dimen/button_margin"
-        android:layout_marginRight="@dimen/button_margin"
         android:background="@drawable/btn_full_screen" />
 
 </RelativeLayout>

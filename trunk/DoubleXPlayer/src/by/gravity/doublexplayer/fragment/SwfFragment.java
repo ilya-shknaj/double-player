@@ -191,28 +191,6 @@ public class SwfFragment extends Fragment implements IVideo {
 		}
 	}
 
-	private void callHiddenWebViewMethod(String name) {
-		if (mWebView != null) {
-			Method method;
-			try {
-				method = WebView.class.getMethod(name);
-				method.invoke(mWebView);
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-	}
 
 	@Override
 	public String getMediaUri() {
