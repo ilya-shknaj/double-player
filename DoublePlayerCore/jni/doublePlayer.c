@@ -191,35 +191,23 @@ static void execute_seek(gint64 desired_position, CustomData *data) {
 	if (desired_position == GST_CLOCK_TIME_NONE)
 		return;
 
-	diff = gst_util_get_timestamp() - data->last_seek_time;
-
-	if (GST_CLOCK_TIME_IS_VALID(data->last_seek_time) && diff < SEEK_MIN_DELAY) {
-		/* The previous seek was too close, delay this one */
-		GSource *timeout_source;
-
-		if (data->desired_position == GST_CLOCK_TIME_NONE) {
-			/* There was no previous seek scheduled. Setup a timer for some time in the future */
-			timeout_source = g_timeout_source_new(
-					(SEEK_MIN_DELAY - diff) / GST_MSECOND);
-			g_source_set_callback(timeout_source, (GSourceFunc) delayed_seek_cb,
-					data, NULL);
-			g_source_attach(timeout_source, data->context);
-			g_source_unref(timeout_source);
-		}
-		/* Update the desired seek position. If multiple petitions are received before it is time
-		 * to perform a seek, only the last one is remembered. */
-		data->desired_position = desired_position;
-		GST_DEBUG(
-				"Throttling seek to %" GST_TIME_FORMAT ", will be in %" GST_TIME_FORMAT, GST_TIME_ARGS (desired_position), GST_TIME_ARGS (SEEK_MIN_DELAY - diff));
-	} else {
-		/* Perform the seek now */
-		GST_DEBUG(
+	GST_DEBUG(
 				"Seeking to %" GST_TIME_FORMAT, GST_TIME_ARGS (desired_position));
-		data->last_seek_time = gst_util_get_timestamp();
-		gst_element_seek_simple(data->pipeline, GST_FORMAT_TIME,
-				GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT, desired_position);
-		data->desired_position = GST_CLOCK_TIME_NONE;
-	}
+//	gst_element_seek_simple(data->pipeline, GST_FORMAT_TIME,
+//				GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_ACCURATE, desired_position);
+
+	GstFormat format = GST_FORMAT_TIME;
+	GstEvent *seek_event;
+	    seek_event = gst_event_new_seek (data->rate, GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_ACCURATE,
+	        GST_SEEK_TYPE_SET, desired_position, GST_SEEK_TYPE_NONE, 0);
+
+	  if (data->video_sink == NULL) {
+	    /* If we have not done so, obtain the sink through which we will send the seek events */
+	    g_object_get (data->pipeline, "video-sink", &data->video_sink, NULL);
+	  }
+
+	  /* Send the event */
+	  gst_element_send_event (data->video_sink, seek_event);
 }
 
 /* Delayed seek callback. This gets called by the timer setup in the above function. */
@@ -307,6 +295,7 @@ static void clock_lost_cb(GstBus *bus, GstMessage *msg, CustomData *data) {
 
 /* Retrieve the video sink's Caps and tell the application about the media size */
 static void check_media_size(CustomData *data) {
+	/*
 	JNIEnv *env = get_jni_env();
 	GstElement *video_sink;
 	GstPad *video_sink_pad;
@@ -315,7 +304,7 @@ static void check_media_size(CustomData *data) {
 	int width;
 	int height;
 
-	/* Retrieve the Caps at the entrance of the video sink */
+	/* Retrieve the Caps at the entrance of the video sink
 	g_object_get(data->pipeline, "video-sink", &video_sink, NULL);
 	video_sink_pad = gst_element_get_static_pad(video_sink, "sink");
 	caps = gst_pad_get_negotiated_caps(video_sink_pad);
@@ -337,7 +326,7 @@ static void check_media_size(CustomData *data) {
 
 	gst_caps_unref(caps);
 	gst_object_unref(video_sink_pad);
-	gst_object_unref(video_sink);
+	gst_object_unref(video_sink);*/
 }
 
 /* Notify UI about pipeline state changes */
@@ -551,13 +540,13 @@ void gst_native_set_position(JNIEnv* env, jobject thiz, int milliseconds) {
 	if (!data)
 		return;
 	gint64 desired_position = (gint64) (milliseconds * GST_MSECOND);
-	if (data->state >= GST_STATE_PAUSED) {
+	//if (data->state >= GST_STATE_PAUSED) {
 		execute_seek(desired_position, data);
-	} else {
+	/*} else {
 		GST_DEBUG(
 				"Scheduling seek to %" GST_TIME_FORMAT " for later", GST_TIME_ARGS (desired_position));
 		data->desired_position = desired_position;
-	}
+	}*/
 }
 
 /* Static class initializer: retrieve method and field IDs */

@@ -61,6 +61,8 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements
 
 	private Runnable mPlayRunnable;
 
+	private Runnable mSetPositionRunnable;
+
 	private static final long RUNNABLE_DELAY = 200;
 
 	@Override
@@ -209,7 +211,7 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements
 	@Override
 	protected void setCurrentPosition(final int position, final int duration) {
 		final RangeSeekBar sb = getRangeSeekBar();
-//		 Log.e(TAG, "position = " + position + " duration " + duration);
+		// Log.e(TAG, "position = " + position + " duration " + duration);
 		// Ignore position messages from the pipeline if the seek bar is being
 		// dragged
 		if (sb.isPressed()) {
@@ -350,7 +352,7 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements
 		Log.e(TAG, "is_playing_desired " + is_playing_desired
 				+ " isRepeatMode " + isRepeatMode);
 		if (is_playing_desired && isRepeatMode) {
-//			postDelayedSetRate();
+			// postDelayedSetRate();
 			setVideoFragment();
 			postDelayedPlay();
 		} else {
@@ -390,6 +392,22 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements
 
 		postDelayed(mSetRateRunnable, RUNNABLE_DELAY);
 
+	}
+
+	protected void postDelayedSetPosition(final int position, final boolean play) {
+		if (mSetPositionRunnable == null) {
+			mSetPositionRunnable = new Runnable() {
+
+				@Override
+				public void run() {
+					Log.e(TAG, "postDelayedSetPosition to " + position);
+					setPosition(position);
+
+				}
+			};
+		}
+
+		postDelayed(mSetPositionRunnable, 300);
 	}
 
 	protected void postDelayedPlay() {
@@ -445,14 +463,16 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements
 				.findViewById(R.id.rateButton);
 		rateButton.setText(rate.getName());
 	}
-	
-	protected void setVideoFragment(){
+
+	protected void setVideoFragment() {
 		RangeSeekBar seekBar = getRangeSeekBar();
-		int minValue = seekBar.hasMinValue() ? seekBar.getSelectedMinValue() : seekBar.getAbsoluteMinValue();
-		int maxValue = seekBar.hasMaxValue() ? seekBar.getSelectedMaxValue() : seekBar.getAbsoluteMaxValue();
-		
+		int minValue = seekBar.hasMinValue() ? seekBar.getSelectedMinValue()
+				: seekBar.getAbsoluteMinValue();
+		int maxValue = seekBar.hasMaxValue() ? seekBar.getSelectedMaxValue()
+				: seekBar.getAbsoluteMaxValue();
+
 		nativeSetFragment(minValue, maxValue);
-		
+
 	}
 
 	private boolean isRepeatMode = false;

@@ -107,9 +107,10 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 				boolean isPlayed = isPlayed();
 				pause();
 				onFullScreenClick();
-				if (isPlayed) {
-					postDelayedPlay();
-				}
+				postDelayedSetPosition(getPosition(), false);
+//				if (isPlayed) {
+//					postDelayedPlay();
+//				}
 			}
 		});
 
@@ -213,7 +214,6 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 	}
 
 	private void onFullScreenClick() {
-
 		((MainActivity) getActivity()).onFullScreenClick(getTag());
 
 	}
