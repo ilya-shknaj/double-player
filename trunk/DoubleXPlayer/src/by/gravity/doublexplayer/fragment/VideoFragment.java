@@ -5,16 +5,14 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
+import by.gravity.common.Constants;
 import by.gravity.doubleplayer.core.fragment.BaseVideoFragment;
 import by.gravity.doublexplayer.R;
 import by.gravity.doublexplayer.activity.MainActivity;
 import by.gravity.doublexplayer.model.Rate;
 import by.gravity.doublexplayer.model.VideoState;
-import by.gravity.doublexplayer.widget.RangeSeekBar;
 
 public class VideoFragment extends BaseVideoFragment implements IVideo {
 
@@ -22,11 +20,8 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 
 	private static final String ARG_MEDIA_URI = "ARG_MEDIA_URI";
 
-	private static final String DEFAULT_MEDIA_URI = "file://"
-			+ Environment.getExternalStorageDirectory().getAbsolutePath()
+	private static final String DEFAULT_MEDIA_URI = Constants.FILE + Environment.getExternalStorageDirectory().getAbsolutePath()
 			+ "/DoublePlayer/Video/11.mp4";
-
-	private Button mPlayButton;
 
 	public static VideoFragment newInstance(String mediaUri) {
 
@@ -72,13 +67,13 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 
 	private void initUI() {
 
-		mPlayButton = (Button) getView().findViewById(R.id.playButton);
-		mPlayButton.setOnClickListener(new OnClickListener() {
+		View playButton = getView().findViewById(R.id.playButton);
+		playButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				if (isPlayed()) {
+				if (isPlaying()) {
 					pause();
 				} else {
 					play();
@@ -86,8 +81,7 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 			}
 		});
 
-		TextView rateButton = (TextView) getView()
-				.findViewById(R.id.rateButton);
+		View rateButton = getView().findViewById(R.id.rateButton);
 		rateButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -98,54 +92,49 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 			}
 		});
 
-		Button fullScreenButton = (Button) getView().findViewById(
-				R.id.fullScreenButton);
+		View fullScreenButton = getView().findViewById(R.id.fullScreenButton);
 		fullScreenButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View paramView) {
-				boolean isPlayed = isPlayed();
+				boolean isPlayed = isPlaying();
 				pause();
 				onFullScreenClick();
 				postDelayedSetPosition(getPosition(), isPlayed);
 			}
 		});
 
-		Button nextFrameButton = (Button) getView().findViewById(
-				R.id.nextFrameButton);
+		View nextFrameButton = getView().findViewById(R.id.nextFrameButton);
 		nextFrameButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				if (!isPlayed()) {
+				if (!isPlaying()) {
 					onNextFrameClick();
 				}
 			}
 		});
 
-		Button prevFrameButton = (Button) getView().findViewById(
-				R.id.prevFrameButton);
+		View prevFrameButton = getView().findViewById(R.id.prevFrameButton);
 		prevFrameButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
-				if (!isPlayed()) {
+				if (!isPlaying()) {
 					onPrevFrameClick();
 				}
 
 			}
 		});
 
-		Button repeatMode = (Button) getView().findViewById(R.id.repeatButton);
+		View repeatMode = getView().findViewById(R.id.repeatButton);
 		repeatMode.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				String message = !getRepeatMode() ? "Repeat mode enable"
-						: "Repeat mode disable";
-				setRepeatMode(!getRepeatMode());
-				Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT)
-						.show();
+				String message = !isRepeatMode() ? "Repeat mode enable" : "Repeat mode disable";
+				setRepeatMode(!isRepeatMode());
+				Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
 			}
 		});
 
@@ -190,11 +179,8 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 
 	}
 
-	
-	
 	private void showProgressBar() {
-		LinearLayout progressBar = (LinearLayout) getView().findViewById(
-				R.id.progressBar);
+		LinearLayout progressBar = (LinearLayout) getView().findViewById(R.id.progressBar);
 		if (progressBar != null) {
 			progressBar.setVisibility(View.VISIBLE);
 		}
@@ -217,8 +203,7 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 
 	public VideoState createVideoState() {
 
-		return new VideoState(getMediaUri(), getPosition(), getRate(),
-				isPlayed());
+		return new VideoState(getMediaUriString(), getPosition(), getRate(), isPlaying());
 	}
 
 	private static VideoState getDefaultVideoState() {
@@ -242,16 +227,17 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 
 	@Override
 	protected void updatePlayPauseUI() {
-		if (mPlayButton == null) {
+		View playButton = getView().findViewById(R.id.playButton);
+		if (playButton == null) {
 			return;
 		}
 
-		if (isPlayed()) {
+		if (isPlaying()) {
 			Log.d(TAG, "set pause button image");
-			mPlayButton.setBackgroundResource(R.drawable.btn_pause);
+			playButton.setBackgroundResource(R.drawable.btn_pause);
 		} else {
 			Log.d(TAG, "set play button image");
-			mPlayButton.setBackgroundResource(R.drawable.btn_play);
+			playButton.setBackgroundResource(R.drawable.btn_play);
 		}
 
 	}
@@ -266,20 +252,16 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 		if (fragmentButton == FragmentButton.START) {
 			button = getView().findViewById(R.id.leftFragmentButton);
 			if (getRangeSeekBar().hasMinValue()) {
-				button.setBackgroundDrawable(getResources().getDrawable(
-						R.drawable.btn_remove_left_position));
+				button.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_remove_left_position));
 			} else {
-				button.setBackgroundDrawable(getResources().getDrawable(
-						R.drawable.btn_add_left_position));
+				button.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_add_left_position));
 			}
 		} else {
 			button = getView().findViewById(R.id.rightFragmentButton);
 			if (getRangeSeekBar().hasMaxValue()) {
-				button.setBackgroundDrawable(getResources().getDrawable(
-						R.drawable.btn_remove_right_position));
+				button.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_remove_right_position));
 			} else {
-				button.setBackgroundDrawable(getResources().getDrawable(
-						R.drawable.btn_add_right_position));
+				button.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_add_right_position));
 			}
 		}
 

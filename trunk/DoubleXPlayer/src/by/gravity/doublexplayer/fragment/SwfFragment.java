@@ -50,7 +50,7 @@ public class SwfFragment extends Fragment implements IVideo {
 		super.onActivityCreated(savedInstanceState);
 		initWebView();
 		initButtons();
-		initFlash(getMediaUri());
+		initFlash(getMediaUriString());
 	}
 
 	private void initButtons() {
@@ -193,7 +193,7 @@ public class SwfFragment extends Fragment implements IVideo {
 
 
 	@Override
-	public String getMediaUri() {
+	public String getMediaUriString() {
 		return getArguments().getString(ARG_MEDIA_URI);
 	}
 

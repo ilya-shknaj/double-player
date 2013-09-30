@@ -6,8 +6,8 @@
 
     <RelativeLayout
         android:id="@+id/leftFragmentLayout"
-        android:layout_width="@dimen/button_size"
-        android:layout_height="@dimen/button_size"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentLeft="true" >
 
         <Button
@@ -19,10 +19,9 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_marginLeft="@dimen/button_margin"
         android:id="@+id/rightFragmentLayout"
-        android:layout_width="@dimen/button_size"
-        android:layout_height="@dimen/button_size"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_toRightOf="@id/leftFragmentLayout" >
 
         <Button

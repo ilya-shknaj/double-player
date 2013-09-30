@@ -267,7 +267,7 @@ public class MainActivity extends FragmentActivity {
 		Fragment fragment = getSupportFragmentManager().findFragmentByTag(position.name());
 		if (fragment != null) {
 			IVideo video = (IVideo) fragment;
-			String mediaUri = video.getMediaUri();
+			String mediaUri = video.getMediaUriString();
 			if (mediaUri != null) {
 				mediaUri = StringUtil.decodeString(mediaUri);
 				String txtPath = PlayerUtil.changeFileExtensionToTxt(FileUtil.getFileNameFromPath(mediaUri));
