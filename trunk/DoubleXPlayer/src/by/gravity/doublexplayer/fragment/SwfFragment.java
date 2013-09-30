@@ -1,8 +1,5 @@
 package by.gravity.doublexplayer.fragment;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
