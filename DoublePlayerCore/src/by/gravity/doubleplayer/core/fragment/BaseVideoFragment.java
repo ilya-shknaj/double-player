@@ -57,12 +57,6 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements
 
 	private Handler handler;
 
-	private Runnable mSetRateRunnable;
-
-	private Runnable mPlayRunnable;
-
-	private Runnable mSetPositionRunnable;
-
 	private static final long RUNNABLE_DELAY = 200;
 
 	@Override
@@ -86,7 +80,6 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 
@@ -211,7 +204,7 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements
 	@Override
 	protected void setCurrentPosition(final int position, final int duration) {
 		final RangeSeekBar sb = getRangeSeekBar();
-		// Log.e(TAG, "position = " + position + " duration " + duration);
+//		Log.e(TAG, "position = " + position + " duration " + duration);
 		// Ignore position messages from the pipeline if the seek bar is being
 		// dragged
 		if (sb.isPressed()) {
@@ -380,48 +373,41 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements
 	}
 
 	private void postDelayedSetRate() {
-		if (mSetRateRunnable == null) {
-			mSetRateRunnable = new Runnable() {
+		postDelayed(new Runnable() {
 
-				@Override
-				public void run() {
-					setRate(getRate());
-				}
-			};
-		}
-
-		postDelayed(mSetRateRunnable, RUNNABLE_DELAY);
+			@Override
+			public void run() {
+				setRate(getRate());
+			}
+		}, RUNNABLE_DELAY);
 
 	}
 
-	protected void postDelayedSetPosition(final int position, final boolean play) {
-		if (mSetPositionRunnable == null) {
-			mSetPositionRunnable = new Runnable() {
+	protected void postDelayedSetPosition(final int position, final boolean isPlayed) {
 
-				@Override
-				public void run() {
-					Log.e(TAG, "postDelayedSetPosition to " + position);
-					setPosition(position);
+		postDelayed(new Runnable() {
 
+			@Override
+			public void run() {
+				Log.e(TAG, "postDelayedSetPosition to " + position);
+				setPosition(position);
+				if(isPlayed){
+					play();
 				}
-			};
-		}
 
-		postDelayed(mSetPositionRunnable, 300);
+			}
+		}, 300);
 	}
 
 	protected void postDelayedPlay() {
-		if (mPlayRunnable == null) {
-			mPlayRunnable = new Runnable() {
 
-				@Override
-				public void run() {
-					play();
-				}
-			};
-		}
+		postDelayed(new Runnable() {
 
-		postDelayed(mPlayRunnable, RUNNABLE_DELAY);
+			@Override
+			public void run() {
+				play();
+			}
+		}, RUNNABLE_DELAY);
 
 	}
 

@@ -107,10 +107,7 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 				boolean isPlayed = isPlayed();
 				pause();
 				onFullScreenClick();
-				postDelayedSetPosition(getPosition(), false);
-//				if (isPlayed) {
-//					postDelayedPlay();
-//				}
+				postDelayedSetPosition(getPosition(), isPlayed);
 			}
 		});
 
