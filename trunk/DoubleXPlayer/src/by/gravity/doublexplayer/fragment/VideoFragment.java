@@ -14,7 +14,7 @@ import by.gravity.doublexplayer.activity.MainActivity;
 import by.gravity.doublexplayer.model.Rate;
 import by.gravity.doublexplayer.model.VideoState;
 
-public class VideoFragment extends BaseVideoFragment implements IVideo {
+public class VideoFragment extends BaseVideoFragment {
 
 	private static final String TAG = VideoFragment.class.getSimpleName();
 
@@ -110,7 +110,7 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 			@Override
 			public void onClick(View v) {
 				if (!isPlaying()) {
-					onNextFrameClick();
+					nextFrame();
 				}
 			}
 		});
@@ -121,7 +121,7 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 			@Override
 			public void onClick(View arg0) {
 				if (!isPlaying()) {
-					onPrevFrameClick();
+					prevFrame();
 				}
 
 			}
@@ -186,12 +186,14 @@ public class VideoFragment extends BaseVideoFragment implements IVideo {
 		}
 	}
 
-	private void onNextFrameClick() {
+	@Override
+	public void nextFrame() {
 		Log.e("test", "next Frame");
 		nativeNextFrame();
 	}
 
-	private void onPrevFrameClick() {
+	@Override
+	public void prevFrame() {
 		int nextPosition = (getPosition() - 40);
 		nativeSeekToPosition(nextPosition);
 	}

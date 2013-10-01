@@ -2,6 +2,8 @@ package by.gravity.doublexplayer.activity;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -22,8 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import by.gravity.common.utils.FileUtil;
 import by.gravity.common.utils.StringUtil;
+import by.gravity.doubleplayer.core.IPlayer;
 import by.gravity.doublexplayer.R;
-import by.gravity.doublexplayer.fragment.IVideo;
 import by.gravity.doublexplayer.fragment.SwfFragment;
 import by.gravity.doublexplayer.fragment.VideoFragment;
 import by.gravity.doublexplayer.manager.SettingsManager;
@@ -58,7 +60,64 @@ public class MainActivity extends FragmentActivity {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.a_main);
+		initTopActionBar();
+		initCommonActionBar();
+		initFragment();
 
+	}
+
+	public enum Position {
+		LEFT, RIGHT;
+
+	}
+
+	public void onFullScreenClick(String tag) {
+
+		showFullScreen(Position.valueOf(tag));
+
+	}
+
+	private void showFullScreen(Position video) {
+
+		RelativeLayout activeLayout = null;
+		RelativeLayout unActiveLayout = null;
+		if (video == Position.LEFT) {
+			activeLayout = (RelativeLayout) findViewById(R.id.leftVideoLayout);
+			unActiveLayout = (RelativeLayout) findViewById(R.id.rightVideoLayout);
+
+		} else {
+			activeLayout = (RelativeLayout) findViewById(R.id.rightVideoLayout);
+			unActiveLayout = (RelativeLayout) findViewById(R.id.leftVideoLayout);
+
+		}
+		if (activeLayout.getLayoutParams().width == android.widget.RelativeLayout.LayoutParams.MATCH_PARENT) {
+			activeLayout.setLayoutParams(new LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
+			unActiveLayout.setLayoutParams(new LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
+			showCommonActionBar();
+		} else {
+			unActiveLayout.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+			activeLayout.setLayoutParams(new LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+					android.widget.LinearLayout.LayoutParams.MATCH_PARENT));
+			hideCommonActionBar();
+
+		}
+	}
+
+	private void showCommonActionBar() {
+		View commonActionBar = findViewById(R.id.commonActionBar);
+		if (commonActionBar != null) {
+			commonActionBar.setVisibility(View.VISIBLE);
+		}
+	}
+
+	private void hideCommonActionBar() {
+		View commonActionBar = findViewById(R.id.commonActionBar);
+		if (commonActionBar != null) {
+			commonActionBar.setVisibility(View.GONE);
+		}
+	}
+
+	private void initTopActionBar() {
 		leftOpenButton = (Button) findViewById(R.id.action_bar_left).findViewById(R.id.btn_open);
 
 		leftOpenButton.setOnClickListener(new OnClickListener() {
@@ -129,43 +188,68 @@ public class MainActivity extends FragmentActivity {
 			}
 		});
 
-		initFragment();
+	}
+
+	private void initCommonActionBar() {
+		View commonActionBar = findViewById(R.id.commonActionBar);
+
+		View playButton = commonActionBar.findViewById(R.id.playButton);
+		playButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View paramView) {
+				getVideoFragments().get(0).play();
+			}
+		});
+
+		View prevFrame = commonActionBar.findViewById(R.id.prevFrameButton);
+		prevFrame.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View paramView) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+		View nextFrame = commonActionBar.findViewById(R.id.nextFrameButton);
+		nextFrame.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View paramView) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+		View rateButton = commonActionBar.findViewById(R.id.rateButton);
+		rateButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View paramView) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 
 	}
 
-	public enum Position {
-		LEFT, RIGHT;
+	private List<IPlayer> getVideoFragments() {
+		List<IPlayer> result = new ArrayList<IPlayer>();
 
-	}
+		Fragment leftFragment = getSupportFragmentManager().findFragmentByTag(Position.LEFT.name());
+		Fragment rightFragment = getSupportFragmentManager().findFragmentByTag(Position.RIGHT.name());
 
-	public void onFullScreenClick(String tag) {
-
-		showFullScreen(Position.valueOf(tag));
-
-	}
-
-	private void showFullScreen(Position video) {
-
-		RelativeLayout activeLayout = null;
-		RelativeLayout unActiveLayout = null;
-		if (video == Position.LEFT) {
-			activeLayout = (RelativeLayout) findViewById(R.id.leftVideoLayout);
-			unActiveLayout = (RelativeLayout) findViewById(R.id.rightVideoLayout);
-
-		} else {
-			activeLayout = (RelativeLayout) findViewById(R.id.rightVideoLayout);
-			unActiveLayout = (RelativeLayout) findViewById(R.id.leftVideoLayout);
-
+		if (leftFragment != null) {
+			result.add((IPlayer) leftFragment);
 		}
-		if (activeLayout.getLayoutParams().width == android.widget.RelativeLayout.LayoutParams.MATCH_PARENT) {
-			activeLayout.setLayoutParams(new LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
-			unActiveLayout.setLayoutParams(new LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
-		} else {
-			unActiveLayout.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
-			activeLayout.setLayoutParams(new LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
-					android.widget.LinearLayout.LayoutParams.MATCH_PARENT));
 
+		if (rightFragment != null) {
+			result.add((IPlayer) rightFragment);
 		}
+		
+		return result;
+
 	}
 
 	private void initFragment() {
@@ -266,7 +350,7 @@ public class MainActivity extends FragmentActivity {
 	private String getMediaInfo(Position position) {
 		Fragment fragment = getSupportFragmentManager().findFragmentByTag(position.name());
 		if (fragment != null) {
-			IVideo video = (IVideo) fragment;
+			IPlayer video = (IPlayer) fragment;
 			String mediaUri = video.getMediaUriString();
 			if (mediaUri != null) {
 				mediaUri = StringUtil.decodeString(mediaUri);

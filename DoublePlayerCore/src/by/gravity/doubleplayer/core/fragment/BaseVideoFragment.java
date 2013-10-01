@@ -39,16 +39,18 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	abstract public int getCurrentPositionTextViewID();
 
 	abstract public int getTotaTextViewID();
-	
-	
+
 	private static final String TAG = BaseVideoFragment.class.getSimpleName();
 
-	private boolean isLocalMedia; // Whether this clip is stored locally or is
-									// being streamed
-	private int desiredPosition; // Position where the users wants to seek to
-	private String mediaUriString; // URI of the clip being played
+	private static final String DATE_FORMAT = "HH:mm:ss";
+	
+	private static final String UTC = "UTC";
+	
+	private boolean isLocalMedia;
+	private int desiredPosition;
+	private String mediaUriString;
 
-	private boolean isPlaying; // Whether the user asked to go to PLAYING
+	private boolean isPlaying;
 
 	private PowerManager.WakeLock wakeLock;
 
@@ -67,8 +69,8 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	private final SimpleDateFormat dateFormat;
 
 	public BaseVideoFragment() {
-		dateFormat = new SimpleDateFormat("HH:mm:ss");
-		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+		dateFormat = new SimpleDateFormat(DATE_FORMAT);
+		dateFormat.setTimeZone(TimeZone.getTimeZone(UTC));
 		handler = new Handler();
 	}
 
@@ -300,7 +302,6 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 		}
 	}
 
-	@Override
 	public void setRate(double rate) {
 
 		nativeSetRate(rate);
@@ -323,7 +324,6 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 
 	}
 
-	@Override
 	public void setMediaUri(String uri) {
 
 		if (!StringUtil.isEmpty(uri)) {

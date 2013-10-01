@@ -6,8 +6,10 @@ public interface IPlayer {
 
 	public void pause();
 
-	public void setRate(double rate);
-
-	public void setMediaUri(String uri);
+	public String getMediaUriString();
+	
+	public void nextFrame();
+	
+	public void prevFrame();
 
 }
