@@ -198,7 +198,7 @@ public class MainActivity extends FragmentActivity {
 
 			@Override
 			public void onClick(View paramView) {
-				getVideoFragments().get(0).play();
+				doAction(Action.PLAY_PAUSE, null);
 			}
 		});
 
@@ -207,7 +207,7 @@ public class MainActivity extends FragmentActivity {
 
 			@Override
 			public void onClick(View paramView) {
-				// TODO Auto-generated method stub
+				doAction(Action.PREV_FRAME, null);
 
 			}
 		});
@@ -217,8 +217,7 @@ public class MainActivity extends FragmentActivity {
 
 			@Override
 			public void onClick(View paramView) {
-				// TODO Auto-generated method stub
-
+				doAction(Action.NEXT_FRAME, null);
 			}
 		});
 
@@ -227,10 +226,39 @@ public class MainActivity extends FragmentActivity {
 
 			@Override
 			public void onClick(View paramView) {
-				// TODO Auto-generated method stub
-
+				doAction(Action.SET_RATE, paramAction)
 			}
 		});
+
+	}
+
+	private void doAction(Action action, Object paramAction) {
+		List<IPlayer> fragments = getVideoFragments();
+		for (IPlayer player : fragments) {
+			switch (action) {
+			case PLAY_PAUSE:
+				player.playPause();
+				break;
+
+			case NEXT_FRAME:
+				player.nextFrame();
+				break;
+
+			case PREV_FRAME:
+				player.prevFrame();
+				break;
+
+			case SET_RATE:
+				player.setRate((Double) paramAction);
+
+			default:
+				break;
+			}
+		}
+	}
+
+	private enum Action {
+		PLAY_PAUSE, PREV_FRAME, NEXT_FRAME, SET_RATE
 
 	}
 
@@ -247,20 +275,19 @@ public class MainActivity extends FragmentActivity {
 		if (rightFragment != null) {
 			result.add((IPlayer) rightFragment);
 		}
-		
+
 		return result;
 
 	}
 
 	private void initFragment() {
 
-		// Fragment leftVideo = VideoFragment.newInstance(null);
+		Fragment leftVideo = VideoFragment.newInstance(null);
 		Fragment rightVideo = VideoFragment.newInstance(null);
 		Fragment swfFragment = SwfFragment.newInstance(null);
 
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		// transaction.replace(R.id.leftVideoLayout, leftVideo,
-		// Position.LEFT.name());
+		transaction.replace(R.id.leftVideoLayout, leftVideo, Position.LEFT.name());
 		transaction.replace(R.id.rightVideoLayout, rightVideo, Position.RIGHT.name());
 		transaction.commit();
 	}

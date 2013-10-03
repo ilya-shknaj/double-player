@@ -187,7 +187,7 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 		setMediaUri(getMediaUriString());
 		setPosition(getPosition());
 		if (isPlaying()) {
-			play();
+			playPause();
 		} else {
 			pause();
 		}
@@ -309,7 +309,7 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	}
 
 	@Override
-	public void play() {
+	public void playPause() {
 		Log.i(TAG, "start play");
 		setPlaying(true);
 		getWakeLock().acquire();
@@ -388,7 +388,7 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 				Log.e(TAG, "postDelayedSetPosition to " + position);
 				setPosition(position);
 				if (isPlayed) {
-					play();
+					playPause();
 				}
 
 			}
@@ -401,7 +401,7 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 
 			@Override
 			public void run() {
-				play();
+				playPause();
 			}
 		}, RUNNABLE_DELAY);
 

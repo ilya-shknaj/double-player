@@ -58,7 +58,7 @@ public class SwfFragment extends Fragment implements IPlayer {
 				if (isPlayed) {
 					pause();
 				} else {
-					play();
+					playPause();
 				}
 
 			}
@@ -147,7 +147,7 @@ public class SwfFragment extends Fragment implements IPlayer {
 
 	}
 
-	public void play() {
+	public void playPause() {
 		isPlayed = true;
 		setPlayPauseButtonUI();
 		mWebView.loadUrl("javascript:Play()");

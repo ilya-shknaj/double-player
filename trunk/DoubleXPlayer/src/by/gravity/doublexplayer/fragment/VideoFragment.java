@@ -76,7 +76,7 @@ public class VideoFragment extends BaseVideoFragment {
 				if (isPlaying()) {
 					pause();
 				} else {
-					play();
+					playPause();
 				}
 			}
 		});
@@ -214,9 +214,9 @@ public class VideoFragment extends BaseVideoFragment {
 	}
 
 	@Override
-	public void play() {
+	public void playPause() {
 
-		super.play();
+		super.playPause();
 		updatePlayPauseUI();
 	}
 
