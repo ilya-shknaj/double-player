@@ -30,7 +30,8 @@ import by.gravity.doublexplayer.widget.RangeSeekBar.OnRangeSeekBarChangeListener
 
 import com.gstreamer.GStreamer;
 
-abstract public class BaseVideoFragment extends NativeVideoFragment implements SurfaceHolder.Callback, OnSeekBarChangeListener, IPlayer {
+abstract public class BaseVideoFragment extends NativeVideoFragment implements
+		SurfaceHolder.Callback, OnSeekBarChangeListener, IPlayer {
 
 	abstract public int getSurfaceID();
 
@@ -43,9 +44,9 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	private static final String TAG = BaseVideoFragment.class.getSimpleName();
 
 	private static final String DATE_FORMAT = "HH:mm:ss";
-	
+
 	private static final String UTC = "UTC";
-	
+
 	private boolean isLocalMedia;
 	private int desiredPosition;
 	private String mediaUriString;
@@ -95,7 +96,8 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 
 	@SuppressWarnings("deprecation")
 	private void initWakeLock() {
-		PowerManager pm = (PowerManager) getActivity().getSystemService(Context.POWER_SERVICE);
+		PowerManager pm = (PowerManager) getActivity().getSystemService(
+				Context.POWER_SERVICE);
 		WakeLock wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, TAG);
 		wakeLock.setReferenceCounted(false);
 		setWakeLock(wakeLock);
@@ -113,7 +115,8 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 		sb.setOnRangeSeekBarChangeListener(new OnRangeSeekBarChangeListener() {
 
 			@Override
-			public void onRangeSeekBarValuesChanged(RangeSeekBar bar, Integer currentValue) {
+			public void onRangeSeekBarValuesChanged(RangeSeekBar bar,
+					Integer currentValue) {
 				setDesiredPosition(currentValue);
 				if (isLocalMedia()) {
 					nativeSetPosition(getDesiredPosition());
@@ -155,14 +158,16 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 		try {
 			GStreamer.init(getActivity());
 		} catch (Exception e) {
-			Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG)
+					.show();
 			getActivity().finish();
 			return;
 		}
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 
 		return inflater.inflate(getViewID(), null);
 	}
@@ -196,14 +201,17 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 
 	private void updateTimeWidget() {
 
-		TextView tv = (TextView) getView().findViewById(getCurrentPositionTextViewID());
-		TextView duration = (TextView) getView().findViewById(getTotaTextViewID());
+		TextView tv = (TextView) getView().findViewById(
+				getCurrentPositionTextViewID());
+		TextView duration = (TextView) getView().findViewById(
+				getTotaTextViewID());
 		RangeSeekBar sb = getRangeSeekBar();
 		if (tv == null || duration == null || sb == null) {
 			return;
 		}
 
-		tv.setText(getDateFormat().format(new Date(sb.getSelectedCurrentValue())));
+		tv.setText(getDateFormat().format(
+				new Date(sb.getSelectedCurrentValue())));
 		duration.setText(getDateFormat().format(new Date(getDuration())));
 	}
 
@@ -232,9 +240,11 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 		setDuration(duration);
 	}
 
-	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+	public void surfaceChanged(SurfaceHolder holder, int format, int width,
+			int height) {
 
-		Log.d(TAG, "Surface changed to format " + format + " width " + width + " height " + height);
+		Log.d(TAG, "Surface changed to format " + format + " width " + width
+				+ " height " + height);
 		nativeSurfaceInit(holder.getSurface());
 	}
 
@@ -254,7 +264,8 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	protected void onMediaSizeChanged(int width, int height) {
 
 		Log.i(TAG, "Media size changed to " + width + "x" + height);
-		final GStreamerSurfaceView gsv = (GStreamerSurfaceView) getView().findViewById(getSurfaceID());
+		final GStreamerSurfaceView gsv = (GStreamerSurfaceView) getView()
+				.findViewById(getSurfaceID());
 		gsv.media_width = width;
 		gsv.media_height = height;
 		getActivity().runOnUiThread(new Runnable() {
@@ -308,15 +319,21 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 
 	}
 
-	@Override
 	public void playPause() {
-		Log.i(TAG, "start play");
+		Log.i(TAG, "playPause call");
+		if (isPlaying()) {
+			pause();
+		} else {
+			play();
+		}
+	}
+
+	public void play() {
 		setPlaying(true);
 		getWakeLock().acquire();
 		nativePlay();
 	}
 
-	@Override
 	public void pause() {
 		setPlaying(false);
 		getWakeLock().release();
@@ -338,9 +355,11 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	protected void onVideoFinished() {
 		super.onVideoFinished();
 		Log.e(TAG, "onVideoFinished");
-		Log.e(TAG, "is_playing_desired " + isPlaying + " isRepeatMode " + isRepeatMode);
+		Log.e(TAG, "is_playing_desired " + isPlaying + " isRepeatMode "
+				+ isRepeatMode);
 		if (isPlaying() && isRepeatMode()) {
 			setVideoFragment();
+			setPlaying(false);
 			postDelayedPlay();
 		} else {
 			setPlaying(false);
@@ -379,7 +398,8 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 		}, RUNNABLE_DELAY);
 	}
 
-	protected void postDelayedSetPosition(final int position, final boolean isPlayed) {
+	protected void postDelayedSetPosition(final int position,
+			final boolean isPlayed) {
 
 		postDelayed(new Runnable() {
 
@@ -434,7 +454,7 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 		return this.rate;
 	}
 
-	protected void setRate(Rate rate) {
+	public void setRate(Rate rate) {
 		this.rate = rate;
 		Log.e(TAG, "setRate isPlayed()=" + isPlaying());
 		setPreRateStatePlaying(isPlaying());
@@ -445,14 +465,17 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 
 	protected void setRateUI(Rate rate) {
 
-		TextView rateButton = (TextView) getView().findViewById(R.id.rateButton);
+		TextView rateButton = (TextView) getView()
+				.findViewById(R.id.rateButton);
 		rateButton.setText(rate.getName());
 	}
 
 	protected void setVideoFragment() {
 		RangeSeekBar seekBar = getRangeSeekBar();
-		int minValue = seekBar.hasMinValue() ? seekBar.getSelectedMinValue() : seekBar.getAbsoluteMinValue();
-		int maxValue = seekBar.hasMaxValue() ? seekBar.getSelectedMaxValue() : seekBar.getAbsoluteMaxValue();
+		int minValue = seekBar.hasMinValue() ? seekBar.getSelectedMinValue()
+				: seekBar.getAbsoluteMinValue();
+		int maxValue = seekBar.hasMaxValue() ? seekBar.getSelectedMaxValue()
+				: seekBar.getAbsoluteMaxValue();
 
 		nativeSetFragment(minValue, maxValue);
 
@@ -483,7 +506,7 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 		return isPlaying;
 	}
 
-	private void setPlaying(boolean isPlaying) {
+	protected void setPlaying(boolean isPlaying) {
 		this.isPlaying = isPlaying;
 	}
 

@@ -36,7 +36,7 @@ public class GStreamerSurfaceView extends SurfaceView {
         int wsize = View.MeasureSpec.getSize(widthMeasureSpec);
         int hsize = View.MeasureSpec.getSize(heightMeasureSpec);
 
-        Log.i ("GStreamer", "onMeasure called with " + media_width + "x" + media_height);
+//        Log.i ("GStreamer", "onMeasure called with " + media_width + "x" + media_height);
         // Obey width rules
         switch (wmode) {
         case View.MeasureSpec.AT_MOST:

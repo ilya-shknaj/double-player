@@ -20,8 +20,9 @@ public class VideoFragment extends BaseVideoFragment {
 
 	private static final String ARG_MEDIA_URI = "ARG_MEDIA_URI";
 
-	private static final String DEFAULT_MEDIA_URI = Constants.FILE + Environment.getExternalStorageDirectory().getAbsolutePath()
-			+ "/DoublePlayer/Video/11.mp4";
+	private static final String DEFAULT_MEDIA_URI = Constants.FILE
+			+ Environment.getExternalStorageDirectory().getAbsolutePath()
+			+ "/DoublePlayer/Video/624.mp4";
 
 	public static VideoFragment newInstance(String mediaUri) {
 
@@ -60,6 +61,7 @@ public class VideoFragment extends BaseVideoFragment {
 			setMediaUri(videoState.getMediaUri());
 			setRate(videoState.getRate());
 			setCurrentPosition(videoState.getPosition());
+			setRepeatMode(true);
 			initUI();
 
 		}
@@ -132,9 +134,11 @@ public class VideoFragment extends BaseVideoFragment {
 
 			@Override
 			public void onClick(View v) {
-				String message = !isRepeatMode() ? "Repeat mode enable" : "Repeat mode disable";
+				String message = !isRepeatMode() ? "Repeat mode enable"
+						: "Repeat mode disable";
 				setRepeatMode(!isRepeatMode());
-				Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT)
+						.show();
 			}
 		});
 
@@ -180,7 +184,8 @@ public class VideoFragment extends BaseVideoFragment {
 	}
 
 	private void showProgressBar() {
-		LinearLayout progressBar = (LinearLayout) getView().findViewById(R.id.progressBar);
+		LinearLayout progressBar = (LinearLayout) getView().findViewById(
+				R.id.progressBar);
 		if (progressBar != null) {
 			progressBar.setVisibility(View.VISIBLE);
 		}
@@ -205,7 +210,8 @@ public class VideoFragment extends BaseVideoFragment {
 
 	public VideoState createVideoState() {
 
-		return new VideoState(getMediaUriString(), getPosition(), getRate(), isPlaying());
+		return new VideoState(getMediaUriString(), getPosition(), getRate(),
+				isPlaying());
 	}
 
 	private static VideoState getDefaultVideoState() {
@@ -218,6 +224,13 @@ public class VideoFragment extends BaseVideoFragment {
 
 		super.playPause();
 		updatePlayPauseUI();
+
+	}
+
+	@Override
+	public void playPause(boolean isPlaying) {
+		setPlaying(!isPlaying);
+		playPause();
 	}
 
 	@Override
@@ -254,16 +267,20 @@ public class VideoFragment extends BaseVideoFragment {
 		if (fragmentButton == FragmentButton.START) {
 			button = getView().findViewById(R.id.leftFragmentButton);
 			if (getRangeSeekBar().hasMinValue()) {
-				button.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_remove_left_position));
+				button.setBackgroundDrawable(getResources().getDrawable(
+						R.drawable.btn_remove_left_position));
 			} else {
-				button.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_add_left_position));
+				button.setBackgroundDrawable(getResources().getDrawable(
+						R.drawable.btn_add_left_position));
 			}
 		} else {
 			button = getView().findViewById(R.id.rightFragmentButton);
 			if (getRangeSeekBar().hasMaxValue()) {
-				button.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_remove_right_position));
+				button.setBackgroundDrawable(getResources().getDrawable(
+						R.drawable.btn_remove_right_position));
 			} else {
-				button.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_add_right_position));
+				button.setBackgroundDrawable(getResources().getDrawable(
+						R.drawable.btn_add_right_position));
 			}
 		}
 
