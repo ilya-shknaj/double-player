@@ -61,9 +61,7 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements
 
 	private final Handler handler;
 
-	private static final long RUNNABLE_DELAY = 200;
-
-	private static final int SET_POSITION_DELAY = 300;
+	private static final long RUNNABLE_DELAY = 350;
 
 	private boolean isRepeatMode = false;
 
@@ -329,12 +327,14 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements
 	}
 
 	public void play() {
+		Log.e(TAG, "play");
 		setPlaying(true);
 		getWakeLock().acquire();
 		nativePlay();
 	}
 
 	public void pause() {
+		Log.e(TAG, "pause");
 		setPlaying(false);
 		getWakeLock().release();
 		nativePause();
@@ -362,6 +362,7 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements
 			setPlaying(false);
 			postDelayedPlay();
 		} else {
+			setVideoFragment();
 			setPlaying(false);
 			postDelayedUpdatePlayPauseUI();
 
@@ -414,7 +415,7 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements
 				}
 
 			}
-		}, SET_POSITION_DELAY);
+		}, RUNNABLE_DELAY);
 	}
 
 	protected void postDelayedPlay() {

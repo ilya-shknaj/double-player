@@ -63,7 +63,7 @@ public class MainActivity extends FragmentActivity {
 		setContentView(R.layout.a_main);
 		initTopActionBar();
 		initCommonActionBar();
-		initFragment();
+//		initFragment();
 
 	}
 
@@ -345,7 +345,7 @@ public class MainActivity extends FragmentActivity {
 				.beginTransaction();
 		transaction.replace(R.id.leftVideoLayout, leftVideo,
 				Position.LEFT.name());
-		transaction.replace(R.id.rightVideoLayout, swfFragment,
+		transaction.replace(R.id.rightVideoLayout, rightVideo,
 				Position.RIGHT.name());
 		transaction.commit();
 	}
