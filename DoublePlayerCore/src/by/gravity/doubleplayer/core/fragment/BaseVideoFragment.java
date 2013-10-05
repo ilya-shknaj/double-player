@@ -371,8 +371,10 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements
 	@Override
 	protected void onSetRateFinished() {
 		super.onSetRateFinished();
+		Log.e(TAG, "onSetRateFinished");
 		if (isPreRateStatePlaying()) {
 			setPreRateStatePlaying(false);
+			setPlaying(false);
 			postDelayedPlay();
 		}
 	}

@@ -33,7 +33,6 @@
     </RelativeLayout>
 
     <Button
-        android:visibility="gone"
         android:id="@+id/repeatButton"
         android:layout_width="@dimen/button_size"
         android:layout_height="@dimen/button_size"

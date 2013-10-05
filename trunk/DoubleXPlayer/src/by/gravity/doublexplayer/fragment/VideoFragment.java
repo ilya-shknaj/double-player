@@ -134,8 +134,8 @@ public class VideoFragment extends BaseVideoFragment {
 
 			@Override
 			public void onClick(View v) {
-				String message = !isRepeatMode() ? "Repeat mode enable"
-						: "Repeat mode disable";
+				String message = !isRepeatMode() ? "Повторение включено"
+						: "Повторение выключено";
 				setRepeatMode(!isRepeatMode());
 				Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT)
 						.show();

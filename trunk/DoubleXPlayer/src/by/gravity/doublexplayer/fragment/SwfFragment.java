@@ -2,6 +2,7 @@ package by.gravity.doublexplayer.fragment;
 
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,13 +23,15 @@ public class SwfFragment extends Fragment implements IPlayer {
 
 	private static final String DEFAULT_URI = "file:///"
 			+ Environment.getExternalStorageDirectory().getAbsolutePath()
-			+ "/DoublePlayer/swf/922.swf";
+			+ "/DoublePlayer/Video/922.swf";
 
 	private static final String ARG_MEDIA_URI = "ARG_MEDIA_URI";
 
 	private boolean isPlayed = true;
 
 	private Button mPlayButton;
+
+	private Handler handler;
 
 	public static SwfFragment newInstance(String mediaUri) {
 		SwfFragment fragment = new SwfFragment();
@@ -50,6 +53,8 @@ public class SwfFragment extends Fragment implements IPlayer {
 		initWebView();
 		initButtons();
 		initFlash(getMediaUriString());
+		handler = new Handler();
+		postDelayedPause();
 	}
 
 	private void initButtons() {
@@ -58,11 +63,7 @@ public class SwfFragment extends Fragment implements IPlayer {
 
 			@Override
 			public void onClick(View paramView) {
-				if (isPlayed) {
-					pause();
-				} else {
-					playPause();
-				}
+				playPause(!isPlayed);
 
 			}
 		});
@@ -162,19 +163,18 @@ public class SwfFragment extends Fragment implements IPlayer {
 
 	}
 
-	public void playPause() {
-		setPlayPauseButtonUI();
-		mWebView.loadUrl("javascript:Play()");
-	}
-
 	@Override
 	public void playPause(boolean isPlayed) {
 		this.isPlayed = isPlayed;
-		if(isPlayed){
-			pause();
-		}else{
+		if (isPlayed) {
+			play();
+		} else {
 			pause();
 		}
+	}
+
+	public void play() {
+		isPlayed = true;
 		setPlayPauseButtonUI();
 		mWebView.loadUrl("javascript:Play()");
 	}
@@ -222,6 +222,16 @@ public class SwfFragment extends Fragment implements IPlayer {
 	public void setRate(Rate rate) {
 		// TODO Auto-generated method stub
 
+	}
+
+	private void postDelayedPause() {
+		handler.postDelayed(new Runnable() {
+
+			@Override
+			public void run() {
+				pause();
+			}
+		}, 200);
 	}
 
 }
