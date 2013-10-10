@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,7 +20,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import by.gravity.common.utils.FileUtil;
 import by.gravity.common.utils.StringUtil;
 import by.gravity.doubleplayer.core.IPlayer;
@@ -348,26 +346,14 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 		transaction.commit();
 	}
 
-	private void openFileAction(int requestCode, String defaultPath) {
-
-		Intent intent = new Intent("org.openintents.action.PICK_FILE");
-		if (!StringUtil.isEmpty(defaultPath)) {
-			intent.setData(Uri.parse(defaultPath));
-		}
-		try {
-			startActivityForResult(intent, requestCode);
-		} catch (ActivityNotFoundException e) {
-			Toast.makeText(this, "IO File Manager not installed", Toast.LENGTH_LONG).show();
-		}
-	}
-
 	private void openCameraAction(int requestCode, String videoPath) {
 
 		Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-		if (!StringUtil.isEmpty(videoPath)) {
-			Uri uri = Uri.parse(videoPath + File.separator + generateVideoName());
-			intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+		if (StringUtil.isEmpty(videoPath)) {
+			videoPath = FileUtil.getDefaultMediaPath();
 		}
+		Uri uri = Uri.fromFile(new File(videoPath + File.separator + generateVideoName()));
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 		startActivityForResult(intent, requestCode);
 	}
 
