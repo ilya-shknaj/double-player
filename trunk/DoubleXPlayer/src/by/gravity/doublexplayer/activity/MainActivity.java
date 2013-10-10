@@ -60,7 +60,7 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 		initTopActionBar();
 		initCommonActionBar();
 		initFileManagerFragments();
-		// initFragment();
+//		initFragment();
 
 	}
 
