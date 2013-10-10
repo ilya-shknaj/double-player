@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="@dimen/progress_buttons_height"
+    android:layout_gravity="center_vertical" >
+
+    <Button
+        android:id="@+id/repeatButton"
+        android:layout_width="@dimen/button_size"
+        android:layout_height="@dimen/button_size"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/btn_repeat" />
+
+    <RelativeLayout
+        android:id="@+id/leftFragmentLayout"
+        android:layout_width="@dimen/fragment_layout_button_width"
+        android:layout_height="@dimen/fragment_layout_button_height"
+        android:layout_marginLeft="@dimen/button_margin"
+        android:layout_toRightOf="@id/repeatButton" >
+
+        <Button
+            android:id="@+id/leftFragmentButton"
+            android:layout_width="@dimen/button_fragment_width"
+            android:layout_height="@dimen/button_fragment_height"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/buttom_fragment_margin_top"
+            android:background="@drawable/btn_add_left_position" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/prevFrameButton"
+        android:layout_width="@dimen/button_size"
+        android:layout_height="@dimen/button_size"
+        android:layout_marginRight="@dimen/button_margin"
+        android:layout_toLeftOf="@+id/playButton"
+        android:background="@drawable/btn_prev_frame" />
+
+    <Button
+        android:id="@+id/playButton"
+        android:layout_width="@dimen/button_size"
+        android:layout_height="@dimen/button_size"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/btn_play" />
+
+    <Button
+        android:id="@+id/nextFrameButton"
+        android:layout_width="@dimen/button_size"
+        android:layout_height="@dimen/button_size"
+        android:layout_marginLeft="@dimen/button_margin"
+        android:layout_toRightOf="@id/playButton"
+        android:background="@drawable/btn_next_frame" />
+
+    <RelativeLayout
+        android:id="@+id/rightFragmentLayout"
+        android:layout_width="@dimen/fragment_layout_button_width"
+        android:layout_height="@dimen/fragment_layout_button_height"
+        android:layout_marginLeft="@dimen/button_size"
+        android:layout_toLeftOf="@+id/rateButton" >
+
+        <Button
+            android:id="@+id/rightFragmentButton"
+            android:layout_width="@dimen/button_fragment_width"
+            android:layout_height="@dimen/button_fragment_height"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/buttom_fragment_margin_top"
+            android:background="@drawable/btn_add_right_position" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/rateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/button_margin"
+        android:layout_toLeftOf="@+id/fullScreenButton"
+        android:text="1X"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/rate_button_size" />
+
+    <Button
+        android:id="@+id/fullScreenButton"
+        android:layout_width="@dimen/button_size"
+        android:layout_height="@dimen/button_size"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/btn_full_screen" />
+
+</RelativeLayout>
