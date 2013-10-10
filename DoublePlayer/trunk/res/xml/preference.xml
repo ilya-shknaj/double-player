@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceCategory android:title="@string/left_panel" >
-        <Preference
-            android:key="@string/left_path"
-            android:title="@string/path" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="@string/right_panel" >
-        <Preference
-            android:key="@string/right_path"
-            android:title="@string/path" />
-    </PreferenceCategory>
-</PreferenceScreen>
+    <ListPreference
+        android:entries="@array/position"
+        android:entryValues="@array/position"
+        android:key="@string/content"
+        android:summary="@string/left_position"
+        android:title="@string/content" />
+
+    <Preference android:key="@string/not_content_path"/>
+
+</PreferenceScreen>

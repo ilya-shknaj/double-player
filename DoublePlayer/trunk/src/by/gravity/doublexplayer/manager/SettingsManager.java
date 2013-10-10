@@ -1,32 +1,51 @@
 package by.gravity.doublexplayer.manager;
 
+import android.os.Environment;
 import by.gravity.common.preference.PreferenceHelper;
 import by.gravity.doublexplayer.R;
 
 public class SettingsManager extends PreferenceHelper {
 
+	private static String DEFAULT_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+	public static String getNotContentPath() {
+		return getString(R.string.not_content_path, DEFAULT_PATH);
+	}
+
+	public static String getNotContentPathWithDefault() {
+		return getString(R.string.not_content_path, R.string.path_not_setted);
+	}
+
+	public static void setNotContentPath(String value) {
+		putString(R.string.not_content_path, value);
+	}
+
+	public static String getContentPosition() {
+		return getString(R.string.content, R.string.left_position);
+	}
+
+	public static void setPosition(String position) {
+		putString(R.string.content, position);
+	}
+
+	public static String getContentPath() {
+		return Environment.getExternalStorageDirectory().getAbsolutePath();
+	}
+
 	public static String getLeftPath() {
-		return getString(R.string.left_path);
-	}
-
-	public static String getLeftPathWithDefault() {
-		return getString(R.string.left_path, R.string.path_not_setted);
-	}
-
-	public static void setLeftPath(String value) {
-		putString(R.string.left_path, value);
+		if (getContentPosition().equals(getString(R.string.left_position))) {
+			return getContentPath();
+		} else {
+			return getNotContentPath();
+		}
 	}
 
 	public static String getRightPath() {
-		return getString(R.string.right_path);
-	}
-
-	public static String getRightPathWithDefault() {
-		return getString(R.string.right_path, R.string.path_not_setted);
-	}
-
-	public static void setRightPath(String value) {
-		putString(R.string.right_path, value);
+		if (getContentPosition().equals(getString(R.string.right_position))) {
+			return getContentPath();
+		} else {
+			return getNotContentPath();
+		}
 	}
 
 }

@@ -3,6 +3,7 @@ package by.gravity.doublexplayer.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import by.gravity.doublexplayer.R;
@@ -12,41 +13,54 @@ import com.ipaulpro.afilechooser.FolderChooseActivity;
 
 public class SettingsActivity extends PreferenceActivity {
 
-	private static final int LEFT_PATH = 1;
+	private static final int SELECT_PATH_REQUEST_CODE = 1;
 
-	private static final int RIGHT_PATH = 2;
+	private Preference notContentPath;
 
-	private Preference leftPath;
-
-	private Preference rightPath;
+	private Preference contentPosition;
 
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preference);
-		leftPath = findPreference(getString(R.string.left_path));
-		leftPath.setSummary(SettingsManager.getLeftPathWithDefault());
-		leftPath.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+		contentPosition = findPreference(getString(R.string.content));
+		contentPosition.setSummary(SettingsManager.getContentPosition());
+		contentPosition.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+
+			@Override
+			public boolean onPreferenceChange(Preference paramPreference, Object paramObject) {
+				SettingsManager.setPosition((String) paramObject);
+				contentPosition.setSummary((CharSequence) paramObject);
+				updateNotContentPathTitle();
+				return true;
+			}
+		});
+
+		notContentPath = findPreference(getString(R.string.not_content_path));
+		notContentPath.setSummary(SettingsManager.getNotContentPathWithDefault());
+		notContentPath.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				startSelectFolder(LEFT_PATH, SettingsManager.getLeftPath());
+				startSelectFolder(SELECT_PATH_REQUEST_CODE, SettingsManager.getNotContentPath());
 				return false;
 			}
 		});
 
-		rightPath = findPreference(getString(R.string.right_path));
-		rightPath.setSummary(SettingsManager.getRightPathWithDefault());
-		rightPath.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+		updateNotContentPathTitle();
 
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				startSelectFolder(RIGHT_PATH, SettingsManager.getRightPath());
-				return false;
-			}
-		});
+	}
 
+	private void updateNotContentPathTitle() {
+		String panelName = null;
+
+		if (SettingsManager.getContentPosition().equals(getString(R.string.left_position))) {
+			panelName = String.format(getString(R.string.not_content_panel), getString(R.string.right));
+		} else {
+			panelName = String.format(getString(R.string.not_content_panel), getString(R.string.left));
+		}
+		notContentPath.setTitle(panelName);
 	}
 
 	private void startSelectFolder(int requestCode, String defaulPath) {
@@ -62,13 +76,8 @@ public class SettingsActivity extends PreferenceActivity {
 			return;
 		}
 		String uriString = data.getData().toString();
-		if (requestCode == LEFT_PATH) {
-			SettingsManager.setLeftPath(uriString);
-			updateSummary(leftPath, uriString);
-		} else if (requestCode == RIGHT_PATH) {
-			SettingsManager.setRightPath(uriString);
-			updateSummary(rightPath, uriString);
-		}
+		SettingsManager.setNotContentPath(uriString);
+		updateSummary(notContentPath, uriString);
 	}
 
 	private void updateSummary(Preference preference, String value) {
