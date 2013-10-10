@@ -32,13 +32,11 @@ import by.gravity.doublexplayer.manager.SettingsManager;
 import by.gravity.doublexplayer.model.Rate;
 import by.gravity.doublexplayer.util.PlayerUtil;
 
-public class MainActivity extends FragmentActivity {
+import com.ipaulpro.afilechooser.FileListFragment;
 
-	private static final int LEFT_OPEN_REQUEST_CODE = 100;
+public class MainActivity extends FragmentActivity implements FileListFragment.OnFileSelectedListener {
 
 	private static final int LEFT_CAMERA_REQUEST_CODE = 101;
-
-	private static final int RIGHT_OPEN_REQUEST_CODE = 200;
 
 	private static final int RIGHT_CAMERA_REQUEST_CODE = 201;
 
@@ -63,7 +61,8 @@ public class MainActivity extends FragmentActivity {
 		setContentView(R.layout.a_main);
 		initTopActionBar();
 		initCommonActionBar();
-//		initFragment();
+		initFileManagerFragments();
+		// initFragment();
 
 	}
 
@@ -92,21 +91,12 @@ public class MainActivity extends FragmentActivity {
 
 		}
 		if (activeLayout.getLayoutParams().width == android.widget.RelativeLayout.LayoutParams.MATCH_PARENT) {
-			activeLayout
-					.setLayoutParams(new LinearLayout.LayoutParams(
-							0,
-							android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
-							0.5f));
-			unActiveLayout
-					.setLayoutParams(new LinearLayout.LayoutParams(
-							0,
-							android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
-							0.5f));
+			activeLayout.setLayoutParams(new LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
+			unActiveLayout.setLayoutParams(new LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
 			showCommonActionBar();
 		} else {
 			unActiveLayout.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
-			activeLayout.setLayoutParams(new LinearLayout.LayoutParams(
-					android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+			activeLayout.setLayoutParams(new LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
 					android.widget.LinearLayout.LayoutParams.MATCH_PARENT));
 			hideCommonActionBar();
 
@@ -127,34 +117,54 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
+	private void initFileManagerFragments() {
+		initFileMangerFragment(Position.LEFT);
+		initFileMangerFragment(Position.RIGHT);
+
+	}
+
+	private void initFileMangerFragment(Position position) {
+		FileListFragment fileFragment = null;
+		int layoutID = 0;
+		if (position == Position.LEFT) {
+			fileFragment = FileListFragment.newInstance(SettingsManager.getLeftPath(), true);
+			layoutID = R.id.leftVideoLayout;
+
+		} else if (position == Position.RIGHT) {
+			fileFragment = FileListFragment.newInstance(SettingsManager.getRightPath(), true);
+			layoutID = R.id.rightVideoLayout;
+		}
+		if (fileFragment != null && layoutID != 0) {
+			fileFragment.setOnFileSelectedListener(this);
+			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+			transaction.replace(layoutID, fileFragment, position.name());
+			transaction.commit();
+		}
+	}
+
 	private void initTopActionBar() {
-		leftOpenButton = (Button) findViewById(R.id.action_bar_left)
-				.findViewById(R.id.btn_open);
+		leftOpenButton = (Button) findViewById(R.id.action_bar_left).findViewById(R.id.btn_open);
 
 		leftOpenButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				openFileAction(LEFT_OPEN_REQUEST_CODE,
-						SettingsManager.getLeftPath());
+				initFileMangerFragment(Position.LEFT);
 			}
 		});
 
-		leftCameraButton = (Button) findViewById(R.id.action_bar_left)
-				.findViewById(R.id.btn_camera);
+		leftCameraButton = (Button) findViewById(R.id.action_bar_left).findViewById(R.id.btn_camera);
 		leftCameraButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				openCameraAction(LEFT_CAMERA_REQUEST_CODE,
-						SettingsManager.getLeftPath());
+				openCameraAction(LEFT_CAMERA_REQUEST_CODE, SettingsManager.getRightPath());
 			}
 		});
 
-		leftInfoButton = (Button) findViewById(R.id.action_bar_left)
-				.findViewById(R.id.btn_info);
+		leftInfoButton = (Button) findViewById(R.id.action_bar_left).findViewById(R.id.btn_info);
 		leftInfoButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -163,32 +173,27 @@ public class MainActivity extends FragmentActivity {
 			}
 		});
 
-		rightOpenButton = (Button) findViewById(R.id.action_bar_right)
-				.findViewById(R.id.btn_open);
+		rightOpenButton = (Button) findViewById(R.id.action_bar_right).findViewById(R.id.btn_open);
 		rightOpenButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				openFileAction(RIGHT_OPEN_REQUEST_CODE,
-						SettingsManager.getRightPath());
+				initFileMangerFragment(Position.RIGHT);
 			}
 		});
 
-		rightCameraButton = (Button) findViewById(R.id.action_bar_right)
-				.findViewById(R.id.btn_camera);
+		rightCameraButton = (Button) findViewById(R.id.action_bar_right).findViewById(R.id.btn_camera);
 		rightCameraButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				openCameraAction(RIGHT_CAMERA_REQUEST_CODE,
-						SettingsManager.getRightPath());
+				openCameraAction(RIGHT_CAMERA_REQUEST_CODE, SettingsManager.getRightPath());
 			}
 		});
 
-		rightInfoButton = (Button) findViewById(R.id.action_bar_right)
-				.findViewById(R.id.btn_info);
+		rightInfoButton = (Button) findViewById(R.id.action_bar_right).findViewById(R.id.btn_info);
 		rightInfoButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -203,8 +208,7 @@ public class MainActivity extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 
-				Intent intent = new Intent(MainActivity.this,
-						SettingsActivity.class);
+				Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
 				startActivity(intent);
 			}
 		});
@@ -290,8 +294,7 @@ public class MainActivity extends FragmentActivity {
 
 	protected void setRateUI(Rate rate) {
 		View commonActionBar = findViewById(R.id.commonActionBar);
-		TextView rateButton = (TextView) commonActionBar
-				.findViewById(R.id.rateButton);
+		TextView rateButton = (TextView) commonActionBar.findViewById(R.id.rateButton);
 		rateButton.setText(rate.getName());
 	}
 
@@ -318,10 +321,8 @@ public class MainActivity extends FragmentActivity {
 	private List<IPlayer> getVideoFragments() {
 		List<IPlayer> result = new ArrayList<IPlayer>();
 
-		Fragment leftFragment = getSupportFragmentManager().findFragmentByTag(
-				Position.LEFT.name());
-		Fragment rightFragment = getSupportFragmentManager().findFragmentByTag(
-				Position.RIGHT.name());
+		Fragment leftFragment = getSupportFragmentManager().findFragmentByTag(Position.LEFT.name());
+		Fragment rightFragment = getSupportFragmentManager().findFragmentByTag(Position.RIGHT.name());
 
 		if (leftFragment != null) {
 			result.add((IPlayer) leftFragment);
@@ -341,12 +342,9 @@ public class MainActivity extends FragmentActivity {
 		Fragment rightVideo = VideoFragment.newInstance(null);
 		Fragment swfFragment = SwfFragment.newInstance(null);
 
-		FragmentTransaction transaction = getSupportFragmentManager()
-				.beginTransaction();
-		transaction.replace(R.id.leftVideoLayout, leftVideo,
-				Position.LEFT.name());
-		transaction.replace(R.id.rightVideoLayout, rightVideo,
-				Position.RIGHT.name());
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		transaction.replace(R.id.leftVideoLayout, leftVideo, Position.LEFT.name());
+		transaction.replace(R.id.rightVideoLayout, rightVideo, Position.RIGHT.name());
 		transaction.commit();
 	}
 
@@ -359,23 +357,23 @@ public class MainActivity extends FragmentActivity {
 		try {
 			startActivityForResult(intent, requestCode);
 		} catch (ActivityNotFoundException e) {
-			Toast.makeText(this, "IO File Manager not installed",
-					Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "IO File Manager not installed", Toast.LENGTH_LONG).show();
 		}
 	}
 
 	private void openCameraAction(int requestCode, String videoPath) {
 
 		Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-		Uri uri = Uri.parse(videoPath + "/" + generateVideoName());
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+		if (!StringUtil.isEmpty(videoPath)) {
+			Uri uri = Uri.parse(videoPath + File.separator + generateVideoName());
+			intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+		}
 		startActivityForResult(intent, requestCode);
 	}
 
 	private String generateVideoName() {
 
-		SimpleDateFormat dateFormat = new SimpleDateFormat(
-				"yyyy_MM_dd_HH_mm_ss");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
 		return dateFormat.format(System.currentTimeMillis()) + ".mp4";
 
 	}
@@ -387,32 +385,24 @@ public class MainActivity extends FragmentActivity {
 		if (resultCode != RESULT_OK) {
 			return;
 		}
-		if (requestCode == LEFT_OPEN_REQUEST_CODE) {
-			setVideoFragmentUri(Position.LEFT.name(), data.getDataString());
-		} else if (requestCode == RIGHT_OPEN_REQUEST_CODE) {
-			setVideoFragmentUri(Position.RIGHT.name(), data.getDataString());
-		} else if (requestCode == LEFT_CAMERA_REQUEST_CODE) {
-			setVideoFragmentUri(Position.LEFT.name(),
-					FileUtil.getFilePathFromContentUri(data.getData()));
+		if (requestCode == LEFT_CAMERA_REQUEST_CODE) {
+			setVideoFragmentUri(Position.LEFT.name(), FileUtil.getFilePathFromContentUri(data.getData()));
 		} else if (requestCode == RIGHT_CAMERA_REQUEST_CODE) {
-			setVideoFragmentUri(Position.RIGHT.name(),
-					FileUtil.getFilePathFromContentUri(data.getData()));
+			setVideoFragmentUri(Position.RIGHT.name(), FileUtil.getFilePathFromContentUri(data.getData()));
 		}
 
 	}
 
 	private void setVideoFragmentUri(String tag, String mediaUri) {
 		Fragment fragment;
-		if (mediaUri.length() > 4
-				&& mediaUri.substring(mediaUri.length() - 3).equals("swf")) {
+		if (mediaUri.length() > 4 && mediaUri.substring(mediaUri.length() - 3).equals("swf")) {
 			fragment = SwfFragment.newInstance(mediaUri);
 		} else {
 			fragment = VideoFragment.newInstance(mediaUri);
 
 		}
 
-		FragmentTransaction transaction = getSupportFragmentManager()
-				.beginTransaction();
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		if (tag.intern() == Position.LEFT.name().intern()) {
 			transaction.replace(R.id.leftVideoLayout, fragment, tag);
 		} else {
@@ -439,21 +429,27 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	private String getMediaInfo(Position position) {
-		Fragment fragment = getSupportFragmentManager().findFragmentByTag(
-				position.name());
+		Fragment fragment = getSupportFragmentManager().findFragmentByTag(position.name());
 		if (fragment != null) {
 			IPlayer video = (IPlayer) fragment;
 			String mediaUri = video.getMediaUriString();
 			if (mediaUri != null) {
 				mediaUri = StringUtil.decodeString(mediaUri);
-				String txtPath = PlayerUtil.changeFileExtensionToTxt(FileUtil
-						.getFileNameFromPath(mediaUri));
-				return FileUtil.readFileAsString(SettingsManager.getInfoPath()
-						+ File.separator + txtPath);
+				String txtPath = PlayerUtil.changeFileExtensionToTxt(mediaUri);
+				return FileUtil.readFileAsString(txtPath);
 			}
 		}
 
 		return null;
+	}
+
+	@Override
+	public void onFileSelected(String tag, String filePath) {
+		if (tag.equals(Position.LEFT.name())) {
+			setVideoFragmentUri(Position.LEFT.name(), filePath);
+		} else if (tag.equals(Position.RIGHT.name())) {
+			setVideoFragmentUri(Position.RIGHT.name(), filePath);
+		}
 	}
 
 }

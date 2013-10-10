@@ -1,14 +1,14 @@
 package by.gravity.doublexplayer.activity;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
-import android.widget.Toast;
 import by.gravity.doublexplayer.R;
 import by.gravity.doublexplayer.manager.SettingsManager;
+
+import com.ipaulpro.afilechooser.FolderChooseActivity;
 
 public class SettingsActivity extends PreferenceActivity {
 
@@ -16,13 +16,9 @@ public class SettingsActivity extends PreferenceActivity {
 
 	private static final int RIGHT_PATH = 2;
 
-	private static final int INFO_PATH = 3;
-
 	private Preference leftPath;
 
 	private Preference rightPath;
-
-	private Preference infoPath;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -35,7 +31,7 @@ public class SettingsActivity extends PreferenceActivity {
 
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				startSelectFolder(LEFT_PATH);
+				startSelectFolder(LEFT_PATH, SettingsManager.getLeftPath());
 				return false;
 			}
 		});
@@ -46,32 +42,17 @@ public class SettingsActivity extends PreferenceActivity {
 
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				startSelectFolder(RIGHT_PATH);
-				return false;
-			}
-		});
-
-		infoPath = findPreference(getString(R.string.info_path));
-		infoPath.setSummary(SettingsManager.getInfoPath());
-		infoPath.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-
-			@Override
-			public boolean onPreferenceClick(Preference paramPreference) {
-				startSelectFolder(INFO_PATH);
+				startSelectFolder(RIGHT_PATH, SettingsManager.getRightPath());
 				return false;
 			}
 		});
 
 	}
 
-	private void startSelectFolder(int requestCode) {
-		Intent intent = new Intent("org.openintents.action.PICK_DIRECTORY");
-		try {
-			startActivityForResult(intent, requestCode);
-		} catch (ActivityNotFoundException e) {
-			Toast.makeText(this, "File manager not found", Toast.LENGTH_SHORT)
-					.show();
-		}
+	private void startSelectFolder(int requestCode, String defaulPath) {
+		Intent intent = new Intent(this, FolderChooseActivity.class);
+		intent.putExtra(FolderChooseActivity.EXTRA_START_PATH, defaulPath);
+		startActivityForResult(intent, requestCode);
 	}
 
 	@Override
@@ -87,9 +68,6 @@ public class SettingsActivity extends PreferenceActivity {
 		} else if (requestCode == RIGHT_PATH) {
 			SettingsManager.setRightPath(uriString);
 			updateSummary(rightPath, uriString);
-		} else if (requestCode == INFO_PATH) {
-			SettingsManager.setInfoPath(uriString);
-			updateSummary(infoPath, uriString);
 		}
 	}
 

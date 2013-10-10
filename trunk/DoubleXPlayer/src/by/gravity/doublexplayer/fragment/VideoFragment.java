@@ -22,8 +22,8 @@ public class VideoFragment extends BaseVideoFragment {
 
 	private static final String DEFAULT_MEDIA_URI = Constants.FILE
 			+ Environment.getExternalStorageDirectory().getAbsolutePath()
-//			+ "/DoublePlayer/Video/624.mp4";
-			+ "/DCIM/Camera/VID_20131005_123558.mp4";
+			+ "/DoublePlayer/Video/624.mp4";
+//			+ "/DCIM/Camera/VID_20131005_123558.mp4";
 
 	public static VideoFragment newInstance(String mediaUri) {
 
