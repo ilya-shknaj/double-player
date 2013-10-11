@@ -54,7 +54,11 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 
 	private TextView currentFilePath;
 
-	private static final String IS_SELECT_FILE = "IS_SELECT_FILE";
+	private static final String PATH_ARG = "PATH_ARG";
+
+	private static final String SELECT_FILE_ARG = "SELECT_FILE_ARG";
+
+	private static final String LOCK_DIRECTORY_ARG = "LOCK_DIRECTORY_ARG";
 
 	private static final String SLASH_STRING = "/";
 
@@ -70,12 +74,13 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 	 *            The absolute path of the file (directory) to display.
 	 * @return A new Fragment with the given file path.
 	 */
-	public static FileListFragment newInstance(String path, boolean selectFile) {
+	public static FileListFragment newInstance(String path, boolean selectFile, boolean lockDirectory) {
 
 		FileListFragment fragment = new FileListFragment();
 		Bundle args = new Bundle();
-		args.putString(FileChooserActivity.PATH, path);
-		args.putBoolean(IS_SELECT_FILE, selectFile);
+		args.putString(PATH_ARG, path);
+		args.putBoolean(SELECT_FILE_ARG, selectFile);
+		args.putBoolean(LOCK_DIRECTORY_ARG, lockDirectory);
 		fragment.setArguments(args);
 
 		return fragment;
@@ -101,25 +106,23 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-
-		setEmptyText(getString(R.string.empty_directory));
+		if (getArguments().getBoolean(LOCK_DIRECTORY_ARG)) {
+			setEmptyText(getString(R.string.empty_content));
+		} else {
+			setEmptyText(getString(R.string.empty_directory));
+		}
 		setListAdapter(mAdapter);
 		setListShown(false);
 
 		super.onActivityCreated(savedInstanceState);
 
-		View backButton = getView().findViewById(R.id.backButton);
-		backButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				onBackClick();
-			}
-		});
+		currentFilePath = (TextView) getView().findViewById(R.id.currentPath);
+		String path = getArguments().getString(PATH_ARG) != null ? getArguments().getString(PATH_ARG) : ROOT_FOLDER;
+		setPath(path);
 
 		View currentDirectoryButton = getView().findViewById(R.id.currentDirectoryButton);
 
-		if (!getArguments().getBoolean(IS_SELECT_FILE, true)) {
+		if (!getArguments().getBoolean(SELECT_FILE_ARG, true)) {
 			currentDirectoryButton.setVisibility(View.VISIBLE);
 			currentDirectoryButton.setOnClickListener(new OnClickListener() {
 
@@ -132,9 +135,23 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 			});
 		}
 
-		currentFilePath = (TextView) getView().findViewById(R.id.currentPath);
-		String path = getArguments().getString(FileChooserActivity.PATH) != null ? getArguments().getString(FileChooserActivity.PATH) : ROOT_FOLDER;
-		setPath(path);
+		View backButton = getView().findViewById(R.id.backButton);
+
+		if (getArguments().getBoolean(LOCK_DIRECTORY_ARG, false)) {
+			backButton.setVisibility(View.GONE);
+			currentFilePath.setVisibility(View.GONE);
+
+		} else {
+
+			backButton.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					onBackClick();
+				}
+			});
+		}
+
 		getLoaderManager().initLoader(LOADER_ID, null, this);
 
 	}
@@ -224,7 +241,7 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 		if (path != null) {
 			setPath(path);
 			getLoaderManager().restartLoader(0, null, this);
-		} else if (!getArguments().getBoolean(IS_SELECT_FILE, true)) {
+		} else if (!getArguments().getBoolean(SELECT_FILE_ARG, true)) {
 			getActivity().finish();
 		}
 	}

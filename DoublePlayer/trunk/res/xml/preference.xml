@@ -2,12 +2,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <ListPreference
+        android:defaultValue="@string/left_position"
         android:entries="@array/position"
         android:entryValues="@array/position"
         android:key="@string/content"
         android:summary="@string/left_position"
         android:title="@string/content" />
 
-    <Preference android:key="@string/not_content_path"/>
+    <Preference android:key="@string/not_content_path" />
 
 </PreferenceScreen>

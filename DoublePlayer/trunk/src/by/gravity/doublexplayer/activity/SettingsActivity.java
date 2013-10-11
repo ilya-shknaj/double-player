@@ -19,6 +19,8 @@ public class SettingsActivity extends PreferenceActivity {
 
 	private Preference contentPosition;
 
+	private boolean valuesChanged = false;
+
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,9 @@ public class SettingsActivity extends PreferenceActivity {
 				SettingsManager.setPosition((String) paramObject);
 				contentPosition.setSummary((CharSequence) paramObject);
 				updateNotContentPathTitle();
+				if (!valuesChanged) {
+					valuesChanged = true;
+				}
 				return true;
 			}
 		});
@@ -44,6 +49,7 @@ public class SettingsActivity extends PreferenceActivity {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				startSelectFolder(SELECT_PATH_REQUEST_CODE, SettingsManager.getNotContentPath());
+
 				return false;
 			}
 		});
@@ -78,6 +84,17 @@ public class SettingsActivity extends PreferenceActivity {
 		String uriString = data.getData().toString();
 		SettingsManager.setNotContentPath(uriString);
 		updateSummary(notContentPath, uriString);
+		if (!valuesChanged) {
+			valuesChanged = true;
+		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (valuesChanged) {
+			setResult(RESULT_OK);
+		}
+		finish();
 	}
 
 	private void updateSummary(Preference preference, String value) {

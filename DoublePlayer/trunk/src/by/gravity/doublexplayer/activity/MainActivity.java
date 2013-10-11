@@ -38,6 +38,8 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 
 	private static final int RIGHT_CAMERA_REQUEST_CODE = 201;
 
+	private static final int SETTINGS_UPDATE_REQUEST_CODE = 300;
+
 	private Button leftOpenButton;
 
 	private Button leftCameraButton;
@@ -60,7 +62,7 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 		initTopActionBar();
 		initCommonActionBar();
 		initFileManagerFragments();
-//		initFragment();
+		// initFragment();
 
 	}
 
@@ -125,11 +127,11 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 		FileListFragment fileFragment = null;
 		int layoutID = 0;
 		if (position == Position.LEFT) {
-			fileFragment = FileListFragment.newInstance(SettingsManager.getLeftPath(), true);
+			fileFragment = FileListFragment.newInstance(SettingsManager.getLeftPath(), true, isContentPosition(position));
 			layoutID = R.id.leftVideoLayout;
 
 		} else if (position == Position.RIGHT) {
-			fileFragment = FileListFragment.newInstance(SettingsManager.getRightPath(), true);
+			fileFragment = FileListFragment.newInstance(SettingsManager.getRightPath(), true, isContentPosition(position));
 			layoutID = R.id.rightVideoLayout;
 		}
 		if (fileFragment != null && layoutID != 0) {
@@ -138,6 +140,16 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 			transaction.replace(layoutID, fileFragment, position.name());
 			transaction.commit();
 		}
+	}
+
+	private boolean isContentPosition(Position position) {
+		if (position == Position.LEFT && SettingsManager.getLeftPath().equals(SettingsManager.getContentPath())) {
+			return true;
+		} else if (position == Position.RIGHT && SettingsManager.getRightPath().equals(SettingsManager.getContentPath())) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private void initTopActionBar() {
@@ -207,7 +219,7 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 			public void onClick(View v) {
 
 				Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-				startActivity(intent);
+				startActivityForResult(intent, SETTINGS_UPDATE_REQUEST_CODE);
 			}
 		});
 
@@ -375,6 +387,8 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 			setVideoFragmentUri(Position.LEFT.name(), FileUtil.getFilePathFromContentUri(data.getData()));
 		} else if (requestCode == RIGHT_CAMERA_REQUEST_CODE) {
 			setVideoFragmentUri(Position.RIGHT.name(), FileUtil.getFilePathFromContentUri(data.getData()));
+		} else if (requestCode == SETTINGS_UPDATE_REQUEST_CODE) {
+			initFileManagerFragments();
 		}
 
 	}
