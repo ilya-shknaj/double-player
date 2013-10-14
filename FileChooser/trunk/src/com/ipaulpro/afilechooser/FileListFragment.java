@@ -19,6 +19,8 @@ package com.ipaulpro.afilechooser;
 import java.io.File;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ListFragment;
@@ -29,6 +31,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -152,6 +157,15 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 			});
 		}
 
+		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> paramAdapterView, View paramView, int position, long id) {
+				onListItemLongClick(paramView, position);
+				return false;
+			}
+		});
+
 		getLoaderManager().initLoader(LOADER_ID, null, this);
 
 	}
@@ -203,6 +217,43 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 				}
 			}
 		}
+	}
+
+	public void onListItemLongClick(View view, final int position) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setTitle(getString(R.string.select_action));
+		final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_item);
+		arrayAdapter.add(getString(R.string.delete));
+		builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(final DialogInterface dialog, int which) {
+				String strName = arrayAdapter.getItem(which);
+				if (strName.equals(getString(R.string.delete))) {
+					AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
+					final File selectedFile = (File) getListView().getAdapter().getItem(position);
+					builderInner.setMessage(String.format(getString(R.string.file_would_deleted), selectedFile.getName()));
+					builderInner.setTitle(getString(R.string.delete_alarm_message));
+					builderInner.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							selectedFile.delete();
+							dialog.dismiss();
+						}
+					});
+					builderInner.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+							dialog.dismiss();
+						}
+					});
+					builderInner.show();
+				}
+			}
+		});
+		builder.show();
 	}
 
 	@Override
