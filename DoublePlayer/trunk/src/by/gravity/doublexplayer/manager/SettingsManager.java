@@ -18,9 +18,14 @@ public class SettingsManager extends PreferenceHelper {
 	}
 
 	public static String getContentPath() {
-		return ContextHolder.getContext().getExternalFilesDir(null).getAbsolutePath();
+		if (ContextHolder.getContext().getExternalFilesDir(null) != null) {
+			return ContextHolder.getContext().getExternalFilesDir(null).getAbsolutePath();
+		} else {
+			return "";
+		}
+
 	}
-	
+
 	public static String getNotContentPath() {
 		return getString(R.string.not_content_path, DEFAULT_PATH);
 	}
@@ -32,7 +37,6 @@ public class SettingsManager extends PreferenceHelper {
 	public static void setNotContentPath(String value) {
 		putString(R.string.not_content_path, value);
 	}
-
 
 	public static String getLeftPath() {
 		if (getContentPosition().equals(getString(R.string.left_position))) {

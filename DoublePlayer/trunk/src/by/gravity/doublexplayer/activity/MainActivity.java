@@ -58,12 +58,16 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.a_main);
+		setContentView(getContentViewResource());
 		initTopActionBar();
 		initCommonActionBar();
 		initFileManagerFragments();
 		// initFragment();
 
+	}
+
+	protected int getContentViewResource() {
+		return R.layout.a_main;
 	}
 
 	public enum Position {
@@ -135,9 +139,9 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 			layoutID = R.id.rightVideoLayout;
 		}
 		if (fileFragment != null && layoutID != 0) {
-			fileFragment.setOnFileSelectedListener(this);
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 			transaction.replace(layoutID, fileFragment, position.name());
+			fileFragment.setOnFileSelectedListener(this);
 			transaction.commit();
 		}
 	}

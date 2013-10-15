@@ -168,7 +168,7 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	@Override
 	public void onDestroyView() {
 
-		nativeFinalize();
+		// nativeFinalize();
 		if (getWakeLock().isHeld()) {
 			getWakeLock().release();
 		}
@@ -193,23 +193,22 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	}
 
 	private void updateTimeWidget() {
-
-		TextView tv = (TextView) getView().findViewById(getCurrentPositionTextViewID());
-		TextView duration = (TextView) getView().findViewById(getTotaTextViewID());
+		View tv = getView().findViewById(getCurrentPositionTextViewID());
+		View duration = getView().findViewById(getTotaTextViewID());
 		RangeSeekBar sb = getRangeSeekBar();
 		if (tv == null || duration == null || sb == null) {
 			return;
 		}
 
-		tv.setText(getDateFormat().format(new Date(sb.getSelectedCurrentValue())));
-		duration.setText(getDateFormat().format(new Date(getDuration())));
+		((TextView) tv).setText(getDateFormat().format(new Date(sb.getSelectedCurrentValue())));
+		((TextView) duration).setText(getDateFormat().format(new Date(getDuration())));
 	}
 
 	// Called from native code
 	@Override
 	protected void setCurrentPosition(final int position, final int duration) {
 		final RangeSeekBar sb = getRangeSeekBar();
-//		Log.e(TAG, "position = " + position + " duration " + duration);
+		// Log.e(TAG, "position = " + position + " duration " + duration);
 		// Ignore position messages from the pipeline if the seek bar is being
 		// dragged
 		if (sb.isPressed()) {
@@ -527,8 +526,8 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	}
 
 	static {
-		System.loadLibrary("gstreamer_android");
-		System.loadLibrary("doublePlayer");
+		System.load("/data/data/by.gravity.doublexplayer/lib/libgstreamer_android.so");
+		System.load("/data/data/by.gravity.doublexplayer/lib/libdoublePlayer.so");
 		nativeClassInit();
 	}
 
