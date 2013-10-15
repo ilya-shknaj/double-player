@@ -54,7 +54,6 @@ public class SwfFragment extends Fragment implements IPlayer {
 		initButtons();
 		initFlash(getMediaUriString());
 		handler = new Handler();
-		postDelayedPause();
 	}
 
 	private void initButtons() {
