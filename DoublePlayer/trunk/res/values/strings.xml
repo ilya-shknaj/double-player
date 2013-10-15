@@ -14,6 +14,8 @@
     <string name="right">Правая</string>
     <string name="left_position">Слева</string>
     <string name="right_position">Справа</string>
+    <string name="not_installed_app">Не найдено приложение</string>
+    <string name="app_not_installed">Приложение %s не установлено</string>
     
     <string-array name="position">
         <item >@string/left_position</item>

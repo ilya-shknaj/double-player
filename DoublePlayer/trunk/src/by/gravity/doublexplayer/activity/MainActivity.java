@@ -6,7 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -40,6 +43,14 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 
 	private static final int SETTINGS_UPDATE_REQUEST_CODE = 300;
 
+	private static final String DOUBLE_PLAYER_PACKAGE = "by.gravity.doublexplayer";
+
+	private static final String FLASH_PLAYER = "com.adobe.flashplayer";
+
+	private static final String DOUBLE_PLAYER_APPLICATION_NAME = "CoreDoublePlayer";
+
+	private static final String FLASH_PLAYER_APPLICATION_NAME = "Adobe Flash Player";
+
 	private Button leftOpenButton;
 
 	private Button leftCameraButton;
@@ -59,11 +70,41 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 
 		super.onCreate(savedInstanceState);
 		setContentView(getContentViewResource());
-		initTopActionBar();
-		initCommonActionBar();
-		initFileManagerFragments();
-		// initFragment();
+		if (appplicationIsInstalled(DOUBLE_PLAYER_PACKAGE)) {
+			initTopActionBar();
+			initCommonActionBar();
+			initFileManagerFragments();
+			// initFragment();
+		} else {
+			showNotInstalledDialog(DOUBLE_PLAYER_APPLICATION_NAME);
+		}
 
+	}
+
+	private boolean appplicationIsInstalled(String packageName) {
+		PackageManager pm = getPackageManager();
+		boolean appInstalled = false;
+		try {
+			pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
+			appInstalled = true;
+		} catch (PackageManager.NameNotFoundException e) {
+			appInstalled = false;
+		}
+		return appInstalled;
+	}
+
+	private void showNotInstalledDialog(String appName) {
+		AlertDialog.Builder builder = new Builder(this);
+		builder.setTitle(getString(R.string.not_installed_app));
+		builder.setMessage(String.format(getString(R.string.app_not_installed), appName));
+		builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				finish();
+			}
+		});
+		builder.show();
 	}
 
 	protected int getContentViewResource() {
@@ -400,7 +441,12 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 	private void setVideoFragmentUri(String tag, String mediaUri) {
 		Fragment fragment;
 		if (mediaUri.length() > 4 && mediaUri.substring(mediaUri.length() - 3).equals("swf")) {
-			fragment = SwfFragment.newInstance(mediaUri);
+			if (appplicationIsInstalled(FLASH_PLAYER)) {
+				fragment = SwfFragment.newInstance(mediaUri);
+			} else {
+				showNotInstalledDialog(FLASH_PLAYER_APPLICATION_NAME);
+				return;
+			}
 		} else {
 			fragment = VideoFragment.newInstance(mediaUri);
 
@@ -427,7 +473,7 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 		}
 		textView.setText(info);
 		builder.setView(dialogView);
-		builder.setPositiveButton("Ok", null);
+		builder.setPositiveButton(android.R.string.ok, null);
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}
