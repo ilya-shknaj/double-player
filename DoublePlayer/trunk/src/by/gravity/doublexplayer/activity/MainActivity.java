@@ -379,11 +379,11 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 		Fragment leftFragment = getSupportFragmentManager().findFragmentByTag(Position.LEFT.name());
 		Fragment rightFragment = getSupportFragmentManager().findFragmentByTag(Position.RIGHT.name());
 
-		if (leftFragment != null) {
+		if (leftFragment != null && leftFragment instanceof IPlayer) {
 			result.add((IPlayer) leftFragment);
 		}
 
-		if (rightFragment != null) {
+		if (rightFragment != null && rightFragment instanceof IPlayer) {
 			result.add((IPlayer) rightFragment);
 		}
 
