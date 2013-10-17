@@ -1,0 +1,13 @@
+<resources>
+
+    <dimen name="button_size">55dp</dimen>
+    <dimen name="button_margin">20dp</dimen>
+    <dimen name="button_fragment_width">22dp</dimen>
+    <dimen name="button_fragment_height">44dp</dimen>
+    <dimen name="buttom_fragment_margin_top">2dp</dimen>
+    <dimen name="fragment_layout_button_height">55dp</dimen>
+    <dimen name="fragment_layout_button_width">55dp</dimen>
+    <dimen name="progress_buttons_height">55dp</dimen>
+    <dimen name="rate_button_size">48sp</dimen>
+
+</resources>

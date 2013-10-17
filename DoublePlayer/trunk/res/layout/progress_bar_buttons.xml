@@ -54,7 +54,7 @@
         android:id="@+id/rightFragmentLayout"
         android:layout_width="@dimen/fragment_layout_button_width"
         android:layout_height="@dimen/fragment_layout_button_height"
-        android:layout_marginLeft="@dimen/button_size"
+        android:layout_marginRight="@dimen/button_margin"
         android:layout_toLeftOf="@+id/rateButton" >
 
         <Button
