@@ -47,6 +47,6 @@
         android:layout_toLeftOf="@+id/fullScreenButton"
         android:text="1X"
         android:textColor="@android:color/white"
-        android:textSize="22sp" />
+        android:textSize="@dimen/rate_button_size" />
 
 </RelativeLayout>

@@ -13,8 +13,8 @@
 
     <RelativeLayout
         android:id="@+id/leftFragmentLayout"
-        android:layout_width="@dimen/fragment_layout_button_width"
-        android:layout_height="@dimen/fragment_layout_button_height"
+        android:layout_width="@dimen/button_size"
+        android:layout_height="@dimen/button_size"
         android:layout_marginLeft="@dimen/button_margin"
         android:layout_toRightOf="@id/repeatButton" >
 
@@ -24,7 +24,8 @@
             android:layout_height="@dimen/button_fragment_height"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/buttom_fragment_margin_top"
-            android:background="@drawable/btn_add_left_position" />
+            android:background="@drawable/btn_add_left_position"
+            android:clickable="false" />
     </RelativeLayout>
 
     <Button
@@ -52,8 +53,8 @@
 
     <RelativeLayout
         android:id="@+id/rightFragmentLayout"
-        android:layout_width="@dimen/fragment_layout_button_width"
-        android:layout_height="@dimen/fragment_layout_button_height"
+        android:layout_width="@dimen/button_size"
+        android:layout_height="@dimen/button_size"
         android:layout_marginRight="@dimen/button_margin"
         android:layout_toLeftOf="@+id/rateButton" >
 
@@ -63,13 +64,15 @@
             android:layout_height="@dimen/button_fragment_height"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/buttom_fragment_margin_top"
-            android:background="@drawable/btn_add_right_position" />
+            android:background="@drawable/btn_add_right_position"
+            android:clickable="false" />
     </RelativeLayout>
 
     <TextView
         android:id="@+id/rateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/button_margin"
         android:layout_toLeftOf="@+id/fullScreenButton"
         android:text="1X"
