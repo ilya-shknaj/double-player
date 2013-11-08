@@ -142,12 +142,14 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 			unActiveLayout.setLayoutParams(new LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
 			showCommonActionBar();
 			showActionBarButtons(position);
+			hideBorderLine(position);
 		} else {
 			unActiveLayout.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
 			activeLayout.setLayoutParams(new LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
 					android.widget.LinearLayout.LayoutParams.MATCH_PARENT));
 			hideCommonActionBar();
 			hideTopBarButtons(position);
+			showBorderLine(position);
 
 		}
 	}
@@ -164,6 +166,85 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 		if (commonActionBar != null) {
 			commonActionBar.setVisibility(View.GONE);
 		}
+	}
+
+	private void hideTopBarButtons(Position selectedPosition) {
+		View actionBarView;
+		if (selectedPosition == Position.LEFT) {
+			actionBarView = findViewById(R.id.action_bar_right);
+		} else {
+			actionBarView = findViewById(R.id.action_bar_left);
+		}
+
+		actionBarView.setVisibility(View.INVISIBLE);
+	}
+
+	private void showActionBarButtons(Position currentPosition) {
+		View actionBarView;
+		if (currentPosition == Position.LEFT) {
+			actionBarView = findViewById(R.id.action_bar_right);
+		} else {
+			actionBarView = findViewById(R.id.action_bar_left);
+		}
+
+		actionBarView.setVisibility(View.VISIBLE);
+	}
+
+	private void showBorderLine(Position position) {
+		showBorderLine(position, View.VISIBLE);
+	}
+
+	private void hideBorderLine(Position position) {
+		showBorderLine(position, View.INVISIBLE);
+		View verticalLineLeft = findViewById(R.id.borderLineLeft);
+		View verticalLineRight = findViewById(R.id.borderLineRight);
+		verticalLineLeft.setVisibility(View.INVISIBLE);
+		verticalLineRight.setVisibility(View.INVISIBLE);
+	}
+
+	private void showBorderLine(Position currentPosition, int visibility) {
+		int commonLineVisibility;
+		int lineVisibility;
+
+		if (visibility == View.VISIBLE) {
+			commonLineVisibility = View.INVISIBLE;
+			lineVisibility = View.VISIBLE;
+		} else {
+			commonLineVisibility = View.VISIBLE;
+			lineVisibility = View.INVISIBLE;
+		}
+
+		View belowLine;
+		View verticalLineShowed;
+		View verticalLineHided;
+		View commonBelowLine;
+		View videoBorderLine;
+
+		View leftActionBar = findViewById(R.id.action_bar_left);
+		View rightActionBar = findViewById(R.id.action_bar_right);
+		if (currentPosition == Position.LEFT) {
+			belowLine = findViewById(R.id.belowLeftBar);
+			verticalLineShowed = leftActionBar.findViewById(R.id.borderLineLeft);
+			verticalLineHided = leftActionBar.findViewById(R.id.borderLineRight);
+		} else {
+			belowLine = findViewById(R.id.belowRightBar);
+			verticalLineShowed = rightActionBar.findViewById(R.id.borderLineRight);
+			verticalLineHided = rightActionBar.findViewById(R.id.borderLineLeft);
+		}
+		commonBelowLine = findViewById(R.id.commonBorderLine);
+		videoBorderLine = findViewById(R.id.videoBorderLine);
+
+		belowLine.setVisibility(lineVisibility);
+		if (visibility == View.VISIBLE) {
+			verticalLineShowed.setVisibility(lineVisibility);
+			verticalLineHided.setVisibility(commonLineVisibility);
+		} else {
+			verticalLineShowed.setVisibility(View.INVISIBLE);
+			verticalLineHided.setVisibility(View.INVISIBLE);
+		}
+		commonBelowLine.setVisibility(commonLineVisibility);
+		videoBorderLine.setVisibility(commonLineVisibility);
+
 	}
 
 	private void initFileManagerFragments() {
@@ -277,28 +358,6 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 			}
 		});
 
-	}
-
-	private void hideTopBarButtons(Position selectedPosition) {
-		View actionBarView;
-		if (selectedPosition == Position.LEFT) {
-			actionBarView = findViewById(R.id.action_bar_right);
-		} else {
-			actionBarView = findViewById(R.id.action_bar_left);
-		}
-
-		actionBarView.setVisibility(View.INVISIBLE);
-	}
-
-	private void showActionBarButtons(Position selectedPosition) {
-		View actionBarView;
-		if (selectedPosition == Position.LEFT) {
-			actionBarView = findViewById(R.id.action_bar_right);
-		} else {
-			actionBarView = findViewById(R.id.action_bar_left);
-		}
-
-		actionBarView.setVisibility(View.VISIBLE);
 	}
 
 	private Rate rate = Rate.X1;

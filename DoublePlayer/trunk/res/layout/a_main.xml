@@ -25,6 +25,12 @@
             android:layout_weight="0.5"
             android:orientation="horizontal" />
 
+        <View
+            android:id="@+id/videoBorderLine"
+            android:layout_width="@dimen/border_line"
+            android:layout_height="fill_parent"
+            android:background="@color/borderLine" />
+
         <RelativeLayout
             android:id="@+id/rightVideoLayout"
             android:layout_width="0dp"
