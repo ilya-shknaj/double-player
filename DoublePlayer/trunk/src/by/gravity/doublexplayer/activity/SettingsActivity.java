@@ -7,6 +7,7 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import by.gravity.doublexplayer.R;
+import by.gravity.doublexplayer.googleanalytics.SettingActivityTracking;
 import by.gravity.doublexplayer.manager.SettingsManager;
 
 import com.ipaulpro.afilechooser.FolderChooseActivity;
@@ -34,6 +35,7 @@ public class SettingsActivity extends PreferenceActivity {
 			public boolean onPreferenceChange(Preference paramPreference, Object paramObject) {
 				SettingsManager.setPosition((String) paramObject);
 				contentPosition.setSummary((CharSequence) paramObject);
+				SettingActivityTracking.trackContentPosition((String) paramObject);
 				updateNotContentPathTitle();
 				if (!valuesChanged) {
 					valuesChanged = true;
@@ -84,6 +86,7 @@ public class SettingsActivity extends PreferenceActivity {
 		String uriString = data.getData().toString();
 		SettingsManager.setNotContentPath(uriString);
 		updateSummary(notContentPath, uriString);
+		SettingActivityTracking.trackSetNotContentPath(uriString);
 		if (!valuesChanged) {
 			valuesChanged = true;
 		}

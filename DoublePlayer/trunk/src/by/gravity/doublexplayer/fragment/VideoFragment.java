@@ -11,6 +11,7 @@ import by.gravity.common.Constants;
 import by.gravity.doubleplayer.core.fragment.BaseVideoFragment;
 import by.gravity.doublexplayer.R;
 import by.gravity.doublexplayer.activity.MainActivity;
+import by.gravity.doublexplayer.googleanalytics.VideoFragmentTracking;
 import by.gravity.doublexplayer.model.Rate;
 import by.gravity.doublexplayer.model.VideoState;
 
@@ -81,6 +82,7 @@ public class VideoFragment extends BaseVideoFragment {
 					pause();
 				} else {
 					playPause();
+					VideoFragmentTracking.trackPlayPause();
 				}
 			}
 		});
@@ -93,6 +95,7 @@ public class VideoFragment extends BaseVideoFragment {
 
 				Rate rate = getRate().getNext(getRate());
 				setRate(rate);
+				VideoFragmentTracking.trackSetRate(rate.getValue());
 			}
 		});
 
@@ -104,6 +107,7 @@ public class VideoFragment extends BaseVideoFragment {
 				boolean isPlayed = isPlaying();
 				pause();
 				onFullScreenClick();
+				VideoFragmentTracking.trackFullScreen();
 				postDelayedSetPosition(getPosition(), isPlayed);
 			}
 		});
@@ -115,6 +119,7 @@ public class VideoFragment extends BaseVideoFragment {
 			public void onClick(View v) {
 				if (!isPlaying()) {
 					nextFrame();
+					VideoFragmentTracking.trackNextFrame();
 				}
 			}
 		});
@@ -126,6 +131,7 @@ public class VideoFragment extends BaseVideoFragment {
 			public void onClick(View arg0) {
 				if (!isPlaying()) {
 					prevFrame();
+					VideoFragmentTracking.trackPrevFrame();
 				}
 
 			}
@@ -138,6 +144,7 @@ public class VideoFragment extends BaseVideoFragment {
 			public void onClick(View v) {
 				String message = !isRepeatMode() ? "Повторение включено" : "Повторение выключено";
 				setRepeatMode(!isRepeatMode());
+				VideoFragmentTracking.trackRepeatMode();
 				Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
 			}
 		});
@@ -156,6 +163,7 @@ public class VideoFragment extends BaseVideoFragment {
 				}
 
 				setVideoFragment();
+				VideoFragmentTracking.trackLeftFragment();
 				updateVideoFragmentUI(FragmentButton.START);
 
 			}
@@ -174,6 +182,7 @@ public class VideoFragment extends BaseVideoFragment {
 					getRangeSeekBar().setHasMaxValue(false);
 				}
 				setVideoFragment();
+				VideoFragmentTracking.trackRightFragment();
 				updateVideoFragmentUI(FragmentButton.FINISH);
 
 			}

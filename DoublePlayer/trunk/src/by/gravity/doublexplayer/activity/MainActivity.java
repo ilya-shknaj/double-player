@@ -14,7 +14,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,19 +22,21 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import by.gravity.common.activity.TrackingActivity;
 import by.gravity.common.utils.FileUtil;
 import by.gravity.common.utils.StringUtil;
 import by.gravity.doubleplayer.core.IPlayer;
 import by.gravity.doublexplayer.R;
 import by.gravity.doublexplayer.fragment.SwfFragment;
 import by.gravity.doublexplayer.fragment.VideoFragment;
+import by.gravity.doublexplayer.googleanalytics.MainActivityTracking;
 import by.gravity.doublexplayer.manager.SettingsManager;
 import by.gravity.doublexplayer.model.Rate;
 import by.gravity.doublexplayer.util.PlayerUtil;
 
 import com.ipaulpro.afilechooser.FileListFragment;
 
-public class MainActivity extends FragmentActivity implements FileListFragment.OnFileSelectedListener {
+public class MainActivity extends TrackingActivity implements FileListFragment.OnFileSelectedListener {
 
 	private static final int LEFT_CAMERA_REQUEST_CODE = 101;
 
@@ -78,6 +79,7 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 		} else {
 			showNotInstalledDialog(DOUBLE_PLAYER_APPLICATION_NAME);
 		}
+		MainActivityTracking.trackStartMainActivity(getCallingPackage());
 
 	}
 
@@ -216,6 +218,7 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 			public void onClick(View v) {
 
 				openCameraAction(LEFT_CAMERA_REQUEST_CODE, SettingsManager.getRightPath());
+				MainActivityTracking.trackLeftRecordVideo();
 			}
 		});
 
@@ -225,6 +228,7 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 			@Override
 			public void onClick(View paramView) {
 				showInfoDialog(Position.LEFT);
+				MainActivityTracking.trackLeftFileInfo();
 			}
 		});
 
@@ -245,6 +249,7 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 			public void onClick(View v) {
 
 				openCameraAction(RIGHT_CAMERA_REQUEST_CODE, SettingsManager.getRightPath());
+				MainActivityTracking.trackRightRecordVideo();
 			}
 		});
 
@@ -254,6 +259,7 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 			@Override
 			public void onClick(View paramView) {
 				showInfoDialog(Position.RIGHT);
+				MainActivityTracking.trackRightFileInfo();
 			}
 		});
 
@@ -265,6 +271,7 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 
 				Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
 				startActivityForResult(intent, SETTINGS_UPDATE_REQUEST_CODE);
+				MainActivityTracking.trackOpenSettings();
 			}
 		});
 
@@ -281,6 +288,7 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 			@Override
 			public void onClick(View paramView) {
 				doAction(Action.PLAY_PAUSE);
+				MainActivityTracking.trackPlayPause();
 			}
 		});
 
@@ -290,7 +298,7 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 			@Override
 			public void onClick(View paramView) {
 				doAction(Action.PREV_FRAME);
-
+				MainActivityTracking.trackPrevFrame();
 			}
 		});
 
@@ -300,6 +308,7 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 			@Override
 			public void onClick(View paramView) {
 				doAction(Action.NEXT_FRAME);
+				MainActivityTracking.trackNextFrame();
 			}
 		});
 
@@ -310,6 +319,7 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 			public void onClick(View paramView) {
 				rate = rate.getNext(rate);
 				doAction(Action.SET_RATE);
+				MainActivityTracking.trackSetRate(rate.getValue());
 			}
 		});
 
@@ -480,7 +490,7 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 
 	private String getMediaInfo(Position position) {
 		Fragment fragment = getSupportFragmentManager().findFragmentByTag(position.name());
-		if (fragment != null) {
+		if (fragment != null && fragment instanceof IPlayer) {
 			IPlayer video = (IPlayer) fragment;
 			String mediaUri = video.getMediaUriString();
 			if (mediaUri != null) {
@@ -500,6 +510,12 @@ public class MainActivity extends FragmentActivity implements FileListFragment.O
 		} else if (tag.equals(Position.RIGHT.name())) {
 			setVideoFragmentUri(Position.RIGHT.name(), filePath);
 		}
-	}
 
+		int indexExpansion = filePath.lastIndexOf("\\.");
+		if (indexExpansion != -1) {
+			String expansion = filePath.substring(indexExpansion);
+			MainActivityTracking.trackOpenFile(expansion);
+		}
+
+	}
 }

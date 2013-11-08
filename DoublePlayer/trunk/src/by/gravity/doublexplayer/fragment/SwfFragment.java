@@ -15,14 +15,14 @@ import android.widget.Button;
 import by.gravity.doubleplayer.core.IPlayer;
 import by.gravity.doublexplayer.R;
 import by.gravity.doublexplayer.activity.MainActivity;
+import by.gravity.doublexplayer.googleanalytics.VideoFragmentTracking;
 import by.gravity.doublexplayer.model.Rate;
 
 public class SwfFragment extends Fragment implements IPlayer {
 
 	private WebView mWebView;
 
-	private static final String DEFAULT_URI = "file:///"
-			+ Environment.getExternalStorageDirectory().getAbsolutePath()
+	private static final String DEFAULT_URI = "file:///" + Environment.getExternalStorageDirectory().getAbsolutePath()
 			+ "/DoublePlayer/Video/922.swf";
 
 	private static final String ARG_MEDIA_URI = "ARG_MEDIA_URI";
@@ -63,17 +63,18 @@ public class SwfFragment extends Fragment implements IPlayer {
 			@Override
 			public void onClick(View paramView) {
 				playPause(!isPlayed);
+				VideoFragmentTracking.trackPlayPause();
 
 			}
 		});
 
-		Button fullScreenButton = (Button) getView().findViewById(
-				R.id.fullScreenButton);
+		Button fullScreenButton = (Button) getView().findViewById(R.id.fullScreenButton);
 		fullScreenButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View paramView) {
 				onFullScreenClick();
+				VideoFragmentTracking.trackFullScreen();
 			}
 		});
 
@@ -83,6 +84,7 @@ public class SwfFragment extends Fragment implements IPlayer {
 			@Override
 			public void onClick(View v) {
 				zoomIn();
+				VideoFragmentTracking.trackZoomIn();
 			}
 		});
 
@@ -92,6 +94,7 @@ public class SwfFragment extends Fragment implements IPlayer {
 			@Override
 			public void onClick(View v) {
 				zoomOut();
+				VideoFragmentTracking.trackZoomOut();
 			}
 		});
 
@@ -113,26 +116,18 @@ public class SwfFragment extends Fragment implements IPlayer {
 		StringBuffer localStringBuffer = new StringBuffer();
 		localStringBuffer
 				.append("<style type='text/css'>html,body,object{ margin: 0px; padding: 0px; border: 0px; width: 100%; height: 100%; overflow: hidden; background-color: #000000; color: #FF0000;} </style>");
-		localStringBuffer
-				.append("<object id='flashmovie' type='application/x-shockwave-flash' align='center' width='100%' height='100%' >");
-		localStringBuffer.append("<param name='movie' value='" + filePath
-				+ "'/>");
+		localStringBuffer.append("<object id='flashmovie' type='application/x-shockwave-flash' align='center' width='100%' height='100%' >");
+		localStringBuffer.append("<param name='movie' value='" + filePath + "'/>");
 		localStringBuffer.append("<param name='quality' value='medium'/>");
-		localStringBuffer
-				.append("<param name='allowFullScreen' value='false'/>");
+		localStringBuffer.append("<param name='allowFullScreen' value='false'/>");
 		localStringBuffer.append("<param name='wmode' value='direct'/>");
 		localStringBuffer.append("<param name='scale' value='showall'/>");
-		localStringBuffer
-				.append("<param name='allowScriptAccess' value='always'/>");
+		localStringBuffer.append("<param name='allowScriptAccess' value='always'/>");
 		localStringBuffer.append("<center>");
-		localStringBuffer
-				.append("<div style='border:2px solid #666; background:#EEEEE0; position: relative; top: 100px; '>");
-		localStringBuffer
-				.append("<h3 style='color:red; text-align:center'>Please Install Adobe Flash Plugin and Restart !</h3>");
-		localStringBuffer
-				.append("<h5 style='color:#80BFFF; text-align:center'>(Some Android Devices(CPU Lower ARMv7) Can't Support Flash !)</h5>");
-		localStringBuffer
-				.append("<a href='https://market.android.com/details?id=com.adobe.flashplayer'>DOWNLOAD FROM MARKET</a>");
+		localStringBuffer.append("<div style='border:2px solid #666; background:#EEEEE0; position: relative; top: 100px; '>");
+		localStringBuffer.append("<h3 style='color:red; text-align:center'>Please Install Adobe Flash Plugin and Restart !</h3>");
+		localStringBuffer.append("<h5 style='color:#80BFFF; text-align:center'>(Some Android Devices(CPU Lower ARMv7) Can't Support Flash !)</h5>");
+		localStringBuffer.append("<a href='https://market.android.com/details?id=com.adobe.flashplayer'>DOWNLOAD FROM MARKET</a>");
 		localStringBuffer.append("</div>");
 		localStringBuffer.append("</center>");
 		localStringBuffer.append("</object>");
@@ -143,16 +138,13 @@ public class SwfFragment extends Fragment implements IPlayer {
 		localStringBuffer.append("function Pause(){flashmovie.StopPlay();}");
 		localStringBuffer.append("function ZoomIn(){flashmovie.Zoom(90);}");
 		localStringBuffer.append("function ZoomOut(){flashmovie.Zoom(110);}");
-		localStringBuffer
-				.append("function GotoFrame(goframe){flashmovie.GotoFrame(goframe);}");
+		localStringBuffer.append("function GotoFrame(goframe){flashmovie.GotoFrame(goframe);}");
 		localStringBuffer.append("</script>");
-		mWebView.loadDataWithBaseURL(null, localStringBuffer.toString(),
-				"text/html", "utf-8", null);
+		mWebView.loadDataWithBaseURL(null, localStringBuffer.toString(), "text/html", "utf-8", null);
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.f_video_flash, null);
 	}
 
