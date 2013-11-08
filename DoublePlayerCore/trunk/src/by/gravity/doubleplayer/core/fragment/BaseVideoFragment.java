@@ -193,6 +193,9 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	}
 
 	private void updateTimeWidget() {
+		if (getView() == null) {
+			return;
+		}
 		View tv = getView().findViewById(getCurrentPositionTextViewID());
 		View duration = getView().findViewById(getTotaTextViewID());
 		RangeSeekBar sb = getRangeSeekBar();
