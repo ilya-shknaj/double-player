@@ -124,11 +124,11 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 
 	}
 
-	private void showFullScreen(Position video) {
+	private void showFullScreen(Position position) {
 
 		RelativeLayout activeLayout = null;
 		RelativeLayout unActiveLayout = null;
-		if (video == Position.LEFT) {
+		if (position == Position.LEFT) {
 			activeLayout = (RelativeLayout) findViewById(R.id.leftVideoLayout);
 			unActiveLayout = (RelativeLayout) findViewById(R.id.rightVideoLayout);
 
@@ -141,11 +141,13 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 			activeLayout.setLayoutParams(new LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
 			unActiveLayout.setLayoutParams(new LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
 			showCommonActionBar();
+			showActionBarButtons(position);
 		} else {
 			unActiveLayout.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
 			activeLayout.setLayoutParams(new LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
 					android.widget.LinearLayout.LayoutParams.MATCH_PARENT));
 			hideCommonActionBar();
+			hideTopBarButtons(position);
 
 		}
 	}
@@ -275,6 +277,28 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 			}
 		});
 
+	}
+
+	private void hideTopBarButtons(Position selectedPosition) {
+		View actionBarView;
+		if (selectedPosition == Position.LEFT) {
+			actionBarView = findViewById(R.id.action_bar_right);
+		} else {
+			actionBarView = findViewById(R.id.action_bar_left);
+		}
+
+		actionBarView.setVisibility(View.INVISIBLE);
+	}
+
+	private void showActionBarButtons(Position selectedPosition) {
+		View actionBarView;
+		if (selectedPosition == Position.LEFT) {
+			actionBarView = findViewById(R.id.action_bar_right);
+		} else {
+			actionBarView = findViewById(R.id.action_bar_left);
+		}
+
+		actionBarView.setVisibility(View.VISIBLE);
 	}
 
 	private Rate rate = Rate.X1;

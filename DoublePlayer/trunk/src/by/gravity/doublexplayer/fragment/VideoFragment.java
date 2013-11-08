@@ -255,7 +255,11 @@ public class VideoFragment extends BaseVideoFragment {
 
 	@Override
 	protected void updatePlayPauseUI() {
-		View playButton = getView().findViewById(R.id.playButton);
+		View view = getView();
+		if (view == null) {
+			return;
+		}
+		View playButton = view.findViewById(R.id.playButton);
 		if (playButton == null) {
 			return;
 		}
