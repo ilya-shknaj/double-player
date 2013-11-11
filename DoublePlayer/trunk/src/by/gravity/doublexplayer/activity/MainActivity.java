@@ -79,7 +79,7 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 		} else {
 			showNotInstalledDialog(DOUBLE_PLAYER_APPLICATION_NAME);
 		}
-		MainActivityTracking.trackStartMainActivity(getCallingPackage());
+		MainActivityTracking.trackStartMainActivity(getPackageName());
 
 	}
 

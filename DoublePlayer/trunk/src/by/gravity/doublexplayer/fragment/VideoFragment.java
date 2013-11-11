@@ -107,8 +107,8 @@ public class VideoFragment extends BaseVideoFragment {
 				boolean isPlayed = isPlaying();
 				pause();
 				onFullScreenClick();
-				VideoFragmentTracking.trackFullScreen();
 				postDelayedSetPosition(getPosition(), isPlayed);
+				VideoFragmentTracking.trackFullScreen();
 			}
 		});
 
