@@ -10,46 +10,67 @@
         android:orientation="horizontal" >
 
         <View
-            android:visibility="invisible"
             android:id="@+id/borderLineRight"
             android:layout_width="@dimen/border_line"
             android:layout_height="@dimen/button_size"
-            android:background="@color/borderLine" />
+            android:background="@color/borderLine"
+            android:visibility="invisible" />
 
-        <Button
+        <RelativeLayout
             android:id="@+id/btn_open"
-            android:layout_width="@dimen/button_size"
-            android:layout_height="@dimen/button_size"
-            android:layout_marginLeft="@dimen/button_margin"
-            android:background="@drawable/btn_gallery" />
+            android:layout_width="@dimen/button_layout_size"
+            android:layout_height="@dimen/button_layout_size" >
 
-        <Button
+            <Button
+                android:layout_width="@dimen/button_size"
+                android:layout_height="@dimen/button_size"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="@dimen/button_margin"
+                android:background="@drawable/btn_gallery"
+                android:clickable="false" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/btn_camera"
-            android:layout_width="@dimen/button_size"
-            android:layout_height="@dimen/button_size"
-            android:layout_marginLeft="@dimen/button_margin"
-            android:background="@drawable/btn_camera" />
+            android:layout_width="@dimen/button_layout_size"
+            android:layout_height="@dimen/button_layout_size" >
 
-        <Button
+            <Button
+                android:layout_width="@dimen/button_size"
+                android:layout_height="@dimen/button_size"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="@dimen/button_margin"
+                android:background="@drawable/btn_camera"
+                android:clickable="false" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/btn_info"
-            android:layout_width="@dimen/button_size"
-            android:layout_height="@dimen/button_size"
-            android:layout_marginLeft="@dimen/button_margin"
-            android:background="@drawable/btn_info" />
+            android:layout_width="@dimen/button_layout_size"
+            android:layout_height="@dimen/button_layout_size" >
+
+            <Button
+                android:layout_width="@dimen/button_size"
+                android:layout_height="@dimen/button_size"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="@dimen/button_margin"
+                android:background="@drawable/btn_info"
+                android:clickable="false" />
+        </RelativeLayout>
 
         <View
-            android:visibility="invisible"
             android:id="@+id/borderLineLeft"
             android:layout_width="@dimen/border_line"
             android:layout_height="@dimen/button_size"
-            android:background="@color/borderLine" />
+            android:background="@color/borderLine"
+            android:visibility="invisible" />
     </LinearLayout>
 
     <View
-        android:visibility="invisible"
         android:id="@+id/belowBorderLine"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/border_line"
-        android:background="@color/borderLine" />
+        android:background="@color/borderLine"
+        android:visibility="invisible" />
 
 </LinearLayout>

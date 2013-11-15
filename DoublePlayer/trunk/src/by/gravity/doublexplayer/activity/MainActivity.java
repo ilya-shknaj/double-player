@@ -21,7 +21,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -55,19 +54,19 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 
 	private static final String FLASH_PLAYER_APPLICATION_NAME = "Adobe Flash Player";
 
-	private Button leftOpenButton;
+	private View leftOpenButton;
 
-	private Button leftCameraButton;
+	private View leftCameraButton;
 
-	private Button leftInfoButton;
+	private View leftInfoButton;
 
-	private Button rightOpenButton;
+	private View rightOpenButton;
 
-	private Button rightCameraButton;
+	private View rightCameraButton;
 
-	private Button rightInfoButton;
+	private View rightInfoButton;
 
-	private Button settingsButton;
+	private View settingsButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -314,7 +313,7 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 	}
 
 	private void initTopActionBar() {
-		leftOpenButton = (Button) findViewById(R.id.action_bar_left).findViewById(R.id.btn_open);
+		leftOpenButton = findViewById(R.id.action_bar_left).findViewById(R.id.btn_open);
 
 		leftOpenButton.setOnClickListener(new OnClickListener() {
 
@@ -325,7 +324,7 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 			}
 		});
 
-		leftCameraButton = (Button) findViewById(R.id.action_bar_left).findViewById(R.id.btn_camera);
+		leftCameraButton = findViewById(R.id.action_bar_left).findViewById(R.id.btn_camera);
 		leftCameraButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -336,7 +335,7 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 			}
 		});
 
-		leftInfoButton = (Button) findViewById(R.id.action_bar_left).findViewById(R.id.btn_info);
+		leftInfoButton = findViewById(R.id.action_bar_left).findViewById(R.id.btn_info);
 		leftInfoButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -346,7 +345,7 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 			}
 		});
 
-		rightOpenButton = (Button) findViewById(R.id.action_bar_right).findViewById(R.id.btn_open);
+		rightOpenButton = findViewById(R.id.action_bar_right).findViewById(R.id.btn_open);
 		rightOpenButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -356,7 +355,7 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 			}
 		});
 
-		rightCameraButton = (Button) findViewById(R.id.action_bar_right).findViewById(R.id.btn_camera);
+		rightCameraButton = findViewById(R.id.action_bar_right).findViewById(R.id.btn_camera);
 		rightCameraButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -367,7 +366,7 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 			}
 		});
 
-		rightInfoButton = (Button) findViewById(R.id.action_bar_right).findViewById(R.id.btn_info);
+		rightInfoButton = findViewById(R.id.action_bar_right).findViewById(R.id.btn_info);
 		rightInfoButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -377,7 +376,7 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 			}
 		});
 
-		settingsButton = (Button) findViewById(R.id.settings);
+		settingsButton = findViewById(R.id.settings);
 		settingsButton.setOnClickListener(new OnClickListener() {
 
 			@Override

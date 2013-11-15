@@ -17,14 +17,21 @@
         android:layout_toLeftOf="@+id/settings"
         layout="@layout/action_bar_item" />
 
-    <Button
+    <RelativeLayout
         android:id="@+id/settings"
-        android:layout_width="@dimen/button_size"
-        android:layout_height="@dimen/button_size"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="@dimen/button_margin"
-        android:layout_marginRight="@dimen/button_margin"
-        android:background="@drawable/btn_settings" />
+        android:layout_width="@dimen/button_layout_size"
+        android:layout_height="@dimen/button_layout_size"
+        android:layout_alignParentRight="true" >
+
+        <Button
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/button_margin"
+            android:layout_marginRight="@dimen/button_margin"
+            android:background="@drawable/btn_settings"
+            android:clickable="false" />
+    </RelativeLayout>
 
     <View
         android:id="@+id/commonBorderLine"

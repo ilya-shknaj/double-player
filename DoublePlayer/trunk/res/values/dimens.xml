@@ -8,5 +8,6 @@
     <dimen name="progress_buttons_height">40dp</dimen>
     <dimen name="rate_button_size">24sp</dimen>
     <dimen name="border_line">1px</dimen>
+    <dimen name="button_layout_size">40dp</dimen>
 
 </resources>
