@@ -320,6 +320,7 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 		mListContainer = root.findViewById(R.id.listContainer);
 		mProgressContainer = root.findViewById(R.id.progressContainer);
 		mListShown = true;
+		root.setBackgroundColor(getResources().getColor(R.color.transparent));
 		return root;
 	}
 
