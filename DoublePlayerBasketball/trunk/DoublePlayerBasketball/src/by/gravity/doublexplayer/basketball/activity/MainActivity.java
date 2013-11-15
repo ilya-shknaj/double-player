@@ -1,10 +1,13 @@
 package by.gravity.doublexplayer.basketball.activity;
 
+import by.gravity.doublexplayer.basketball.R;
+
+
 public class MainActivity extends by.gravity.doublexplayer.activity.MainActivity {
 
 	@Override
-	protected int getContentViewResource() {
-		return super.getContentViewResource();
+	protected int getLayoutBackground() {
+		return R.drawable.bg_basketball;
 	}
 
 }

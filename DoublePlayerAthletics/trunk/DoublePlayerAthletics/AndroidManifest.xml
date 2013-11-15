@@ -3,11 +3,11 @@
     package="by.gravity.doublexplayer.athletics"
     android:installLocation="preferExternal"
     android:versionCode="1"
-    android:versionName="1.0.7" >
+    android:versionName="1.0.8a" >
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="18" />
+        android:targetSdkVersion="19" />
 
     <uses-feature android:name="android.hardware.camera" />
 

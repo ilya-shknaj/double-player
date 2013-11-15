@@ -2,11 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="by.gravity.doublexplayer.tourism"
     android:versionCode="1"
-    android:versionName="1.0.7" >
+    android:versionName="1.0.8a" >
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="18" />
+        android:targetSdkVersion="19" />
 
     <uses-feature android:name="android.hardware.camera" />
 
