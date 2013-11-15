@@ -1,5 +1,8 @@
 package by.gravity.doublexplayer.activity;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -19,6 +22,8 @@ public class SettingsActivity extends PreferenceActivity {
 	private Preference notContentPath;
 
 	private Preference contentPosition;
+
+	private Preference aboutDeveloper;
 
 	private boolean valuesChanged = false;
 
@@ -52,6 +57,17 @@ public class SettingsActivity extends PreferenceActivity {
 			public boolean onPreferenceClick(Preference preference) {
 				startSelectFolder(SELECT_PATH_REQUEST_CODE, SettingsManager.getNotContentPath());
 
+				return false;
+			}
+		});
+
+		aboutDeveloper = findPreference(getString(R.string.about_developer));
+		aboutDeveloper.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+			@Override
+			public boolean onPreferenceClick(Preference paramPreference) {
+				showAboutDeveloperDialog();
+				SettingActivityTracking.trackAboutDeveloper();
 				return false;
 			}
 		});
@@ -102,6 +118,20 @@ public class SettingsActivity extends PreferenceActivity {
 
 	private void updateSummary(Preference preference, String value) {
 		preference.setSummary(value);
+	}
+
+	private void showAboutDeveloperDialog() {
+		AlertDialog.Builder builder = new Builder(this);
+		builder.setTitle(getString(R.string.about_developer));
+		builder.setMessage(getString(R.string.about_developer_text));
+		builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		builder.show();
 	}
 
 }

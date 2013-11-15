@@ -16,6 +16,8 @@
     <string name="right_position">Справа</string>
     <string name="not_installed_app">Не найдено приложение</string>
     <string name="app_not_installed">Приложение %s не установлено</string>
+    <string name="about_developer">О разработчиках</string>
+    <string name="about_developer_text">Разработчик:\nИлья Шкнай\nilya.shknaj@gmai.com\n\nРуководитель:\nВиталий Храмов\nkhramoff@gmail.com</string>
     
     <string-array name="position">
         <item >@string/left_position</item>

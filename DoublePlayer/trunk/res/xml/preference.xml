@@ -10,5 +10,7 @@
         android:title="@string/content" />
 
     <Preference android:key="@string/not_content_path" />
+    
+    <Preference android:key="@string/about_developer" android:title="@string/about_developer"/>
 
 </PreferenceScreen>

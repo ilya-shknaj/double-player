@@ -51,7 +51,7 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 
 	private static final String FLASH_PLAYER = "com.adobe.flashplayer";
 
-	private static final String DOUBLE_PLAYER_APPLICATION_NAME = "CoreDoublePlayer";
+	private static final String DOUBLE_PLAYER_APPLICATION_NAME = "DoublePlayer";
 
 	private static final String FLASH_PLAYER_APPLICATION_NAME = "Adobe Flash Player";
 
