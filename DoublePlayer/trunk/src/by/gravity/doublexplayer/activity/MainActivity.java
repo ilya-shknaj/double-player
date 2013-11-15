@@ -169,14 +169,14 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 			unActiveLayout.setLayoutParams(new LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
 			showCommonActionBar();
 			showActionBarButtons(position);
-			hideBorderLine(position);
+			// hideBorderLine(position);
 		} else {
 			unActiveLayout.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
 			activeLayout.setLayoutParams(new LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
 					android.widget.LinearLayout.LayoutParams.MATCH_PARENT));
 			hideCommonActionBar();
 			hideTopBarButtons(position);
-			showBorderLine(position);
+			// showBorderLine(position);
 
 		}
 	}
