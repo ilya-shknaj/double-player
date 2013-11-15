@@ -30,8 +30,8 @@ public class MainActivityTracking {
 
 	private static final String OPEN_SETTINGS = "OpenSettings";
 
-	public static void trackStartMainActivity(String packageString) {
-		trackEvent(START_MAIN_ACTIVITY + " " + packageString);
+	public static void trackStartMainActivity(String text) {
+		trackEvent(START_MAIN_ACTIVITY + " " + text);
 	}
 
 	public static void trackPlayPause() {

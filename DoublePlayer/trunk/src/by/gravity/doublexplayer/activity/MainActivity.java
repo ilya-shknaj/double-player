@@ -9,7 +9,10 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -71,6 +74,7 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 
 		super.onCreate(savedInstanceState);
 		setContentView(getContentViewResource());
+		setBackground();
 		if (appplicationIsInstalled(DOUBLE_PLAYER_PACKAGE)) {
 			initTopActionBar();
 			initCommonActionBar();
@@ -79,8 +83,31 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 		} else {
 			showNotInstalledDialog(DOUBLE_PLAYER_APPLICATION_NAME);
 		}
-		MainActivityTracking.trackStartMainActivity(getPackageName());
+		trackStartMainActivity();
+	}
 
+	private void trackStartMainActivity() {
+		try {
+			PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+			MainActivityTracking.trackStartMainActivity(getPackageName() + " " + pInfo.versionName);
+		} catch (NameNotFoundException e) {
+			MainActivityTracking.trackStartMainActivity(getPackageName());
+		}
+
+	}
+
+	private void setBackground() {
+		View rootView = findViewById(R.id.rootLayout);
+		int backgroundResource = getLayoutBackground();
+		if (backgroundResource != Color.BLACK) {
+			rootView.setBackgroundDrawable(getResources().getDrawable(getLayoutBackground()));
+		} else {
+			rootView.setBackgroundColor(Color.BLACK);
+		}
+	}
+
+	protected int getLayoutBackground() {
+		return Color.BLACK;
 	}
 
 	private boolean appplicationIsInstalled(String packageName) {
@@ -605,4 +632,5 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 		}
 
 	}
+
 }
