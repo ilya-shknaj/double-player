@@ -214,7 +214,8 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 			lineVisibility = View.INVISIBLE;
 		}
 
-		View belowLine;
+		View belowLineShowed;
+		View belowLineHided;
 		View verticalLineShowed;
 		View verticalLineHided;
 		View commonBelowLine;
@@ -223,18 +224,21 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 		View leftActionBar = findViewById(R.id.action_bar_left);
 		View rightActionBar = findViewById(R.id.action_bar_right);
 		if (currentPosition == Position.LEFT) {
-			belowLine = findViewById(R.id.belowLeftBar);
+			belowLineShowed = findViewById(R.id.belowLeftBar);
+			belowLineHided = findViewById(R.id.belowRightBar);
 			verticalLineShowed = leftActionBar.findViewById(R.id.borderLineLeft);
 			verticalLineHided = leftActionBar.findViewById(R.id.borderLineRight);
 		} else {
-			belowLine = findViewById(R.id.belowRightBar);
+			belowLineShowed = findViewById(R.id.belowRightBar);
+			belowLineHided = findViewById(R.id.belowLeftBar);
 			verticalLineShowed = rightActionBar.findViewById(R.id.borderLineRight);
 			verticalLineHided = rightActionBar.findViewById(R.id.borderLineLeft);
 		}
 		commonBelowLine = findViewById(R.id.commonBorderLine);
 		videoBorderLine = findViewById(R.id.videoBorderLine);
 
-		belowLine.setVisibility(lineVisibility);
+		belowLineShowed.setVisibility(lineVisibility);
+		belowLineHided.setVisibility(commonLineVisibility);
 		if (visibility == View.VISIBLE) {
 			verticalLineShowed.setVisibility(lineVisibility);
 			verticalLineHided.setVisibility(commonLineVisibility);
