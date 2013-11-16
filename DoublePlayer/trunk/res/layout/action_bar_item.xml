@@ -19,13 +19,13 @@
         <RelativeLayout
             android:id="@+id/btn_open"
             android:layout_width="@dimen/button_layout_size"
-            android:layout_height="@dimen/button_layout_size" >
+            android:layout_height="@dimen/button_layout_size"
+            android:layout_marginLeft="@dimen/button_margin" >
 
             <Button
                 android:layout_width="@dimen/button_size"
                 android:layout_height="@dimen/button_size"
                 android:layout_centerInParent="true"
-                android:layout_marginLeft="@dimen/button_margin"
                 android:background="@drawable/btn_gallery"
                 android:clickable="false" />
         </RelativeLayout>
@@ -33,13 +33,13 @@
         <RelativeLayout
             android:id="@+id/btn_camera"
             android:layout_width="@dimen/button_layout_size"
-            android:layout_height="@dimen/button_layout_size" >
+            android:layout_height="@dimen/button_layout_size"
+            android:layout_marginLeft="@dimen/button_margin" >
 
             <Button
                 android:layout_width="@dimen/button_size"
                 android:layout_height="@dimen/button_size"
                 android:layout_centerInParent="true"
-                android:layout_marginLeft="@dimen/button_margin"
                 android:background="@drawable/btn_camera"
                 android:clickable="false" />
         </RelativeLayout>
@@ -47,13 +47,13 @@
         <RelativeLayout
             android:id="@+id/btn_info"
             android:layout_width="@dimen/button_layout_size"
-            android:layout_height="@dimen/button_layout_size" >
+            android:layout_height="@dimen/button_layout_size"
+            android:layout_marginLeft="@dimen/button_margin" >
 
             <Button
                 android:layout_width="@dimen/button_size"
                 android:layout_height="@dimen/button_size"
                 android:layout_centerInParent="true"
-                android:layout_marginLeft="@dimen/button_margin"
                 android:background="@drawable/btn_info"
                 android:clickable="false" />
         </RelativeLayout>

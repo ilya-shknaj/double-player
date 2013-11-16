@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">DoublePlayer</string>
+    <string name="app_name">Двойной плеер</string>
     <string name="action_settings">Настройки</string>
     <string name="select_video">Выберите видео</string>
     <string name="not_content_panel">%s панель</string>
@@ -17,7 +17,6 @@
     <string name="not_installed_app">Не найдено приложение</string>
     <string name="app_not_installed">Приложение %s не установлено</string>
     <string name="about_developer">О разработчиках</string>
-    <string name="about_developer_text">Разработчик:\nИлья Шкнай\nilya.shknaj@gmai.com\n\nРуководитель:\nВиталий Храмов\nkhramoff@gmail.com</string>
     
     <string-array name="position">
         <item >@string/left_position</item>

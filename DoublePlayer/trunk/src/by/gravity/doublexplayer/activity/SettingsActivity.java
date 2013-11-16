@@ -9,6 +9,8 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.text.Html;
+import by.gravity.common.utils.FileUtil;
 import by.gravity.doublexplayer.R;
 import by.gravity.doublexplayer.googleanalytics.SettingActivityTracking;
 import by.gravity.doublexplayer.manager.SettingsManager;
@@ -123,7 +125,7 @@ public class SettingsActivity extends PreferenceActivity {
 	private void showAboutDeveloperDialog() {
 		AlertDialog.Builder builder = new Builder(this);
 		builder.setTitle(getString(R.string.about_developer));
-		builder.setMessage(getString(R.string.about_developer_text));
+		builder.setMessage(Html.fromHtml(FileUtil.readAssets("about_developers", this)));
 		builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 
 			@Override
