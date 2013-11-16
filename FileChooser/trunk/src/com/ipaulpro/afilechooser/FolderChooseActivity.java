@@ -29,7 +29,7 @@ public class FolderChooseActivity extends FragmentActivity implements FileListFr
 	}
 
 	private void addFragment(String path) {
-		FileListFragment explorerFragment = FileListFragment.newInstance(path, false, false);
+		FileListFragment explorerFragment = FileListFragment.newInstance(path, false, false,false);
 		explorerFragment.setOnFolderSelectedListener(this);
 		getSupportFragmentManager().beginTransaction().add(R.id.explorer_fragment, explorerFragment).commit();
 	}

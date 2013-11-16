@@ -45,7 +45,8 @@ import android.widget.TextView;
  * @author paulburke (ipaulpro)
  * 
  */
-public class FileListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<List<File>>, OnBackClickListener {
+public class FileListFragment extends ListFragment implements
+		LoaderManager.LoaderCallbacks<List<File>>, OnBackClickListener {
 
 	private static final int LOADER_ID = 0;
 
@@ -65,9 +66,12 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 
 	private static final String LOCK_DIRECTORY_ARG = "LOCK_DIRECTORY_ARG";
 
+	private static final String ADD_TRANPARENT_ARG = "ADD_TRANPARENT_ARG";
+
 	private static final String SLASH_STRING = "/";
 
-	private static final String ROOT_FOLDER = Environment.getExternalStorageDirectory().getAbsolutePath();
+	private static final String ROOT_FOLDER = Environment
+			.getExternalStorageDirectory().getAbsolutePath();
 
 	private OnFileSelectedListener onFileSelectedListener;
 	private OnFolderSelectedListener onFolderSelectedListener;
@@ -79,13 +83,15 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 	 *            The absolute path of the file (directory) to display.
 	 * @return A new Fragment with the given file path.
 	 */
-	public static FileListFragment newInstance(String path, boolean selectFile, boolean lockDirectory) {
+	public static FileListFragment newInstance(String path, boolean selectFile,
+			boolean lockDirectory, boolean addTransparent) {
 
 		FileListFragment fragment = new FileListFragment();
 		Bundle args = new Bundle();
 		args.putString(PATH_ARG, path);
 		args.putBoolean(SELECT_FILE_ARG, selectFile);
 		args.putBoolean(LOCK_DIRECTORY_ARG, lockDirectory);
+		args.putBoolean(ADD_TRANPARENT_ARG, addTransparent);
 		fragment.setArguments(args);
 
 		return fragment;
@@ -122,10 +128,12 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 		super.onActivityCreated(savedInstanceState);
 
 		currentFilePath = (TextView) getView().findViewById(R.id.currentPath);
-		String path = getArguments().getString(PATH_ARG) != null ? getArguments().getString(PATH_ARG) : ROOT_FOLDER;
+		String path = getArguments().getString(PATH_ARG) != null ? getArguments()
+				.getString(PATH_ARG) : ROOT_FOLDER;
 		setPath(path);
 
-		View currentDirectoryButton = getView().findViewById(R.id.currentDirectoryButton);
+		View currentDirectoryButton = getView().findViewById(
+				R.id.currentDirectoryButton);
 
 		if (!getArguments().getBoolean(SELECT_FILE_ARG, true)) {
 			currentDirectoryButton.setVisibility(View.VISIBLE);
@@ -134,7 +142,8 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 				@Override
 				public void onClick(View v) {
 					if (onFolderSelectedListener != null) {
-						onFolderSelectedListener.onFolderSelected(getTag(), mPath);
+						onFolderSelectedListener.onFolderSelected(getTag(),
+								mPath);
 					}
 				}
 			});
@@ -160,7 +169,8 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
-			public boolean onItemLongClick(AdapterView<?> paramAdapterView, View paramView, int position, long id) {
+			public boolean onItemLongClick(AdapterView<?> paramAdapterView,
+					View paramView, int position, long id) {
 				onListItemLongClick(paramView, position);
 				return false;
 			}
@@ -187,15 +197,19 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 		mListShown = shown;
 		if (shown) {
 			if (animate) {
-				mProgressContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out));
-				mListContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in));
+				mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
+						getActivity(), android.R.anim.fade_out));
+				mListContainer.startAnimation(AnimationUtils.loadAnimation(
+						getActivity(), android.R.anim.fade_in));
 			}
 			mProgressContainer.setVisibility(View.GONE);
 			mListContainer.setVisibility(View.VISIBLE);
 		} else {
 			if (animate) {
-				mProgressContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in));
-				mListContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out));
+				mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
+						getActivity(), android.R.anim.fade_in));
+				mListContainer.startAnimation(AnimationUtils.loadAnimation(
+						getActivity(), android.R.anim.fade_out));
 			}
 			mProgressContainer.setVisibility(View.VISIBLE);
 			mListContainer.setVisibility(View.INVISIBLE);
@@ -213,7 +227,8 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 				getLoaderManager().restartLoader(0, null, this);
 			} else {
 				if (onFileSelectedListener != null) {
-					onFileSelectedListener.onFileSelected(getTag(), "file://" + file.getAbsoluteFile().toString());
+					onFileSelectedListener.onFileSelected(getTag(), "file://"
+							+ file.getAbsoluteFile().toString());
 				}
 			}
 		}
@@ -222,7 +237,8 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 	public void onListItemLongClick(View view, final int position) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(getString(R.string.select_action));
-		final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_item);
+		final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+				getActivity(), android.R.layout.select_dialog_item);
 		arrayAdapter.add(getString(R.string.delete));
 		builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
 
@@ -230,25 +246,35 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 			public void onClick(final DialogInterface dialog, int which) {
 				String strName = arrayAdapter.getItem(which);
 				if (strName.equals(getString(R.string.delete))) {
-					AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
-					final File selectedFile = (File) getListView().getAdapter().getItem(position);
-					builderInner.setMessage(String.format(getString(R.string.file_would_deleted), selectedFile.getName()));
-					builderInner.setTitle(getString(R.string.delete_alarm_message));
-					builderInner.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					AlertDialog.Builder builderInner = new AlertDialog.Builder(
+							getActivity());
+					final File selectedFile = (File) getListView().getAdapter()
+							.getItem(position);
+					builderInner.setMessage(String.format(
+							getString(R.string.file_would_deleted),
+							selectedFile.getName()));
+					builderInner
+							.setTitle(getString(R.string.delete_alarm_message));
+					builderInner.setPositiveButton(android.R.string.ok,
+							new DialogInterface.OnClickListener() {
 
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							selectedFile.delete();
-							dialog.dismiss();
-						}
-					});
-					builderInner.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									selectedFile.delete();
+									dialog.dismiss();
+								}
+							});
+					builderInner.setNegativeButton(android.R.string.cancel,
+							new DialogInterface.OnClickListener() {
 
-						@Override
-						public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-							dialog.dismiss();
-						}
-					});
+								@Override
+								public void onClick(
+										DialogInterface paramDialogInterface,
+										int paramInt) {
+									dialog.dismiss();
+								}
+							});
 					builderInner.show();
 				}
 			}
@@ -312,7 +338,8 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 		int INTERNAL_EMPTY_ID = 0x00ff0001;
 		View root = inflater.inflate(R.layout.chooser, container, false);
 		(root.findViewById(R.id.internalEmpty)).setId(INTERNAL_EMPTY_ID);
@@ -320,7 +347,10 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 		mListContainer = root.findViewById(R.id.listContainer);
 		mProgressContainer = root.findViewById(R.id.progressContainer);
 		mListShown = true;
-		root.setBackgroundColor(getResources().getColor(R.color.transparent));
+		if (getArguments().getBoolean(ADD_TRANPARENT_ARG, true)) {
+			root.setBackgroundColor(getResources()
+					.getColor(R.color.transparent));
+		}
 		return root;
 	}
 
@@ -328,7 +358,8 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 		return onFileSelectedListener;
 	}
 
-	public void setOnFileSelectedListener(OnFileSelectedListener fileSelectedListener) {
+	public void setOnFileSelectedListener(
+			OnFileSelectedListener fileSelectedListener) {
 		this.onFileSelectedListener = fileSelectedListener;
 	}
 
@@ -336,7 +367,8 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 		return onFolderSelectedListener;
 	}
 
-	public void setOnFolderSelectedListener(OnFolderSelectedListener folderSelectedListener) {
+	public void setOnFolderSelectedListener(
+			OnFolderSelectedListener folderSelectedListener) {
 		this.onFolderSelectedListener = folderSelectedListener;
 	}
 
