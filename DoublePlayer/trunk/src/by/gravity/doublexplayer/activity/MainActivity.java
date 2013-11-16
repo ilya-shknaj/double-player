@@ -168,14 +168,14 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 			unActiveLayout.setLayoutParams(new LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
 			showCommonActionBar();
 			showActionBarButtons(position);
-			// hideBorderLine(position);
+			showBorderLine();
 		} else {
 			unActiveLayout.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
 			activeLayout.setLayoutParams(new LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
 					android.widget.LinearLayout.LayoutParams.MATCH_PARENT));
 			hideCommonActionBar();
 			hideTopBarButtons(position);
-			// showBorderLine(position);
+			hideBorderLine();
 
 		}
 	}
@@ -216,65 +216,16 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 		actionBarView.setVisibility(View.VISIBLE);
 	}
 
-	private void showBorderLine(Position position) {
-		showBorderLine(position, View.VISIBLE);
+	private void showBorderLine() {
+		View videoBorderLine = findViewById(R.id.videoBorderLine);
+
+		videoBorderLine.setVisibility(View.VISIBLE);
 	}
 
-	private void hideBorderLine(Position position) {
-		showBorderLine(position, View.INVISIBLE);
-		View verticalLineLeft = findViewById(R.id.borderLineLeft);
-		View verticalLineRight = findViewById(R.id.borderLineRight);
-		verticalLineLeft.setVisibility(View.INVISIBLE);
-		verticalLineRight.setVisibility(View.INVISIBLE);
-	}
+	private void hideBorderLine() {
+		View videoBorderLine = findViewById(R.id.videoBorderLine);
 
-	private void showBorderLine(Position currentPosition, int visibility) {
-		int commonLineVisibility;
-		int lineVisibility;
-
-		if (visibility == View.VISIBLE) {
-			commonLineVisibility = View.INVISIBLE;
-			lineVisibility = View.VISIBLE;
-		} else {
-			commonLineVisibility = View.VISIBLE;
-			lineVisibility = View.INVISIBLE;
-		}
-
-		View belowLineShowed;
-		View belowLineHided;
-		View verticalLineShowed;
-		View verticalLineHided;
-		View commonBelowLine;
-		View videoBorderLine;
-
-		View leftActionBar = findViewById(R.id.action_bar_left);
-		View rightActionBar = findViewById(R.id.action_bar_right);
-		if (currentPosition == Position.LEFT) {
-			belowLineShowed = findViewById(R.id.belowLeftBar);
-			belowLineHided = findViewById(R.id.belowRightBar);
-			verticalLineShowed = leftActionBar.findViewById(R.id.borderLineLeft);
-			verticalLineHided = leftActionBar.findViewById(R.id.borderLineRight);
-		} else {
-			belowLineShowed = findViewById(R.id.belowRightBar);
-			belowLineHided = findViewById(R.id.belowLeftBar);
-			verticalLineShowed = rightActionBar.findViewById(R.id.borderLineRight);
-			verticalLineHided = rightActionBar.findViewById(R.id.borderLineLeft);
-		}
-		commonBelowLine = findViewById(R.id.commonBorderLine);
-		videoBorderLine = findViewById(R.id.videoBorderLine);
-
-		belowLineShowed.setVisibility(lineVisibility);
-		belowLineHided.setVisibility(commonLineVisibility);
-		if (visibility == View.VISIBLE) {
-			verticalLineShowed.setVisibility(lineVisibility);
-			verticalLineHided.setVisibility(commonLineVisibility);
-		} else {
-			verticalLineShowed.setVisibility(View.INVISIBLE);
-			verticalLineHided.setVisibility(View.INVISIBLE);
-		}
-		commonBelowLine.setVisibility(commonLineVisibility);
-		videoBorderLine.setVisibility(commonLineVisibility);
-
+		videoBorderLine.setVisibility(View.INVISIBLE);
 	}
 
 	private void initFileManagerFragments() {
