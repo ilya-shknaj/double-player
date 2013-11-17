@@ -239,7 +239,7 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 	private void initFileMangerFragment(Position position) {
 		FileListFragment fileFragment = null;
 		int layoutID = 0;
-		boolean addTranparent = getPackageName().equals(DOUBLE_PLAYER_PACKAGE);
+		boolean addTranparent = !getPackageName().equals(DOUBLE_PLAYER_PACKAGE);
 		if (position == Position.LEFT) {
 			fileFragment = FileListFragment.newInstance(SettingsManager.getLeftPath(), true, isContentPosition(position), addTranparent);
 			layoutID = R.id.leftVideoLayout;
