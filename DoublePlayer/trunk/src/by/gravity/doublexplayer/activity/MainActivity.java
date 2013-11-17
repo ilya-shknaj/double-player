@@ -47,6 +47,8 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 	private static final int SETTINGS_UPDATE_REQUEST_CODE = 300;
 
 	private static final String DOUBLE_PLAYER_PACKAGE = "by.gravity.doublexplayer";
+	
+	private static final String DOUBLE_PLAYER_LIBRARY_PACKAGE = "by.gravity.doublexplayer.library";
 
 	private static final String FLASH_PLAYER = "com.adobe.flashplayer";
 
@@ -74,7 +76,7 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 		super.onCreate(savedInstanceState);
 		setContentView(getContentViewResource());
 		setBackground();
-		if (appplicationIsInstalled(DOUBLE_PLAYER_PACKAGE)) {
+		if (appplicationIsInstalled(DOUBLE_PLAYER_LIBRARY_PACKAGE)) {
 			initTopActionBar();
 			initCommonActionBar();
 			initFileManagerFragments();

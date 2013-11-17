@@ -529,8 +529,8 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	}
 
 	static {
-		System.load("/data/data/by.gravity.doublexplayer/lib/libgstreamer_android.so");
-		System.load("/data/data/by.gravity.doublexplayer/lib/libdoublePlayer.so");
+		System.load("/data/data/by.gravity.doublexplayer.library/lib/libgstreamer_android.so");
+		System.load("/data/data/by.gravity.doublexplayer.library/lib/libdoublePlayer.so");
 		nativeClassInit();
 	}
 
