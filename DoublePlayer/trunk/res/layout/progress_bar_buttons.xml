@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_marginBottom="5dp"
     android:layout_height="@dimen/progress_buttons_height"
-    android:layout_gravity="center_vertical" >
+    android:layout_gravity="center_vertical"
+    android:layout_marginBottom="5dp" >
 
     <Button
         android:id="@+id/repeatButton"
@@ -17,6 +17,7 @@
         android:layout_width="@dimen/button_size"
         android:layout_height="@dimen/button_size"
         android:layout_marginLeft="@dimen/button_margin"
+        android:layout_toLeftOf="@+id/prevFrameButton"
         android:layout_toRightOf="@id/repeatButton" >
 
         <Button
@@ -53,6 +54,7 @@
         android:background="@drawable/btn_next_frame" />
 
     <RelativeLayout
+        android:layout_toRightOf="@id/nextFrameButton"
         android:id="@+id/rightFragmentLayout"
         android:layout_width="@dimen/button_size"
         android:layout_height="@dimen/button_size"
