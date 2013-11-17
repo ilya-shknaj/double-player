@@ -34,12 +34,12 @@
 		<link>
 			<name>core</name>
 			<type>2</type>
-			<location>C:/Users/Ilya_Shknai@epam.com/workspace/DoublePlayerCore/src</location>
+			<location>D:/Study/Eclipse/DoublePlayerCore/src</location>
 		</link>
 		<link>
-			<name>xAndroid</name>
+			<name>xDroid</name>
 			<type>2</type>
-			<location>C:/Users/Ilya_Shknai@epam.com/workspace/xAndroid/src</location>
+			<location>D:/Study/Eclipse/xAndroid/src</location>
 		</link>
 	</linkedResources>
 </projectDescription>
