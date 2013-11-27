@@ -8,7 +8,7 @@
     <string name="default_path">Путь по умолчанию</string>
     <string name="path">Путь</string>
     <string name="path_not_setted">Путь не задан</string>
-    <string name="info_not_found">Информация о видео отсутсвует</string>
+    <string name="info_not_found">Информация о видео отсутствует</string>
     <string name="content">Контент</string>
     <string name="left">Левая</string>
     <string name="right">Правая</string>
