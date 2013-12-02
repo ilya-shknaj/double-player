@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Установщик е-Спорт</string>
+    
+    <string name="aerobics">Аэробика</string>
+    <string name="athletics">Легкая атлетика</string>
+    <string name="basketball">Баскетбол</string>
+    <string name="football">Футбол</string>
+    <string name="gymnastics">Гимнастика</string>
+    <string name="obstacle">Полоса препятствий</string>
+    <string name="tourism">Туризм</string>
+	<string name="volleyball">Волейбол</string>
+	
+	
+	<string name="success">Контент установлен успешно</string>
+	<string name="error">Во время установки контента произошла ошибка</string>
+	<string name="progress_title">Распаковка контента</string>
+	<string name="progress_message">Пожалуйста подождите</string>
+</resources>
