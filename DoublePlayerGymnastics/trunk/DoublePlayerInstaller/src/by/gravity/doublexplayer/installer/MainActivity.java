@@ -36,19 +36,19 @@ public class MainActivity extends TrackingActivity {
 
 	public void onInstallButtonClick(final DoublePlayerModel playerModel) {
 		showProgress();
-		new AsyncTask<Void, Void, Void>() {
+		new AsyncTask<Void, Void, Boolean>() {
 
 			@Override
-			protected Void doInBackground(Void... params) {
-				ZipUtils.unpackZip(playerModel.getContentInputPath(), playerModel.getContentOutputPath());
-				return null;
+			protected Boolean doInBackground(Void... params) {
+				return ZipUtils.unpackZip(playerModel.getContentInputPath(), playerModel.getContentOutputPath());
 			}
 
 			@Override
-			protected void onPostExecute(Void result) {
+			protected void onPostExecute(Boolean result) {
 				super.onPostExecute(result);
 				hideProgress();
-				Toast.makeText(MainActivity.this, R.string.success, Toast.LENGTH_SHORT).show();
+				String text = result? getString(R.string.success) : getString(R.string.error);
+				Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
 			}
 
 		}.execute();
