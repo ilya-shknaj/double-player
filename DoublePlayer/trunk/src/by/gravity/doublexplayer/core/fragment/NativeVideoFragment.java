@@ -1,4 +1,4 @@
-package by.gravity.doubleplayer.core.fragment;
+package by.gravity.doublexplayer.core.fragment;
 
 import android.support.v4.app.Fragment;
 import android.util.Log;

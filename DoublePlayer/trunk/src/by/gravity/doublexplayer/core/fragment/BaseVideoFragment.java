@@ -1,4 +1,4 @@
-package by.gravity.doubleplayer.core.fragment;
+package by.gravity.doublexplayer.core.fragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -215,7 +215,7 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 	@Override
 	protected void setCurrentPosition(final int position, final int duration) {
 		final RangeSeekBar sb = getRangeSeekBar();
-		// Log.e(TAG, "position = " + position + " duration " + duration);
+		Log.e(TAG, "position = " + position + " duration " + duration);
 		// Ignore position messages from the pipeline if the seek bar is being
 		// dragged
 		if (sb.isPressed()) {
