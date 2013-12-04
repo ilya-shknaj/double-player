@@ -192,6 +192,19 @@ public class FileUtils {
 		return clickedFile;
 	}
 
+	public static String getFileNameWithoutExtension(File file) {
+		if (file == null) {
+			return "";
+		}
+		String name = file.getName();
+		int pos = name.lastIndexOf(".");
+		if (pos > 0) {
+			name = name.substring(0, pos);
+		}
+
+		return name;
+	}
+
 	public static File getFile(File curdir, String file) {
 		return getFile(curdir.getAbsolutePath(), file);
 	}

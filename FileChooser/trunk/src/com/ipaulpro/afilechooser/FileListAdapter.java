@@ -20,6 +20,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ipaulpro.afilechooser.utils.FileUtils;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,9 +45,11 @@ public class FileListAdapter extends BaseAdapter {
 
 	private List<File> mFiles = new ArrayList<File>();
 	private final LayoutInflater mInflater;
+	private final boolean showExtensional;
 
-	public FileListAdapter(Context context) {
+	public FileListAdapter(Context context, boolean showExtensional) {
 		mInflater = LayoutInflater.from(context);
+		this.showExtensional = showExtensional;
 	}
 
 	public ArrayList<File> getListItems() {
@@ -96,11 +100,11 @@ public class FileListAdapter extends BaseAdapter {
 		final File file = (File) getItem(position);
 
 		// Set the TextView as the file name
-		holder.nameView.setText(file.getName());
+		final String fileName = showExtensional ? file.getName() : FileUtils.getFileNameWithoutExtension(file);
+		holder.nameView.setText(fileName);
 
 		// If the item is not a directory, use the file icon
-		holder.iconView.setImageResource(file.isDirectory() ? ICON_FOLDER
-				: ICON_FILE);
+		holder.iconView.setImageResource(file.isDirectory() ? ICON_FOLDER : ICON_FILE);
 
 		return row;
 	}
