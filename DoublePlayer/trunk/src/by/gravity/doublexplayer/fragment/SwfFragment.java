@@ -12,9 +12,9 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
-import by.gravity.doubleplayer.core.IPlayer;
 import by.gravity.doublexplayer.R;
 import by.gravity.doublexplayer.activity.MainActivity;
+import by.gravity.doublexplayer.core.IPlayer;
 import by.gravity.doublexplayer.googleanalytics.VideoFragmentTracking;
 import by.gravity.doublexplayer.model.Rate;
 
