@@ -52,6 +52,8 @@ public class RangeSeekBar extends ImageView {
 	private double normalizedMinValue = 0d;
 	private double normalizedMaxValue = 1d;
 	private double normalizedCurrentValue = 0d;
+	private Integer deliveredMinValue = null;
+	private Integer deliveredMaxValue = null;
 	private Thumb pressedThumb = null;
 	private boolean notifyWhileDragging = false;
 	private OnRangeSeekBarChangeListener listener;
@@ -208,6 +210,24 @@ public class RangeSeekBar extends ImageView {
 		} else {
 			setNormalizedMinValue(valueToNormalized(value));
 		}
+	}
+	
+	
+
+	public Integer getDeliveredMinValue() {
+		return deliveredMinValue;
+	}
+
+	public void setDeliveredMinValue(Integer deliveredMinValue) {
+		this.deliveredMinValue = deliveredMinValue;
+	}
+
+	public Integer getDeliveredMaxValue() {
+		return deliveredMaxValue;
+	}
+
+	public void setDeliveredMaxValue(Integer deliveredMaxValue) {
+		this.deliveredMaxValue = deliveredMaxValue;
 	}
 
 	public boolean hasMinValue() {

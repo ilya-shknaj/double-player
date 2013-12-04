@@ -467,6 +467,14 @@ abstract public class BaseVideoFragment extends NativeVideoFragment implements S
 
 	protected void setVideoFragment() {
 		RangeSeekBar seekBar = getRangeSeekBar();
+		if (seekBar.getDeliveredMinValue() != null) {
+			seekBar.setSelectedMinValue(seekBar.getDeliveredMinValue());
+			seekBar.setDeliveredMinValue(null);
+		}
+		if (seekBar.getDeliveredMaxValue() != null) {
+			seekBar.setSelectedMaxValue(seekBar.getDeliveredMaxValue());
+			seekBar.setDeliveredMaxValue(null);
+		}
 		int minValue = seekBar.hasMinValue() ? seekBar.getSelectedMinValue() : seekBar.getAbsoluteMinValue();
 		int maxValue = seekBar.hasMaxValue() ? seekBar.getSelectedMaxValue() : seekBar.getAbsoluteMaxValue();
 

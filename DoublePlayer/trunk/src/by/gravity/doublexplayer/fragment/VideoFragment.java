@@ -158,11 +158,11 @@ public class VideoFragment extends BaseVideoFragment {
 				if (!getRangeSeekBar().hasMinValue()) {
 					getRangeSeekBar().setSelectedMinValue(getPosition());
 					getRangeSeekBar().setHasMinValue(true);
+					setVideoFragment();
 				} else {
 					getRangeSeekBar().setHasMinValue(false);
 				}
 
-				setVideoFragment();
 				VideoFragmentTracking.trackLeftFragment();
 				updateVideoFragmentUI(FragmentButton.START);
 
@@ -175,13 +175,21 @@ public class VideoFragment extends BaseVideoFragment {
 			@Override
 			public void onClick(View paramView) {
 				Log.d(TAG, "rightFragmentClick");
+				int minPosition = getRangeSeekBar().getSelectedMinValue();
+				getRangeSeekBar().setDeliveredMinValue(getPosition());
+				boolean hasMinValue = getRangeSeekBar().hasMinValue();
+				getRangeSeekBar().setHasMinValue(true);
 				if (!getRangeSeekBar().hasMaxValue()) {
 					getRangeSeekBar().setSelectedMaxValue(getPosition());
 					getRangeSeekBar().setHasMaxValue(true);
+					setVideoFragment();
+
 				} else {
 					getRangeSeekBar().setHasMaxValue(false);
+					setVideoFragment();
 				}
-				setVideoFragment();
+				getRangeSeekBar().setHasMinValue(hasMinValue);
+				getRangeSeekBar().setSelectedMinValue(minPosition);
 				VideoFragmentTracking.trackRightFragment();
 				updateVideoFragmentUI(FragmentButton.FINISH);
 
