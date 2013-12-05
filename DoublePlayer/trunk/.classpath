@@ -5,7 +5,6 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="src" path="core"/>
-	<classpathentry excluding="by/gravity/common/utils/MapUtil.java|by/gravity/common/cache/|by/gravity/common/task/" kind="src" path="xDroid"/>
+	<classpathentry excluding="by/gravity/common/cache/|by/gravity/common/task/|by/gravity/common/utils/MapUtil.java" kind="src" path="xAndroid"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

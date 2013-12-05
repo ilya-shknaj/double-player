@@ -32,14 +32,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>core</name>
+			<name>xAndroid</name>
 			<type>2</type>
-			<location>D:/Study/Eclipse/DoublePlayerCore/src</location>
-		</link>
-		<link>
-			<name>xDroid</name>
-			<type>2</type>
-			<location>D:/Study/Eclipse/xAndroid/src</location>
+			<location>C:/Users/Ilya_Shknai@epam.com/workspace/xAndroid/src</location>
 		</link>
 	</linkedResources>
 </projectDescription>
