@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="left_path">leftPath</string>
-    <string name="left_camera_path">leftCameraPath</string>
-    <string name="right_path">rightPath</string>
-    <string name="right_camera_path">rightCameraPath</string>
     <string name="not_content_path">notContentPath</string>
     
 </resources>

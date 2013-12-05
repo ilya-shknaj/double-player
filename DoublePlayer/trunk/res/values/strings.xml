@@ -2,11 +2,7 @@
 <resources>
 
     <string name="app_name">Двойной плеер</string>
-    <string name="action_settings">Настройки</string>
-    <string name="select_video">Выберите видео</string>
     <string name="not_content_panel">%s панель</string>
-    <string name="default_path">Путь по умолчанию</string>
-    <string name="path">Путь</string>
     <string name="path_not_setted">Путь не задан</string>
     <string name="info_not_found">Информация о видео отсутствует</string>
     <string name="content">Контент</string>
