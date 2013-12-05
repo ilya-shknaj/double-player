@@ -40,6 +40,7 @@
         </activity>
         <activity
             android:name="by.gravity.doublexplayer.activity.SettingsActivity"
+            android:screenOrientation="sensorLandscape"
             android:theme="@style/SettingsTheme" />
         <activity android:name="com.ipaulpro.afilechooser.FolderChooseActivity" />
     </application>
