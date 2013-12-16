@@ -47,7 +47,7 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 	private static final int SETTINGS_UPDATE_REQUEST_CODE = 300;
 
 	private static final String DOUBLE_PLAYER_PACKAGE = "by.gravity.doublexplayer";
-	
+
 	private static final String DOUBLE_PLAYER_LIBRARY_PACKAGE = "by.gravity.doublexplayer.library";
 
 	private static final String FLASH_PLAYER = "com.adobe.flashplayer";
@@ -151,6 +151,7 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 		showFullScreen(Position.valueOf(tag));
 
 	}
+	
 
 	private void showFullScreen(Position position) {
 
@@ -171,6 +172,7 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 			showCommonActionBar();
 			showActionBarButtons(position);
 			showBorderLine();
+			hideFullScreenButton(position);
 		} else {
 			unActiveLayout.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
 			activeLayout.setLayoutParams(new LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
@@ -179,6 +181,23 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 			hideTopBarButtons(position);
 			hideBorderLine();
 
+		}
+	}
+
+	private boolean isFullScreen(Position position) {
+		RelativeLayout relativeLayout = null;
+		if (position == Position.LEFT) {
+			relativeLayout = (RelativeLayout) findViewById(R.id.leftVideoLayout);
+		} else if (position == Position.RIGHT) {
+			relativeLayout = (RelativeLayout) findViewById(R.id.rightVideoLayout);
+		}
+		if (relativeLayout == null) {
+			return false;
+		}
+		if (relativeLayout.getLayoutParams().width == android.widget.RelativeLayout.LayoutParams.MATCH_PARENT) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -254,6 +273,48 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 			fileFragment.setOnFileSelectedListener(this);
 			transaction.commit();
 		}
+
+		if (isFullScreen(position)) {
+			initFullScreenButton(position);
+		}
+
+	}
+
+	private void initFullScreenButton(final Position position) {
+		View view = null;
+		if (position == Position.LEFT) {
+			view = findViewById(R.id.action_bar_left);
+		} else if (position == Position.RIGHT) {
+			view = findViewById(R.id.action_bar_right);
+		}
+
+		if (view == null) {
+			return;
+		}
+
+		view.findViewById(R.id.btn_fullScreen).setVisibility(View.VISIBLE);
+		view.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				showFullScreen(position);
+			}
+		});
+	}
+
+	private void hideFullScreenButton(Position position) {
+		View view = null;
+		if (position == Position.LEFT) {
+			view = findViewById(R.id.action_bar_left);
+		} else if (position == Position.RIGHT) {
+			view = findViewById(R.id.action_bar_right);
+		}
+
+		if (view == null) {
+			return;
+		}
+
+		view.findViewById(R.id.btn_fullScreen).setVisibility(View.GONE);
 	}
 
 	private boolean isContentPosition(Position position) {
