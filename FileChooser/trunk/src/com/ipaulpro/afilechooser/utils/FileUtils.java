@@ -401,12 +401,7 @@ public class FileUtils {
 	 * 
 	 * @author paulburke
 	 */
-	private static Comparator<File> mComparator = new Comparator<File>() {
-		public int compare(File f1, File f2) {
-			// Sort alphabetically by lower case, which is much cleaner
-			return f1.getName().toLowerCase().compareTo(f2.getName().toLowerCase());
-		}
-	};
+	public static Comparator<File> mComparator = new NaturalOrderComparator<File>();
 
 	/**
 	 * File (not directories) filter.
