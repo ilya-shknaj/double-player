@@ -69,6 +69,8 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 
 	private static final String SLASH_STRING = "/";
 
+	private View backButton;
+
 	private static final String ROOT_FOLDER = Environment.getExternalStorageDirectory().getAbsolutePath();
 
 	private OnFileSelectedListener onFileSelectedListener;
@@ -124,10 +126,6 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 
 		super.onActivityCreated(savedInstanceState);
 
-		currentFilePath = (TextView) getView().findViewById(R.id.currentPath);
-		String path = getArguments().getString(PATH_ARG) != null ? getArguments().getString(PATH_ARG) : ROOT_FOLDER;
-		setPath(path);
-
 		View currentDirectoryButton = getView().findViewById(R.id.currentDirectoryButton);
 
 		if (!getArguments().getBoolean(SELECT_FILE_ARG, true)) {
@@ -143,21 +141,15 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 			});
 		}
 
-		View backButton = getView().findViewById(R.id.backButton);
+		backButton = getView().findViewById(R.id.backButton);
 
-		if (getArguments().getBoolean(LOCK_DIRECTORY_ARG, false)) {
-			backButton.setVisibility(View.GONE);
+		backButton.setOnClickListener(new OnClickListener() {
 
-		} else {
-
-			backButton.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					onBackClick();
-				}
-			});
-		}
+			@Override
+			public void onClick(View v) {
+				onBackClick();
+			}
+		});
 
 		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
 
@@ -167,6 +159,10 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 				return false;
 			}
 		});
+
+		currentFilePath = (TextView) getView().findViewById(R.id.currentPath);
+		String path = getArguments().getString(PATH_ARG) != null ? getArguments().getString(PATH_ARG) : ROOT_FOLDER;
+		setPath(path);
 
 		getLoaderManager().initLoader(LOADER_ID, null, this);
 
@@ -285,14 +281,16 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 
 	private void setPath(String path) {
 		mPath = path;
+		if (backButton.getVisibility() == View.GONE) {
+			backButton.setVisibility(View.VISIBLE);
+		}
 		if (getArguments().getBoolean(LOCK_DIRECTORY_ARG)) {
 			String defaultPath = getArguments().getString(PATH_ARG);
-			if (currentFilePath.length() == 0) {
+			if (currentFilePath.length() == 0 || defaultPath.length() == mPath.length()) {
 				currentFilePath.setText("/");
-			} else if (defaultPath.length() > currentFilePath.length()) {
+				backButton.setVisibility(View.GONE);
+			} else if (defaultPath.length() > mPath.length()) {
 				currentFilePath.setText(mPath.substring(defaultPath.length()));
-			} else {
-				currentFilePath.setText("/");
 			}
 		} else {
 			currentFilePath.setText(path);
