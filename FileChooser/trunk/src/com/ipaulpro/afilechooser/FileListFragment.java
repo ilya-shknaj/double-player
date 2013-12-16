@@ -147,7 +147,6 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 
 		if (getArguments().getBoolean(LOCK_DIRECTORY_ARG, false)) {
 			backButton.setVisibility(View.GONE);
-			currentFilePath.setVisibility(View.GONE);
 
 		} else {
 
@@ -286,7 +285,19 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 
 	private void setPath(String path) {
 		mPath = path;
-		currentFilePath.setText(path);
+		if (getArguments().getBoolean(LOCK_DIRECTORY_ARG)) {
+			String defaultPath = getArguments().getString(PATH_ARG);
+			if (currentFilePath.length() == 0) {
+				currentFilePath.setText("/");
+			} else if (defaultPath.length() > currentFilePath.length()) {
+				currentFilePath.setText(mPath.substring(defaultPath.length()));
+			} else {
+				currentFilePath.setText("/");
+			}
+		} else {
+			currentFilePath.setText(path);
+		}
+
 	}
 
 	@Override
