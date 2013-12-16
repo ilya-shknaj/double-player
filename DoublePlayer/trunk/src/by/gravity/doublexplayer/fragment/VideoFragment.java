@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import by.gravity.common.Constants;
 import by.gravity.doublexplayer.R;
@@ -195,6 +196,15 @@ public class VideoFragment extends BaseVideoFragment {
 
 			}
 		});
+
+		TextView fileName = (TextView) getView().findViewById(R.id.fileName);
+		String mediaUri = getArguments().getString(ARG_MEDIA_URI);
+		int indexSlash = mediaUri.lastIndexOf("/");
+		int indexDot = mediaUri.lastIndexOf(".");
+		if (indexDot == -1) {
+			indexDot = mediaUri.length();
+		}
+		fileName.setText(mediaUri.substring(indexSlash + 1, indexDot));
 
 		showProgressBar();
 

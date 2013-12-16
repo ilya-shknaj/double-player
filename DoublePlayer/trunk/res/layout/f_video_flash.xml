@@ -4,10 +4,18 @@
     android:layout_height="fill_parent" >
 
     <include
-        android:layout_above="@+id/progressBar"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_above="@+id/progressBar"
         layout="@layout/webview" />
+
+    <TextView
+        android:id="@+id/fileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:lines="1"
+        android:textColor="@android:color/black" />
 
     <include
         android:id="@+id/progressBar"

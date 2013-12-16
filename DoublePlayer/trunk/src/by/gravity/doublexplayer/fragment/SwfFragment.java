@@ -12,6 +12,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.TextView;
 import by.gravity.doublexplayer.R;
 import by.gravity.doublexplayer.activity.MainActivity;
 import by.gravity.doublexplayer.core.IPlayer;
@@ -51,12 +52,12 @@ public class SwfFragment extends Fragment implements IPlayer {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		initWebView();
-		initButtons();
+		initView();
 		initFlash(getMediaUriString());
 		handler = new Handler();
 	}
 
-	private void initButtons() {
+	private void initView() {
 		mPlayButton = (Button) getView().findViewById(R.id.playButton);
 		mPlayButton.setOnClickListener(new OnClickListener() {
 
@@ -97,6 +98,15 @@ public class SwfFragment extends Fragment implements IPlayer {
 				VideoFragmentTracking.trackZoomOut();
 			}
 		});
+		
+		TextView fileName = (TextView) getView().findViewById(R.id.fileName);
+		String mediaUri = getArguments().getString(ARG_MEDIA_URI);
+		int indexSlash = mediaUri.lastIndexOf("/");
+		int indexDot = mediaUri.lastIndexOf(".");
+		if (indexDot == -1) {
+			indexDot = mediaUri.length();
+		}
+		fileName.setText(mediaUri.substring(indexSlash + 1, indexDot));
 
 		setPlayPauseButtonUI();
 	}

@@ -151,7 +151,6 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 		showFullScreen(Position.valueOf(tag));
 
 	}
-	
 
 	private void showFullScreen(Position position) {
 
@@ -294,7 +293,7 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 
 		view.findViewById(R.id.btn_fullScreen).setVisibility(View.VISIBLE);
 		view.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				showFullScreen(position);
