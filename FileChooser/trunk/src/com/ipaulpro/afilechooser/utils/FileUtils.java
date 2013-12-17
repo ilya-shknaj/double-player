@@ -219,8 +219,7 @@ public class FileUtils {
 	 * 
 	 * @author paulburke
 	 */
-	public static String getPath(Context context, Uri uri) throws URISyntaxException {
-
+	public static String getPath(Context context, Uri uri) {
 		if (DEBUG)
 			Log.d(TAG + " File -", "Authority: " + uri.getAuthority() + ", Fragment: " + uri.getFragment() + ", Port: " + uri.getPort() + ", Query: "
 					+ uri.getQuery() + ", Scheme: " + uri.getScheme() + ", Host: " + uri.getHost() + ", Segments: "
