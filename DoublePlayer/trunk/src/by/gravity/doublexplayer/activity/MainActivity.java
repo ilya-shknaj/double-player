@@ -91,7 +91,7 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (isContentPosition(Position.LEFT)) {
+		if (isContentPosition(Position.RIGHT)) {
 			findViewById(R.id.action_bar_left).findViewById(R.id.btn_info).setVisibility(View.GONE);
 			findViewById(R.id.action_bar_right).findViewById(R.id.btn_info).setVisibility(View.VISIBLE);
 		} else {
