@@ -34,7 +34,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 /**
@@ -221,15 +223,16 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(getString(R.string.select_action));
 		final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_item);
+		arrayAdapter.add(getString(R.string.rename));
 		arrayAdapter.add(getString(R.string.delete));
 		builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(final DialogInterface dialog, int which) {
 				String strName = arrayAdapter.getItem(which);
+				AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
+				final File selectedFile = (File) getListView().getAdapter().getItem(position);
 				if (strName.equals(getString(R.string.delete))) {
-					AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
-					final File selectedFile = (File) getListView().getAdapter().getItem(position);
 					builderInner.setMessage(String.format(getString(R.string.file_would_deleted), selectedFile.getName()));
 					builderInner.setTitle(getString(R.string.delete_alarm_message));
 					builderInner.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -248,6 +251,32 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 						}
 					});
 					builderInner.show();
+				} else if (strName.equals(getString(R.string.rename))) {
+
+					builderInner.setTitle(R.string.rename);
+
+					final EditText input = new EditText(getActivity());
+					input.setText(selectedFile.getName());
+
+					builderInner.setView(input);
+
+					builderInner.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							String value = input.getText().toString();
+							String newFilePath = selectedFile.getAbsolutePath().replace(selectedFile.getName(), "") + value;
+							selectedFile.renameTo(new File(newFilePath));
+
+						}
+					});
+
+					builderInner.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							dialog.dismiss();
+						}
+					});
+
+					builderInner.show();
+
 				}
 			}
 		});
