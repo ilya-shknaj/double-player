@@ -12,6 +12,7 @@ import by.gravity.common.Constants;
 import by.gravity.doublexplayer.R;
 import by.gravity.doublexplayer.activity.MainActivity;
 import by.gravity.doublexplayer.core.fragment.BaseVideoFragment;
+import by.gravity.doublexplayer.googleanalytics.SettingActivityTracking;
 import by.gravity.doublexplayer.googleanalytics.VideoFragmentTracking;
 import by.gravity.doublexplayer.model.Rate;
 import by.gravity.doublexplayer.model.VideoState;
@@ -204,6 +205,7 @@ public class VideoFragment extends BaseVideoFragment {
 				@Override
 				public void onClick(View paramView) {
 					((MainActivity) getActivity()).playFileInFolder(getTag(), getArguments().getString(ARG_MEDIA_URI), true);
+					VideoFragmentTracking.trackNextFile();
 				}
 			});
 		}
@@ -215,6 +217,7 @@ public class VideoFragment extends BaseVideoFragment {
 				@Override
 				public void onClick(View paramView) {
 					((MainActivity) getActivity()).playFileInFolder(getTag(), getArguments().getString(ARG_MEDIA_URI), false);
+					VideoFragmentTracking.trackPrevFile();
 				}
 			});
 		}

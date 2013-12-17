@@ -105,6 +105,7 @@ public class SwfFragment extends Fragment implements IPlayer {
 			@Override
 			public void onClick(View paramView) {
 				((MainActivity) getActivity()).playFileInFolder(getTag(), getArguments().getString(ARG_MEDIA_URI), true);
+				VideoFragmentTracking.trackNextFile();
 			}
 		});
 
@@ -114,6 +115,7 @@ public class SwfFragment extends Fragment implements IPlayer {
 			@Override
 			public void onClick(View paramView) {
 				((MainActivity) getActivity()).playFileInFolder(getTag(), getArguments().getString(ARG_MEDIA_URI), false);
+				VideoFragmentTracking.trackPrevFile();
 			}
 		});
 

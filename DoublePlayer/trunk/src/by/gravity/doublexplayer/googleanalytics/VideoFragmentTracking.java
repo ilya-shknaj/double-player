@@ -26,6 +26,10 @@ public class VideoFragmentTracking {
 
 	private static final String ZOOM_OUT = "ZoomOut";
 
+	private static final String NEXT_FILE = "NextFile";
+
+	private static final String PREV_FILE = "PrevFile";
+
 	public static void trackPlayPause() {
 		trackEvent(PLAY_PAUSE);
 	}
@@ -64,6 +68,14 @@ public class VideoFragmentTracking {
 
 	public static void trackZoomOut() {
 		trackEvent(ZOOM_OUT);
+	}
+
+	public static void trackNextFile() {
+		trackEvent(NEXT_FILE);
+	}
+
+	public static void trackPrevFile() {
+		trackEvent(PREV_FILE);
 	}
 
 	private static void trackEvent(String label) {
