@@ -89,6 +89,18 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 		trackStartMainActivity();
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (isContentPosition(Position.LEFT)) {
+			findViewById(R.id.action_bar_left).findViewById(R.id.btn_info).setVisibility(View.GONE);
+			findViewById(R.id.action_bar_right).findViewById(R.id.btn_info).setVisibility(View.VISIBLE);
+		} else {
+			findViewById(R.id.action_bar_left).findViewById(R.id.btn_info).setVisibility(View.VISIBLE);
+			findViewById(R.id.action_bar_right).findViewById(R.id.btn_info).setVisibility(View.GONE);
+		}
+	}
+
 	private void trackStartMainActivity() {
 		try {
 			PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
