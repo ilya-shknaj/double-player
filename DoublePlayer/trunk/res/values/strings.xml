@@ -13,6 +13,8 @@
     <string name="not_installed_app">Не найдено приложение</string>
     <string name="app_not_installed">Приложение %s не установлено</string>
     <string name="about_developer">О разработчиках</string>
+    <string name="repeat_enabled">Повторение включено</string>
+    <string name="repeat_disabled">Повторение выключено</string>
     
     <string-array name="position">
         <item >@string/left_position</item>

@@ -98,7 +98,25 @@ public class SwfFragment extends Fragment implements IPlayer {
 				VideoFragmentTracking.trackZoomOut();
 			}
 		});
-		
+
+		Button nextFile = (Button) getView().findViewById(R.id.nextFileButton);
+		nextFile.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View paramView) {
+				((MainActivity) getActivity()).playFileInFolder(getTag(), getArguments().getString(ARG_MEDIA_URI), true);
+			}
+		});
+
+		Button prevFile = (Button) getView().findViewById(R.id.prevFileButton);
+		prevFile.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View paramView) {
+				((MainActivity) getActivity()).playFileInFolder(getTag(), getArguments().getString(ARG_MEDIA_URI), false);
+			}
+		});
+
 		TextView fileName = (TextView) getView().findViewById(R.id.fileName);
 		String mediaUri = getArguments().getString(ARG_MEDIA_URI);
 		int indexSlash = mediaUri.lastIndexOf("/");

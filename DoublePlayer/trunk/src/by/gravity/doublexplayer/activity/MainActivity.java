@@ -24,6 +24,7 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import by.gravity.common.Constants;
 import by.gravity.common.activity.TrackingActivity;
 import by.gravity.common.utils.FileUtil;
 import by.gravity.common.utils.StringUtil;
@@ -37,6 +38,7 @@ import by.gravity.doublexplayer.model.Rate;
 import by.gravity.doublexplayer.util.PlayerUtil;
 
 import com.ipaulpro.afilechooser.FileListFragment;
+import com.ipaulpro.afilechooser.utils.FileUtils;
 
 public class MainActivity extends TrackingActivity implements FileListFragment.OnFileSelectedListener {
 
@@ -575,7 +577,7 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 
 	}
 
-	private void setVideoFragmentUri(String tag, String mediaUri) {
+	public void setVideoFragmentUri(String tag, String mediaUri) {
 		Fragment fragment;
 		if (mediaUri.length() > 4 && mediaUri.substring(mediaUri.length() - 3).equals("swf")) {
 			if (appplicationIsInstalled(FLASH_PLAYER)) {
@@ -644,6 +646,63 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 			MainActivityTracking.trackOpenFile(expansion);
 		}
 
+	}
+
+	public void playFileInFolder(String tag, String currentPath, boolean nextFile) {
+		List<File> files = getFilesInFolder(currentPath);
+		String fileName = currentPath.substring(currentPath.lastIndexOf("/") + 1);
+
+		int currentFileIndex = -1;
+		for (int i = 0; i < files.size(); i++) {
+			if (files.get(i).isDirectory()) {
+				continue;
+			}
+
+			if (files.get(i).getName().equals(fileName)) {
+				currentFileIndex = i;
+				break;
+			}
+
+		}
+
+		if (currentFileIndex == -1) {
+			return;
+		}
+
+		boolean fileFounded = false;
+		while (!fileFounded) {
+			if (nextFile) {
+				currentFileIndex++;
+				if (currentFileIndex == files.size()) {
+					currentFileIndex = 0;
+				}
+			} else {
+				currentFileIndex--;
+				if (currentFileIndex < 0) {
+					currentFileIndex = files.size() - 1;
+				}
+			}
+
+			if (files.get(currentFileIndex).isDirectory()) {
+				continue;
+			}
+
+			if (!files.get(currentFileIndex).getName().equals(fileName)) {
+				setVideoFragmentUri(tag, Constants.FILE + files.get(currentFileIndex).getAbsolutePath());
+				fileFounded = true;
+			}
+
+			if (files.get(currentFileIndex).getName().equals(fileName)) {
+				fileFounded = true;
+			}
+
+		}
+
+	}
+
+	private List<File> getFilesInFolder(String currentPath) {
+		String path = currentPath.substring(0, currentPath.lastIndexOf("/"));
+		return FileUtils.getFileList(FileUtils.getPath(this, Uri.parse(path)));
 	}
 
 }

@@ -1,12 +1,7 @@
 package by.gravity.doublexplayer.fragment;
 
-import java.io.File;
-import java.util.List;
-
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.IInterface;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,8 +15,6 @@ import by.gravity.doublexplayer.core.fragment.BaseVideoFragment;
 import by.gravity.doublexplayer.googleanalytics.VideoFragmentTracking;
 import by.gravity.doublexplayer.model.Rate;
 import by.gravity.doublexplayer.model.VideoState;
-
-import com.ipaulpro.afilechooser.utils.FileUtils;
 
 public class VideoFragment extends BaseVideoFragment {
 
@@ -150,7 +143,7 @@ public class VideoFragment extends BaseVideoFragment {
 
 			@Override
 			public void onClick(View v) {
-				String message = !isRepeatMode() ? "Повторение включено" : "Повторение выключено";
+				String message = !isRepeatMode() ? getString(R.string.repeat_enabled) : getString(R.string.repeat_disabled);
 				setRepeatMode(!isRepeatMode());
 				VideoFragmentTracking.trackRepeatMode();
 				Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
@@ -210,10 +203,7 @@ public class VideoFragment extends BaseVideoFragment {
 
 				@Override
 				public void onClick(View paramView) {
-					List<File> files = getFilesInFolder();
-					String fileName = getArguments().getString(ARG_MEDIA_URI).substring(getArguments().getString(ARG_MEDIA_URI).lastIndexOf("/") + 1);
-					int index = files.indexOf(fileName);
-					setMediaUri(files.get(index + 1).getAbsolutePath());
+					((MainActivity) getActivity()).playFileInFolder(getTag(), getArguments().getString(ARG_MEDIA_URI), true);
 				}
 			});
 		}
@@ -224,7 +214,7 @@ public class VideoFragment extends BaseVideoFragment {
 
 				@Override
 				public void onClick(View paramView) {
-
+					((MainActivity) getActivity()).playFileInFolder(getTag(), getArguments().getString(ARG_MEDIA_URI), false);
 				}
 			});
 		}
@@ -240,11 +230,6 @@ public class VideoFragment extends BaseVideoFragment {
 
 		showProgressBar();
 
-	}
-
-	private List<File> getFilesInFolder() {
-		String path = getArguments().getString(ARG_MEDIA_URI).substring(0, getArguments().getString(ARG_MEDIA_URI).lastIndexOf("/"));
-		return FileUtils.getFileList(FileUtils.getPath(getActivity(), Uri.parse(path)));
 	}
 
 	@Override

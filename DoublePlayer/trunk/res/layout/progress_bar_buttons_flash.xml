@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="@dimen/progress_buttons_height"
     android:layout_marginBottom="5dp"
-    android:background="@android:color/black"
-    android:layout_height="match_parent" >
+    android:background="@android:color/black" >
+
+    <Button
+        android:id="@+id/prevFileButton"
+        android:layout_width="@dimen/button_size"
+        android:layout_height="@dimen/button_size"
+        android:layout_alignParentLeft="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/button_margin"
+        android:background="@drawable/btn_prev_file" />
+
+    <Button
+        android:id="@+id/nextFileButton"
+        android:layout_width="@dimen/button_size"
+        android:layout_height="@dimen/button_size"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/button_margin"
+        android:layout_toRightOf="@id/prevFileButton"
+        android:background="@drawable/btn_next_file" />
 
     <Button
         android:id="@+id/playButton"
@@ -19,23 +37,21 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/button_margin"
         android:background="@drawable/btn_full_screen" />
-    
-    <Button 
+
+    <Button
         android:id="@+id/zoomOut"
         android:layout_width="@dimen/button_size"
         android:layout_height="@dimen/button_size"
-        android:layout_alignParentLeft="true"
         android:layout_marginLeft="@dimen/button_margin"
-        android:background="@drawable/btn_zoom_out"
-        />
-    
-    <Button 
+        android:layout_toLeftOf="@+id/zoomIn"
+        android:background="@drawable/btn_zoom_out" />
+
+    <Button
         android:id="@+id/zoomIn"
         android:layout_width="@dimen/button_size"
         android:layout_height="@dimen/button_size"
-        android:layout_toRightOf="@id/zoomOut"
-        android:layout_marginLeft="15dp"
-        android:background="@drawable/btn_zoom_in"
-        />
+        android:layout_marginRight="@dimen/button_margin"
+        android:layout_toLeftOf="@id/fullScreenButton"
+        android:background="@drawable/btn_zoom_in" />
 
 </RelativeLayout>
