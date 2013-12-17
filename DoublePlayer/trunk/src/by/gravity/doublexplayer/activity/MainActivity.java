@@ -25,7 +25,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import by.gravity.common.Constants;
-import by.gravity.common.activity.TrackingActivity;
 import by.gravity.common.utils.FileUtil;
 import by.gravity.common.utils.StringUtil;
 import by.gravity.doublexplayer.R;
