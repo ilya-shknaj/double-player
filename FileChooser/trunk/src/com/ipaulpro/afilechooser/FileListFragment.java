@@ -36,7 +36,6 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 /**
@@ -340,11 +339,8 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 
 	private String getUpLevelPath() {
 		String result = mPath;
-		if (result.equals(ROOT_FOLDER)) {
-			return null;
-		}
 		int index = result.lastIndexOf(SLASH_STRING);
-		if (index != -1) {
+		if (index != -1 && index != 0) {
 			return result.substring(0, index);
 		}
 
