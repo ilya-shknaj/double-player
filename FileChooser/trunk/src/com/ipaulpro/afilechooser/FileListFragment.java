@@ -26,6 +26,7 @@ import android.os.Environment;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -230,7 +231,7 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 			public void onClick(final DialogInterface dialog, int which) {
 				String strName = arrayAdapter.getItem(which);
 				AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
-				final File selectedFile = (File) getListView().getAdapter().getItem(position);
+				final File selectedFile = mAdapter.getListItems().get(position);
 				if (strName.equals(getString(R.string.delete))) {
 					builderInner.setMessage(String.format(getString(R.string.file_would_deleted), selectedFile.getName()));
 					builderInner.setTitle(getString(R.string.delete_alarm_message));
@@ -239,6 +240,8 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							selectedFile.delete();
+							mAdapter.getListItems().remove(position);
+							mAdapter.notifyDataSetChanged();
 							dialog.dismiss();
 						}
 					});
@@ -263,7 +266,10 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 						public void onClick(DialogInterface dialog, int whichButton) {
 							String value = input.getText().toString();
 							String newFilePath = selectedFile.getAbsolutePath().replace(selectedFile.getName(), "") + value;
-							selectedFile.renameTo(new File(newFilePath));
+							File renamedFile = new File(newFilePath);
+							selectedFile.renameTo(renamedFile);
+							mAdapter.getListItems().set(position, renamedFile);
+							mAdapter.notifyDataSetChanged();
 
 						}
 					});
