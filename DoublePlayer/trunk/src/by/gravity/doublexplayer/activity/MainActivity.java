@@ -36,6 +36,7 @@ import by.gravity.doublexplayer.manager.SettingsManager;
 import by.gravity.doublexplayer.model.Rate;
 import by.gravity.doublexplayer.util.PlayerUtil;
 
+import com.flurry.sdk.ca;
 import com.ipaulpro.afilechooser.FileListFragment;
 import com.ipaulpro.afilechooser.utils.FileUtils;
 
@@ -553,14 +554,16 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 		transaction.commit();
 	}
 
+	private Uri cameraUri = null;
+
 	private void openCameraAction(int requestCode, String videoPath) {
 
 		Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
 		if (StringUtil.isEmpty(videoPath)) {
 			videoPath = FileUtil.getDefaultMediaPath();
 		}
-		Uri uri = Uri.fromFile(new File(videoPath + File.separator + generateVideoName()));
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+		cameraUri = Uri.fromFile(new File(videoPath + File.separator + generateVideoName()));
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUri);
 		startActivityForResult(intent, requestCode);
 	}
 
@@ -578,10 +581,11 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 		if (resultCode != RESULT_OK) {
 			return;
 		}
+
 		if (requestCode == LEFT_CAMERA_REQUEST_CODE) {
-			setVideoFragmentUri(Position.LEFT.name(), FileUtil.getFilePathFromContentUri(data.getData()));
+			setVideoFragmentUri(Position.LEFT.name(), FileUtil.getFilePathFromContentUri(cameraUri));
 		} else if (requestCode == RIGHT_CAMERA_REQUEST_CODE) {
-			setVideoFragmentUri(Position.RIGHT.name(), FileUtil.getFilePathFromContentUri(data.getData()));
+			setVideoFragmentUri(Position.RIGHT.name(), FileUtil.getFilePathFromContentUri(cameraUri));
 		} else if (requestCode == SETTINGS_UPDATE_REQUEST_CODE) {
 			initFileManagerFragments();
 		}
