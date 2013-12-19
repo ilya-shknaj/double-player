@@ -3,6 +3,8 @@ package by.gravity.doublexplayer.installer;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,7 +12,6 @@ import android.os.Environment;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.Toast;
 import by.gravity.common.utils.FileUtil;
-import by.gravity.common.utils.ZipUtils;
 import by.gravity.doublexplayer.installer.fragment.InstallerFragment;
 import by.gravity.doublexplayer.installer.model.DoublePlayerModel;
 
@@ -35,23 +36,44 @@ public class MainActivity extends TrackingActivity {
 
 	public void onInstallButtonClick(final DoublePlayerModel playerModel) {
 		showProgress();
+		final ZipFile zipFile = createZipFile(playerModel.getContentInputPath());
 		new AsyncTask<Void, Void, Boolean>() {
 
 			@Override
 			protected Boolean doInBackground(Void... params) {
-				return ZipUtils.unpackZip(playerModel.getContentInputPath(), playerModel.getContentOutputPath());
+				if (zipFile == null) {
+					return false;
+				}
+				try {
+					zipFile.extractAll(playerModel.getContentOutputPath());
+				} catch (ZipException e) {
+					e.printStackTrace();
+					return false;
+				}
+
+				return true;
 			}
 
 			@Override
 			protected void onPostExecute(Boolean result) {
 				super.onPostExecute(result);
 				hideProgress();
-				String text = result? getString(R.string.success) : getString(R.string.error);
+				String text = result ? getString(R.string.success) : getString(R.string.error);
 				Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
 			}
 
 		}.execute();
 
+	}
+
+	private ZipFile createZipFile(String zipPath) {
+		try {
+			return new ZipFile(zipPath);
+		} catch (ZipException e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 	public void onChooseArhiveFileButtonClick(DoublePlayerModel playerModel) {
@@ -62,6 +84,7 @@ public class MainActivity extends TrackingActivity {
 		progressDialog = new ProgressDialog(this);
 		progressDialog.setTitle(getString(R.string.progress_title));
 		progressDialog.setMessage(getString(R.string.progress_message));
+		progressDialog.setCancelable(false);
 		progressDialog.show();
 	}
 
