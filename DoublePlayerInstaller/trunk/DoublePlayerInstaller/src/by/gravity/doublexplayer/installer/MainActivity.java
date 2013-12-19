@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.Toast;
-import by.gravity.common.activity.TrackingActivity;
 import by.gravity.common.utils.FileUtil;
 import by.gravity.common.utils.ZipUtils;
 import by.gravity.doublexplayer.installer.fragment.InstallerFragment;
