@@ -323,7 +323,7 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 			if (currentFilePath.length() == 0 || defaultPath.length() == mPath.length()) {
 				currentFilePath.setText("/");
 				backButton.setVisibility(View.GONE);
-			} else if (defaultPath.length() > mPath.length()) {
+			} else if (mPath.length() > defaultPath.length()) {
 				currentFilePath.setText(mPath.substring(defaultPath.length()));
 			}
 		} else {
