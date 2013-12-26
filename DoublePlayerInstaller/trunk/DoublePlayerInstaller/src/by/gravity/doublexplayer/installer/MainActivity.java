@@ -31,6 +31,7 @@ public class MainActivity extends TrackingActivity {
 
 		modelList = getApplicationList();
 		initInstallerFragment();
+		onInstallButtonClick(modelList.get(1));
 
 	}
 
@@ -50,7 +51,6 @@ public class MainActivity extends TrackingActivity {
 					e.printStackTrace();
 					return false;
 				}
-
 				return true;
 			}
 
