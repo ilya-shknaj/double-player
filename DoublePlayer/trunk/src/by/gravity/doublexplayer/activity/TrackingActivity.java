@@ -11,7 +11,7 @@ public class TrackingActivity extends FragmentActivity {
 	public void onStart() {
 		super.onStart();
 		EasyTracker.getInstance().activityStart(this);
-		BugSenseHandler.initAndStartSession(this, "b646ffe2");
+		BugSenseHandler.initAndStartSession(this, "e465f247");
 		FlurryAgent.onStartSession(this, "ZJM6Q6B3KTP5RS38SBPQ");
 	}
 

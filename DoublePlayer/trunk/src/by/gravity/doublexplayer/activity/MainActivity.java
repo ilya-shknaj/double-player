@@ -36,7 +36,6 @@ import by.gravity.doublexplayer.manager.SettingsManager;
 import by.gravity.doublexplayer.model.Rate;
 import by.gravity.doublexplayer.util.PlayerUtil;
 
-import com.flurry.sdk.ca;
 import com.ipaulpro.afilechooser.FileListFragment;
 import com.ipaulpro.afilechooser.utils.FileUtils;
 
