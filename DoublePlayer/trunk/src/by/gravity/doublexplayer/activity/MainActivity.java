@@ -327,7 +327,9 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 			return;
 		}
 
-		view.findViewById(R.id.btn_fullScreen).setVisibility(View.GONE);
+		if (view.findViewById(R.id.btn_fullScreen).getVisibility() == View.VISIBLE) {
+			view.findViewById(R.id.btn_fullScreen).setVisibility(View.GONE);
+		}
 	}
 
 	private boolean isContentPosition(Position position) {
@@ -654,6 +656,8 @@ public class MainActivity extends TrackingActivity implements FileListFragment.O
 		} else if (tag.equals(Position.RIGHT.name())) {
 			setVideoFragmentUri(Position.RIGHT.name(), filePath);
 		}
+
+		hideFullScreenButton(Position.valueOf(tag));
 
 		int indexExpansion = filePath.lastIndexOf("\\.");
 		if (indexExpansion != -1) {
